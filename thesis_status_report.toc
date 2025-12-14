@@ -6,10 +6,10 @@
 \contentsline {section}{\numberline {2}Goals and Objectives}{4}{section.2}%
 \contentsline {subsection}{\numberline {2.1}Primary Goal}{4}{subsection.2.1}%
 \contentsline {subsection}{\numberline {2.2}Specific Objectives}{4}{subsection.2.2}%
-\contentsline {subsubsection}{\numberline {2.2.1}Objective 1: Output Distribution Analysis (COMPLETED)}{4}{subsubsection.2.2.1}%
-\contentsline {subsubsection}{\numberline {2.2.2}Objective 2: Latent Space Structure Exploration (COMPLETED)}{5}{subsubsection.2.2.2}%
-\contentsline {subsubsection}{\numberline {2.2.3}Objective 3: Uncertainty-Guided Efficient Training (COMPLETED)}{5}{subsubsection.2.2.3}%
-\contentsline {subsubsection}{\numberline {2.2.4}Objective 4: Synthesis and Thesis Completion (IN PROGRESS)}{5}{subsubsection.2.2.4}%
+\contentsline {subsubsection}{\numberline {2.2.1}Objective 1: Output Distribution Analysis}{4}{subsubsection.2.2.1}%
+\contentsline {subsubsection}{\numberline {2.2.2}Objective 2: Latent Space Structure Exploration}{5}{subsubsection.2.2.2}%
+\contentsline {subsubsection}{\numberline {2.2.3}Objective 3: Uncertainty-Guided Efficient Training}{5}{subsubsection.2.2.3}%
+\contentsline {subsubsection}{\numberline {2.2.4}Objective 4: Synthesis and Thesis Completion}{5}{subsubsection.2.2.4}%
 \contentsline {section}{\numberline {3}Literature Review}{5}{section.3}%
 \contentsline {subsection}{\numberline {3.1}Output Distributions: Uncertainty Estimation}{6}{subsection.3.1}%
 \contentsline {subsection}{\numberline {3.2}Internal Representations: Interpretable Structure}{6}{subsection.3.2}%

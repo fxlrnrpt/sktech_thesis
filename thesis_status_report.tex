@@ -55,7 +55,7 @@
   {\Large\textbf{MASTER'S THESIS STATUS REPORT}}\\[0.5cm]
 
   {\Large\textbf{From Internal Representations to Output Distributions:\\
-  Lightweight Signals for LLM Control and Efficiency}}\\[3cm]
+  Improving Reliability, Control, and Training Efficiency in Large Language Models}}\\[3cm]
 
   {\large Master's Educational Program: \textbf{Data Science}}\\[1cm]
 
@@ -81,14 +81,14 @@
 % ============================================
 \section{Research Problem / Questions}
 
-Large Language Models (LLMs) have demonstrated remarkable capabilities across diverse tasks, yet their deployment in production systems faces critical challenges related to \textbf{controllability} and \textbf{training efficiency}. This thesis investigates how signals extracted from LLMs---both from \textbf{internal representations} (hidden state geometry) and their \textbf{external reflection in output distributions} (token-level entropy)---can be leveraged for efficiency gains at two stages:
+Large Language Models (LLMs) have demonstrated remarkable capabilities across diverse tasks, yet their deployment in production systems faces critical challenges: \textbf{unreliable outputs} (hallucinations, miscalibrated confidence), limited \textbf{controllability}, and \textbf{inefficient training}. This thesis investigates how to improve reliability, control, and training efficiency by leveraging signals from both \textbf{internal representations} (hidden state geometry) and \textbf{output distributions} (token-level entropy) at two stages:
 
 \begin{itemize}[leftmargin=*]
   \item \textbf{Training time:} Output entropy guides data stratification for more efficient fine-tuning (Study 3).
   \item \textbf{Runtime:} Output entropy enables uncertainty characterization without additional inference (Study 1), while latent space structure enables generation control without retraining (Study 2)---with potential for future efficient runtime interventions.
 \end{itemize}
 
-The key insight is that the forward pass of an LLM produces a rich hierarchy of information: hidden states encode high-level structure (e.g., language identity), while output logit distributions reflect the model's confidence and uncertainty. This thesis addresses three interconnected problems:
+The key insight is that the forward pass of an LLM produces signals that can be exploited to address these challenges: output distributions reflect model confidence and uncertainty, while hidden states encode high-level structure that can be manipulated for control. This thesis addresses three interconnected problems:
 
 \subsection{Uncertainty Characterization}
 LLMs often generate responses with unjustified confidence, particularly in knowledge-intensive domains. The confidence gap between a model's certainty and actual correctness poses risks in high-stakes applications like healthcare, law, and education, where overconfidence in incorrect answers can lead to harmful decisions.
@@ -106,12 +106,12 @@ Current fine-tuning approaches apply uniform strategies across all data, ignorin
 \textbf{Research Question 3:} \textit{Can uncertainty signals guide complexity-aware training strategies to improve fine-tuning efficiency while reducing data requirements?}
 
 \subsection{Unifying Theme}
-The central thesis is that the LLM forward pass provides two complementary sources of actionable signal:
+The central thesis is that reliability, control, and training efficiency can be improved by leveraging two complementary signal sources from the LLM forward pass:
 \begin{itemize}[leftmargin=*]
-  \item \textbf{Output distributions:} Token-level entropy reflects model confidence and task complexity, enabling runtime uncertainty characterization (Study 1) and training-time data stratification for efficient fine-tuning (Study 3).
-  \item \textbf{Internal representations:} Hidden states encode interpretable structure (e.g., language identity) that can be directly manipulated for runtime generation control. This thesis presents early exploration of latent space geometry (Study 2), demonstrating feasibility and opening directions for future efficient runtime interventions.
+  \item \textbf{Output distributions:} Token-level entropy reflects model confidence and task complexity, enabling runtime uncertainty characterization to flag potential hallucinations (Study 1) and training-time data stratification for more effective fine-tuning (Study 3).
+  \item \textbf{Internal representations:} Hidden states encode interpretable structure (e.g., language identity) that can be directly manipulated for runtime generation control. This thesis presents early exploration of latent space geometry (Study 2), demonstrating feasibility and opening directions for future interventions on other failure modes.
 \end{itemize}
-Together, these signals enable efficiency gains at both training time (smarter fine-tuning) and runtime (uncertainty-aware systems, generation control).
+Together, these signals provide practical approaches to improving reliability, control, and training efficiency.
 
 % ============================================
 % SECTION 2: GOALS AND OBJECTIVES
@@ -119,11 +119,11 @@ Together, these signals enable efficiency gains at both training time (smarter f
 \section{Goals and Objectives}
 
 \subsection{Primary Goal}
-To demonstrate that signals from LLM internals---both hidden state geometry and output entropy---can be leveraged for efficiency gains: output entropy for uncertainty-guided efficient training and runtime uncertainty characterization, and latent space structure for runtime generation control (with this thesis providing early exploration toward future efficient runtime interventions).
+To improve LLM reliability, control, and training efficiency by leveraging signals from internal representations and output distributions: output entropy for uncertainty characterization (improving reliability) and efficient training, and latent space structure for generation control (with this thesis providing early exploration toward future interventions).
 
 \subsection{Specific Objectives}
 
-\subsubsection{Objective 1: Output Distribution Analysis (COMPLETED)}
+\subsubsection{Objective 1: Output Distribution Analysis}
 \begin{itemize}[leftmargin=*]
   \item Develop automated pipeline for uncertainty quantification using entropy from output distributions
   \item Validate correlation between token-level entropy and question difficulty across domains
@@ -131,7 +131,7 @@ To demonstrate that signals from LLM internals---both hidden state geometry and 
   \item \textbf{Status:} Published in arXiv:2503.01688 \cite{sychev2025uncertainty}
 \end{itemize}
 
-\subsubsection{Objective 2: Latent Space Structure Exploration (COMPLETED)}
+\subsubsection{Objective 2: Latent Space Structure Exploration}
 \begin{itemize}[leftmargin=*]
   \item Investigate how high-level concepts are encoded in hidden state geometry
   \item Use language identity as a case study: identify language directions via PCA
@@ -140,7 +140,7 @@ To demonstrate that signals from LLM internals---both hidden state geometry and 
   \item \textbf{Status:} Published in arXiv:2510.13849 \cite{goncharov2025steering}
 \end{itemize}
 
-\subsubsection{Objective 3: Uncertainty-Guided Efficient Training (COMPLETED)}
+\subsubsection{Objective 3: Uncertainty-Guided Efficient Training}
 \begin{itemize}[leftmargin=*]
   \item Use output entropy for dataset stratification by complexity (easy/medium/hard)
   \item Implement differentiated training pipelines (SFT for easy, distillation for hard)
@@ -148,9 +148,9 @@ To demonstrate that signals from LLM internals---both hidden state geometry and 
   \item \textbf{Status:} Published in arXiv:2506.21220 \cite{goncharov2025complexity}
 \end{itemize}
 
-\subsubsection{Objective 4: Synthesis and Thesis Completion (IN PROGRESS)}
+\subsubsection{Objective 4: Synthesis and Thesis Completion}
 \begin{itemize}[leftmargin=*]
-  \item Articulate unified framework: output distributions for training-time and runtime efficiency, internal representations for runtime control
+  \item Articulate unified framework: improving reliability, control, and training efficiency via internal representations and output distributions
   \item Discuss practical implications and future directions (extending latent space exploration)
   \item Complete thesis document and defense preparation
   \item \textbf{Status:} In progress
