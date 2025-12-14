@@ -1,0 +1,59 @@
+This is BibTeX, Version 0.99d (TeX Live 2024)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: main.aux
+A level-1 auxiliary file: chapters/cover.aux
+A level-1 auxiliary file: chapters/contents.aux
+A level-1 auxiliary file: chapters/01_intro.aux
+A level-1 auxiliary file: chapters/02_author_contrib.aux
+A level-1 auxiliary file: chapters/03_publications.aux
+A level-1 auxiliary file: chapters/04_literature.aux
+A level-1 auxiliary file: chapters/05_problem_statement.aux
+A level-1 auxiliary file: chapters/06_methods.aux
+A level-1 auxiliary file: chapters/07_numerical_experiments.aux
+A level-1 auxiliary file: chapters/08_conclusion.aux
+A level-1 auxiliary file: chapters/09_innovations.aux
+A level-1 auxiliary file: chapters/biblio.aux
+The style file: acm.bst
+A level-1 auxiliary file: chapters/10_appendix.aux
+Database file #1: Bibliography.bib
+You've used 43 entries,
+            2253 wiz_defined-function locations,
+            741 strings with 13118 characters,
+and the built_in function-call counts, 16853 in all, are:
+= -- 1487
+> -- 1281
+< -- 0
++ -- 523
+- -- 478
+* -- 1447
+:= -- 2916
+add.period$ -- 129
+call.type$ -- 43
+change.case$ -- 359
+chr.to.int$ -- 0
+cite$ -- 43
+duplicate$ -- 481
+empty$ -- 1018
+format.name$ -- 478
+if$ -- 3311
+int.to.chr$ -- 0
+int.to.str$ -- 43
+missing$ -- 43
+newline$ -- 218
+num.names$ -- 86
+pop$ -- 335
+preamble$ -- 1
+purify$ -- 316
+quote$ -- 0
+skip$ -- 343
+stack$ -- 0
+substring$ -- 596
+swap$ -- 138
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 172
+warning$ -- 0
+while$ -- 117
+width$ -- 45
+write$ -- 406

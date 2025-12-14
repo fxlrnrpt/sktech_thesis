@@ -1,0 +1,159 @@
+\chapter{Methodology}
+
+This chapter describes the theoretical approaches, methods, and algorithms used in each of the three studies comprising this thesis.
+
+\section{Study 1: Uncertainty Estimation via Token-Wise Entropy}
+
+\subsection{Entropy Extraction}
+
+For each generated token $y_t$ in a model's response, we extract the full probability distribution over the vocabulary and compute the Shannon entropy:
+\begin{equation}
+    H_t = -\sum_{v \in \mathcal{V}} p_t(v) \log_2 p_t(v)
+\end{equation}
+where $p_t(v) = p(v | x, y_1, \ldots, y_{t-1})$ is the probability assigned to token $v$ at position $t$.
+
+\subsection{Feature Engineering}
+
+From the sequence of token-wise entropies $(H_1, H_2, \ldots, H_m)$, we compute the following features:
+
+\begin{enumerate}
+    \item \textbf{Mean entropy}: $\bar{H} = \frac{1}{m}\sum_{t=1}^{m} H_t$
+    \item \textbf{Maximum entropy}: $H_{\max} = \max_{t} H_t$
+    \item \textbf{Minimum entropy}: $H_{\min} = \min_{t} H_t$
+    \item \textbf{Entropy range}: $\Delta H = H_{\max} - H_{\min}$
+    \item \textbf{Max-to-min ratio}: $R = \frac{H_{\max}}{H_{\min} + \epsilon}$ (where $\epsilon$ is a small constant for numerical stability)
+    \item \textbf{Standard deviation}: $\sigma_H = \sqrt{\frac{1}{m}\sum_{t=1}^{m}(H_t - \bar{H})^2}$
+\end{enumerate}
+
+\subsection{Model-as-Judge (MASJ) Approach}
+
+In addition to direct entropy features, we implement a Model-as-Judge approach where a language model evaluates the correctness of its own or another model's answers. The judge model receives:
+\begin{itemize}
+    \item The original question $q$
+    \item The generated answer $a$
+    \item A prompt requesting evaluation of answer correctness
+\end{itemize}
+
+The judge's confidence in the correctness assessment provides an additional uncertainty signal that can be combined with entropy-based features.
+
+\subsection{Classification Pipeline}
+
+We train binary classifiers (logistic regression, random forests) on the extracted features to predict answer correctness. The classifier is trained on a held-out portion of the evaluation dataset where ground-truth correctness labels are available. Performance is measured using ROC-AUC to assess the discriminative power of the features.
+
+\section{Study 2: Language Steering in Latent Space}
+
+\subsection{Hidden State Extraction}
+
+For a multilingual model $\mathcal{M}$ and a corpus of text samples in multiple languages, we extract hidden states from intermediate layers. Given input text $x$ in language $\ell$, we collect:
+\begin{equation}
+    H^{(\ell)} = \{h_l^{(t)} : t \in \text{positions}(x), x \in \text{corpus}(\ell)\}
+\end{equation}
+where $l$ denotes a selected layer (typically middle to late layers where semantic information is most concentrated).
+
+\subsection{Language Direction Identification via PCA}
+
+We apply Principal Component Analysis (PCA) to the collected hidden states to identify language-specific directions:
+
+\begin{enumerate}
+    \item \textbf{Data preparation}: Collect hidden states from the same layer for texts in two languages $\ell_1$ and $\ell_2$
+    \item \textbf{Centering}: Compute the mean hidden state $\mu = \frac{1}{|H|}\sum_{h \in H} h$ and center the data
+    \item \textbf{PCA}: Compute the principal components of the centered data
+    \item \textbf{Direction extraction}: The first principal component $v_1$ typically captures the language direction
+\end{enumerate}
+
+The language direction $v_{\text{lang}}$ satisfies:
+\begin{equation}
+    v_{\text{lang}} = \arg\max_{\|v\|=1} \text{Var}(v^\top H)
+\end{equation}
+
+\subsection{Language Classification}
+
+To validate that the identified direction captures language information, we train a linear classifier on the projection of hidden states onto the principal components:
+\begin{equation}
+    \hat{\ell} = \text{sign}(v_{\text{lang}}^\top h + b)
+\end{equation}
+where $b$ is a learned bias term. Classification accuracy above 95\% indicates successful language direction identification.
+
+\subsection{Activation Steering}
+
+During inference, we modify the model's hidden states to steer generation toward the target language:
+\begin{equation}
+    \tilde{h}_l^{(t)} = h_l^{(t)} + \alpha \cdot v_{\ell_{\text{target}}}
+\end{equation}
+
+The steering strength $\alpha$ is a hyperparameter that controls the trade-off between language consistency and generation quality. We apply steering at multiple layers for stronger effect:
+\begin{equation}
+    \tilde{h}_l^{(t)} = h_l^{(t)} + \alpha_l \cdot v_{\ell_{\text{target}}}, \quad l \in \mathcal{L}_{\text{steer}}
+\end{equation}
+where $\mathcal{L}_{\text{steer}}$ is the set of layers to steer and $\alpha_l$ may vary by layer.
+
+\subsection{Evaluation Metrics}
+
+We evaluate steering effectiveness using:
+\begin{enumerate}
+    \item \textbf{KL divergence}: Measures the distance between the output token distribution and the target language distribution
+    \item \textbf{Language identification accuracy}: Fraction of output tokens correctly identified as the target language
+    \item \textbf{Perplexity}: Ensures steering does not significantly degrade generation quality
+\end{enumerate}
+
+\section{Study 3: Complexity-Aware Fine-Tuning}
+
+\subsection{Complexity Estimation}
+
+For each training example $(x, y)$, we estimate complexity by running the base model on $x$ and measuring the entropy of predicting $y$:
+\begin{equation}
+    C(x, y) = \frac{1}{|y|} \sum_{t=1}^{|y|} H(p(\cdot | x, y_{<t}))
+\end{equation}
+
+High complexity indicates that the model is uncertain about the correct response, suggesting the example is difficult.
+
+\subsection{Data Stratification}
+
+We partition the training data into complexity tiers:
+\begin{equation}
+    \mathcal{D}_k = \{(x, y) \in \mathcal{D} : \tau_{k-1} \leq C(x, y) < \tau_k\}
+\end{equation}
+where $\tau_0 < \tau_1 < \ldots < \tau_K$ are threshold values. In our experiments, we use a binary stratification (easy vs. hard) based on a single threshold $\tau$.
+
+\subsection{Training Interventions}
+
+Different complexity tiers receive different training treatments:
+
+\textbf{Easy examples} ($C < \tau$): Direct supervised fine-tuning (SFT) with the standard cross-entropy loss:
+\begin{equation}
+    \mathcal{L}_{\text{SFT}}(x, y) = -\sum_{t=1}^{|y|} \log p_\theta(y_t | x, y_{<t})
+\end{equation}
+
+\textbf{Hard examples} ($C \geq \tau$): Chain-of-thought distillation from a larger teacher model $\mathcal{M}_T$:
+\begin{enumerate}
+    \item Generate reasoning chains $r$ from the teacher: $r \sim \mathcal{M}_T(\cdot | x, \text{``think step by step''})$
+    \item Train the student on the augmented examples:
+    \begin{equation}
+        \mathcal{L}_{\text{distill}}(x, y) = -\sum_{t=1}^{|r|+|y|} \log p_\theta((r \oplus y)_t | x, (r \oplus y)_{<t})
+    \end{equation}
+\end{enumerate}
+where $r \oplus y$ denotes concatenation of the reasoning chain and the answer.
+
+\subsection{Training Pipeline}
+
+The complete training pipeline consists of:
+\begin{enumerate}
+    \item \textbf{Complexity scoring}: Run the base model on all training examples to compute complexity scores
+    \item \textbf{Stratification}: Partition data into easy and hard subsets based on threshold $\tau$
+    \item \textbf{Teacher generation}: For hard examples, generate chain-of-thought reasoning from the teacher model
+    \item \textbf{Mixed training}: Fine-tune the student model on the combined dataset with appropriate losses
+    \item \textbf{Evaluation}: Assess accuracy on held-out test data
+\end{enumerate}
+
+\subsection{Hyperparameter Selection}
+
+Key hyperparameters include:
+\begin{itemize}
+    \item Complexity threshold $\tau$: Selected based on the distribution of complexity scores (e.g., median or percentile-based)
+    \item Teacher model: A larger model from the same family (e.g., Qwen-2.5-72B for Qwen-2.5-1.5B student)
+    \item Training epochs and learning rate: Standard fine-tuning hyperparameters optimized on a validation set
+\end{itemize}
+
+\section{Implementation Details}
+
+All experiments are implemented in Python using the PyTorch framework~\cite{paszke2019pytorch} and the Hugging Face Transformers library~\cite{wolf2020transformers}. Hidden state extraction and entropy computation are performed during standard forward passes without requiring gradient computation. Activation steering is implemented using forward hooks that modify hidden states in-place during generation.

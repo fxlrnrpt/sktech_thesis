@@ -1,0 +1,53 @@
+\chapter{Introduction}
+
+Large language models (LLMs) have emerged as one of the most transformative technologies in artificial intelligence, demonstrating remarkable capabilities across diverse domains including natural language understanding, code generation, mathematical reasoning, and creative writing~\cite{brown2020language,openai2023gpt4,touvron2023llama}. These models, trained on vast corpora of text data, have shown an unprecedented ability to generalize across tasks and generate coherent, contextually appropriate responses. However, despite their impressive performance, the deployment of LLMs in real-world applications faces several fundamental challenges that limit their reliability, controllability, and efficiency.
+
+\paragraph{Relevance.}
+The widespread adoption of LLMs in critical applications---from healthcare diagnostics to legal document analysis, from educational tutoring to scientific research assistance---demands that these systems be trustworthy and predictable. Yet current LLMs exhibit three interconnected limitations that undermine their practical utility:
+
+\begin{enumerate}
+    \item \textbf{Unreliable outputs}: LLMs frequently produce incorrect or fabricated information with high apparent confidence, a phenomenon known as hallucination~\cite{ji2023survey}. Users cannot easily distinguish between reliable and unreliable model outputs, making it difficult to trust LLM-generated content without extensive verification.
+
+    \item \textbf{Limited behavioral control}: Once trained, LLMs exhibit fixed behavioral patterns that may not align with user requirements. For multilingual models, this manifests as unwanted code-switching, where models unexpectedly switch languages mid-response~\cite{winata2021language}. More broadly, fine-grained control over generation behavior remains challenging without expensive retraining.
+
+    \item \textbf{Inefficient training procedures}: Fine-tuning LLMs on new tasks or domains requires substantial computational resources. Current approaches often treat all training examples equally, ignoring the varying complexity and informativeness of different data points, leading to wasted computation on redundant or trivial examples.
+\end{enumerate}
+
+These challenges are not merely academic concerns---they represent practical barriers to LLM adoption in high-stakes applications where errors carry significant consequences.
+
+\paragraph{Main purpose of the research.}
+This thesis investigates a unified approach to addressing these three challenges by leveraging signals that are readily available from a single forward pass through the model. Specifically, we exploit two types of signals: (1) \textit{output distributions}, the probability distributions over tokens that models produce at each generation step, and (2) \textit{internal representations}, the high-dimensional activation patterns in the model's hidden layers. Our central hypothesis is that these signals encode rich information about model behavior, uncertainty, and input characteristics that can be extracted and utilized without requiring architectural modifications or additional training.
+
+The research addresses three concrete questions:
+\begin{enumerate}
+    \item \textbf{RQ1}: How can patterns in token-level output distributions be used to characterize model uncertainty and predict answer correctness?
+
+    \item \textbf{RQ2}: What geometric structure exists in the latent representations of multilingual LLMs, and how can this structure be exploited to control language-specific behaviors?
+
+    \item \textbf{RQ3}: How can output distribution characteristics guide the selection and processing of training data to improve fine-tuning efficiency?
+\end{enumerate}
+
+\paragraph{Scientific novelty.}
+This thesis makes several novel contributions to the field of LLM research:
+
+\begin{enumerate}
+    \item We introduce a systematic analysis of token-wise entropy patterns as uncertainty indicators, demonstrating that the ratio of maximum to minimum token entropy provides stronger predictive signal for answer correctness than aggregate confidence measures. This work extends beyond prior approaches that focus on sequence-level or single-token uncertainty.
+
+    \item We discover and characterize language-specific directions in LLM latent space that can be identified through simple PCA analysis with high accuracy (95--99\%). We demonstrate that these directions can be used for inference-time steering to reduce code-switching without any additional training, providing a new mechanism for behavioral control.
+
+    \item We develop a complexity-aware fine-tuning pipeline that combines entropy-based data stratification with targeted training interventions (direct SFT vs. chain-of-thought distillation), achieving significant accuracy improvements while reducing training data requirements by 81\%.
+
+    \item We establish a unifying framework showing how signals from the forward pass---whether from output distributions or internal representations---can address diverse challenges in LLM deployment, suggesting broader applicability of these techniques.
+\end{enumerate}
+
+\paragraph{Statements for defense.}
+
+\begin{enumerate}
+    \item Token-level entropy patterns, particularly the ratio of maximum to minimum entropy across generated tokens, provide effective signals for predicting LLM answer correctness, achieving ROC-AUC scores up to 0.83 on the MMLU-Pro benchmark.
+
+    \item Language-specific directions exist in the latent space of multilingual LLMs and can be reliably identified through PCA with 95--99\% classification accuracy. Steering model activations along these directions reduces unwanted code-switching by up to 55\% as measured by KL divergence.
+
+    \item Complexity-aware fine-tuning that stratifies training data by entropy and applies appropriate training strategies (direct SFT for simple examples, chain-of-thought distillation for complex ones) improves model accuracy while requiring substantially less training data than uniform approaches.
+
+    \item Signals from a single forward pass through an LLM---both output distributions and internal representations---encode sufficient information to address fundamental challenges in reliability, control, and training efficiency without requiring architectural modifications.
+\end{enumerate}

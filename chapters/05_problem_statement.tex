@@ -1,0 +1,100 @@
+\chapter{Problem statement}
+
+This chapter formally defines the research problems addressed in this thesis and establishes the notation used throughout.
+
+\section{Preliminaries and Notation}
+
+Let $\mathcal{M}$ denote an autoregressive language model with vocabulary $\mathcal{V}$ of size $|\mathcal{V}|$. Given an input sequence $x = (x_1, \ldots, x_n)$, the model produces a probability distribution over the next token:
+\begin{equation}
+    p(x_{n+1} | x_1, \ldots, x_n) = \text{softmax}(f_\theta(x_1, \ldots, x_n))
+    \label{eq:autoregressive}
+\end{equation}
+where $f_\theta: \mathcal{V}^n \rightarrow \mathbb{R}^{|\mathcal{V}|}$ represents the model's logit function parameterized by $\theta$.
+
+For a generated sequence $y = (y_1, \ldots, y_m)$, we define the token-wise entropy at position $t$ as:
+\begin{equation}
+    H_t = -\sum_{v \in \mathcal{V}} p(v | x, y_1, \ldots, y_{t-1}) \log p(v | x, y_1, \ldots, y_{t-1})
+    \label{eq:token_entropy}
+\end{equation}
+
+Let $h_l^{(t)} \in \mathbb{R}^d$ denote the hidden state at layer $l$ and position $t$, where $d$ is the hidden dimension of the model.
+
+\section{Problem 1: Uncertainty Estimation via Output Distributions}
+
+\begin{Def}[Answer Correctness Prediction]
+Given a question $q$ and a model-generated answer $a$, the answer correctness prediction problem is to estimate $P(\text{correct} | q, a, \mathcal{M})$ using only information available from a single forward pass through $\mathcal{M}$.
+\end{Def}
+
+The goal is to identify features derived from the output distribution that correlate with answer correctness. Specifically, we investigate:
+
+\begin{enumerate}
+    \item The sequence of token-wise entropies $(H_1, H_2, \ldots, H_m)$ during answer generation
+    \item Aggregate statistics including mean entropy, maximum entropy, minimum entropy, and their ratios
+    \item The predictive power of these features for distinguishing correct from incorrect answers
+\end{enumerate}
+
+\textbf{Objective}: Develop entropy-based features that achieve high ROC-AUC for predicting answer correctness, improving upon baseline confidence measures.
+
+\section{Problem 2: Language Control via Latent Space Steering}
+
+\begin{Def}[Language Direction]
+A language direction $v_\ell \in \mathbb{R}^d$ for language $\ell$ is a unit vector in the model's hidden state space such that the projection of hidden states onto $v_\ell$ is predictive of whether the model is generating text in language $\ell$.
+\end{Def}
+
+\begin{Def}[Code-Switching]
+Code-switching occurs when a model, prompted to respond in language $\ell_1$, produces tokens that belong to a different language $\ell_2 \neq \ell_1$.
+\end{Def}
+
+The language steering problem consists of two sub-problems:
+
+\textbf{Sub-problem 2a (Direction Identification)}: Given a multilingual model $\mathcal{M}$ and a set of languages $\mathcal{L}$, identify language directions $\{v_\ell\}_{\ell \in \mathcal{L}}$ from hidden states using unsupervised methods.
+
+\textbf{Sub-problem 2b (Activation Steering)}: Given identified language directions, modify the model's hidden states during inference to reduce code-switching:
+\begin{equation}
+    \tilde{h}_l^{(t)} = h_l^{(t)} + \alpha \cdot v_{\ell_{\text{target}}}
+    \label{eq:steering}
+\end{equation}
+where $\alpha$ is a steering strength parameter and $\ell_{\text{target}}$ is the desired output language.
+
+\textbf{Objective}: Achieve high language classification accuracy ($>95\%$) for direction identification and significant reduction in code-switching ($>50\%$ reduction in KL divergence from target language distribution).
+
+\section{Problem 3: Complexity-Aware Fine-Tuning}
+
+\begin{Def}[Example Complexity]
+The complexity of a training example $(x, y)$ with respect to model $\mathcal{M}$ is measured by the entropy of the model's output distribution when generating $y$ given $x$:
+\begin{equation}
+    C(x, y; \mathcal{M}) = \frac{1}{|y|} \sum_{t=1}^{|y|} H_t
+    \label{eq:complexity}
+\end{equation}
+\end{Def}
+
+The complexity-aware fine-tuning problem is to design a training procedure that:
+
+\begin{enumerate}
+    \item Stratifies training data $\mathcal{D} = \{(x_i, y_i)\}_{i=1}^N$ into complexity tiers based on $C(x_i, y_i; \mathcal{M})$
+    \item Applies appropriate training interventions for each tier:
+    \begin{itemize}
+        \item Low complexity (easy examples): Direct supervised fine-tuning (SFT)
+        \item High complexity (hard examples): Chain-of-thought distillation from a teacher model
+    \end{itemize}
+    \item Achieves higher accuracy with less training data compared to uniform training
+\end{enumerate}
+
+Formally, let $\mathcal{D}_{\text{easy}} = \{(x, y) \in \mathcal{D} : C(x, y; \mathcal{M}) < \tau\}$ and $\mathcal{D}_{\text{hard}} = \mathcal{D} \setminus \mathcal{D}_{\text{easy}}$ for some threshold $\tau$. The training objective is:
+\begin{equation}
+    \mathcal{L} = \sum_{(x,y) \in \mathcal{D}_{\text{easy}}} \mathcal{L}_{\text{SFT}}(x, y) + \sum_{(x,y) \in \mathcal{D}_{\text{hard}}} \mathcal{L}_{\text{distill}}(x, y, \mathcal{M}_{\text{teacher}})
+    \label{eq:training_objective}
+\end{equation}
+
+\textbf{Objective}: Achieve accuracy improvements over baseline SFT while using significantly less training data ($>50\%$ reduction in data requirements).
+
+\section{Unifying Theme}
+
+All three problems share a common approach: extracting and utilizing information from a single forward pass through the model. This information takes two forms:
+
+\begin{enumerate}
+    \item \textbf{Output distributions}: The probability distributions over tokens (Problems 1 and 3)
+    \item \textbf{Internal representations}: The hidden states at intermediate layers (Problem 2)
+\end{enumerate}
+
+The unifying hypothesis is that these signals encode rich information about model behavior, uncertainty, and input characteristics that can be exploited without architectural modifications or additional training. This thesis validates this hypothesis through empirical investigation of all three problems.

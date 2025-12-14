@@ -1,0 +1,57 @@
+\chapter{Literature review}
+
+This chapter surveys the research landscape relevant to the three main themes of this thesis: uncertainty estimation in language models, interpretability and control of internal representations, and efficient training methodologies.
+
+\section{Uncertainty Estimation in Large Language Models}
+
+The problem of uncertainty quantification in neural networks has a long history~\cite{gal2016dropout}, but the advent of large language models has introduced new challenges and opportunities. Traditional approaches to uncertainty estimation, such as Monte Carlo dropout~\cite{gal2016dropout} and deep ensembles~\cite{lakshminarayanan2017simple}, require multiple forward passes and are computationally expensive for large models.
+
+Recent work has explored more efficient alternatives. Confidence calibration methods attempt to align model confidence scores with actual accuracy~\cite{guo2017calibration}, but LLMs often exhibit poor calibration, particularly on out-of-distribution inputs~\cite{jiang2021can}. Verbalized confidence, where models are prompted to express uncertainty in natural language~\cite{kadavath2022language,lin2022teaching}, offers an interesting alternative but relies on the model's ability to accurately self-assess.
+
+Token-level probability analysis has emerged as a promising direction. Kuhn et al.~\cite{kuhn2023semantic} introduced semantic entropy, which clusters generated sequences by meaning before computing entropy, addressing the challenge of semantically equivalent but lexically different outputs. Malinin and Gales~\cite{malinin2021uncertainty} proposed using the entropy of the predictive distribution as an uncertainty measure for sequence generation tasks.
+
+The relationship between entropy patterns during generation and answer correctness remains underexplored. While prior work has focused on aggregate measures or first-token probabilities, our research investigates how token-wise entropy dynamics throughout the generation process correlate with model reliability.
+
+\section{Internal Representations and Interpretability}
+
+Understanding the internal representations of neural networks has been a central goal of interpretability research~\cite{olah2017feature,elhage2022toy}. For language models, this involves understanding what information is encoded in activation patterns and how this information is processed across layers.
+
+Probing classifiers have been widely used to identify what linguistic and semantic information is encoded in model representations~\cite{belinkov2017neural,conneau2018you}. These studies have revealed that different layers capture different types of information, with lower layers encoding syntactic features and higher layers encoding more semantic content~\cite{jawahar2019does}.
+
+More recently, researchers have discovered that model representations exhibit meaningful geometric structure. Linear directions in activation space have been found to correspond to interpretable concepts~\cite{mikolov2013linguistic,park2023linear}. This has enabled activation steering approaches, where model behavior can be modified by adding vectors to intermediate activations~\cite{turner2023activation,li2024inference}.
+
+For multilingual models, the question of how different languages are represented has received significant attention. Studies have found that multilingual models develop shared cross-lingual representations~\cite{pires2019multilingual,wu2019beto}, but also maintain language-specific information~\cite{libovicky2020language}. The phenomenon of code-switching---where models unexpectedly switch between languages---has been documented~\cite{winata2021language} but methods for controlling it remain limited.
+
+Our work extends these findings by demonstrating that language-specific directions can be identified through simple PCA analysis and used for inference-time steering without additional training.
+
+\section{Code-Switching in Multilingual Models}
+
+Code-switching refers to the alternation between languages within a single conversation or text. While natural in multilingual human communication, unintended code-switching in LLM outputs is generally undesirable as it reduces output quality and user experience~\cite{ahn2024language}.
+
+Prior approaches to controlling code-switching have primarily relied on training-time interventions. Language-specific fine-tuning can reduce code-switching but requires separate models or adapters for each language~\cite{pfeiffer2020adapterhub}. Constrained decoding methods can force outputs to remain in a target language but may degrade generation quality~\cite{post2018fast}.
+
+The discovery that language identity is encoded as linear directions in latent space~\cite{wendler2024llamas} opens new possibilities for inference-time control. However, practical methods for exploiting this structure to reduce code-switching have not been thoroughly explored. Our work addresses this gap by developing and evaluating activation steering methods specifically designed for language control.
+
+\section{Efficient Fine-Tuning and Data Selection}
+
+Fine-tuning large language models is computationally expensive, motivating research into more efficient approaches. Parameter-efficient fine-tuning methods such as LoRA~\cite{hu2022lora} and adapters~\cite{houlsby2019parameter} reduce the number of trainable parameters but do not address data efficiency.
+
+Data selection and curriculum learning aim to improve training efficiency by carefully choosing which examples to train on. Influence functions~\cite{koh2017understanding} can identify the most impactful training examples but are expensive to compute for large models. Active learning approaches~\cite{settles2009active} select informative examples iteratively but require multiple training rounds.
+
+Recent work has explored using model predictions to guide data selection. Self-training and self-distillation methods~\cite{furlanello2018born,xie2020self} use model outputs as targets for further training. Chain-of-thought distillation~\cite{ho2023large,magister2023teaching} transfers reasoning capabilities from larger to smaller models by training on generated rationales.
+
+The idea of stratifying training data by difficulty has been explored in curriculum learning~\cite{bengio2009curriculum}, where models are trained on progressively harder examples. However, automatically determining example difficulty without manual annotation remains challenging. Our work proposes using entropy as an automatic measure of example complexity and demonstrates that different complexity levels benefit from different training interventions.
+
+\section{Summary and Research Gaps}
+
+The literature reveals several research gaps that this thesis addresses:
+
+\begin{enumerate}
+    \item While uncertainty estimation methods exist, the relationship between token-wise entropy dynamics and answer correctness has not been systematically studied.
+
+    \item Although language-specific directions in latent space have been identified, practical methods for using them to control code-switching at inference time are lacking.
+
+    \item Existing data selection methods do not leverage the insight that examples of different complexity may benefit from different training strategies.
+\end{enumerate}
+
+This thesis addresses these gaps through three interconnected studies that exploit signals from the model's forward pass to improve reliability, control, and efficiency.

@@ -1,0 +1,77 @@
+\chapter{Discussion and conclusion}
+
+\section{Summary of Contributions}
+
+This thesis investigated how signals from a single forward pass through large language models---both output distributions and internal representations---can be leveraged to address fundamental challenges in LLM deployment. We presented three interconnected studies that demonstrate the practical utility of this approach.
+
+\textbf{Study 1: Uncertainty Estimation via Token-Wise Entropy.} We demonstrated that analyzing token-level entropy patterns during generation provides effective signals for predicting answer correctness. The max-to-min entropy ratio achieved ROC-AUC scores up to 0.83 on the MMLU-Pro benchmark, outperforming baseline confidence measures including first-token probability, mean sequence probability, and verbalized confidence. This work shows that the dynamics of uncertainty throughout generation---not just aggregate measures---contain valuable information about model reliability.
+
+\textbf{Study 2: Language Steering in Latent Space.} We discovered that language-specific directions can be reliably identified in LLM latent space through simple PCA analysis, achieving 95--99\% classification accuracy. By steering model activations along these directions during inference, we reduced unwanted code-switching by up to 55\% as measured by KL divergence, without requiring additional training or significant degradation in generation quality. This demonstrates that behavioral control can be achieved through geometric manipulation of internal representations.
+
+\textbf{Study 3: Complexity-Aware Fine-Tuning.} We developed a training pipeline that uses entropy to stratify training data by complexity and applies targeted interventions: direct supervised fine-tuning for easy examples and chain-of-thought distillation for hard examples. This approach achieved accuracy improvements from 0.39 to 0.52 (Qwen-2.5-1.5B) and 0.51 to 0.64 (Qwen-2.5-3B) while using 81\% less training data than baseline methods. This shows that understanding input complexity through output distributions enables more efficient use of training resources.
+
+\section{Unifying Insights}
+
+The three studies share a common finding: the signals produced during a single forward pass through an LLM encode rich information that goes beyond the immediate task of next-token prediction. Specifically:
+
+\begin{enumerate}
+    \item \textbf{Output distributions reflect model confidence}: High entropy indicates uncertainty, and the pattern of entropy changes throughout generation correlates with answer correctness.
+
+    \item \textbf{Internal representations encode interpretable structure}: Language identity is represented as linear directions in activation space, enabling geometric interventions for behavioral control.
+
+    \item \textbf{Entropy measures input complexity}: The model's uncertainty about a training example reflects its difficulty, enabling intelligent data stratification.
+\end{enumerate}
+
+These insights suggest that LLMs develop internal representations of their own capabilities and limitations that can be accessed and exploited without explicit training.
+
+\section{Position in the Research Landscape}
+
+Our work contributes to several active research areas:
+
+\textbf{Uncertainty quantification}: We extend prior work on semantic entropy~\cite{kuhn2023semantic} by demonstrating that token-wise entropy dynamics provide complementary signals. Our approach requires only a single forward pass, making it practical for real-time applications.
+
+\textbf{Interpretability and steering}: Building on discoveries about linear structure in LLM representations~\cite{park2023linear,turner2023activation}, we provide practical methods for language control that require no training and minimal computational overhead.
+
+\textbf{Efficient training}: Our complexity-aware approach relates to curriculum learning~\cite{bengio2009curriculum} and data selection~\cite{settles2009active}, but uniquely combines automatic complexity estimation with targeted training interventions.
+
+\section{Limitations}
+
+Several limitations should be acknowledged:
+
+\begin{enumerate}
+    \item \textbf{Model dependence}: Our methods have been evaluated primarily on the Llama and Qwen model families. Generalization to other architectures (e.g., Mixture of Experts models) requires further validation.
+
+    \item \textbf{Language coverage}: The language steering experiments focused on English-Russian pairs. Extension to more diverse language combinations and low-resource languages remains future work.
+
+    \item \textbf{Task specificity}: Experiments were conducted primarily on multiple-choice question answering (MMLU-Pro). Performance on other task types (open-ended generation, reasoning, coding) needs investigation.
+
+    \item \textbf{Scaling behavior}: While we observed that larger models show better entropy-correctness calibration, the scaling behavior of all proposed methods requires systematic study.
+\end{enumerate}
+
+\section{Future Directions}
+
+This research opens several promising directions:
+
+\begin{enumerate}
+    \item \textbf{Combining signals}: The three types of signals (entropy patterns, internal representations, complexity scores) could be combined into unified frameworks for model monitoring and control.
+
+    \item \textbf{Online adaptation}: The methods could be extended to enable online adaptation during deployment, automatically adjusting model behavior based on observed uncertainty or language patterns.
+
+    \item \textbf{Multi-dimensional steering}: Beyond language, the geometric structure of latent space could be exploited for steering other attributes such as formality, safety, or domain expertise.
+
+    \item \textbf{Theoretical foundations}: Developing theoretical understanding of why these signals are predictive would strengthen the foundations for future applications.
+
+    \item \textbf{Integration with alignment}: The uncertainty and control mechanisms developed here could be integrated with RLHF and other alignment techniques to improve model safety.
+\end{enumerate}
+
+\section{Conclusion}
+
+This thesis demonstrated that accessible signals from a single forward pass through large language models provide valuable information for addressing fundamental deployment challenges. Token-wise entropy patterns predict answer correctness, latent space geometry enables language control, and complexity-aware data stratification improves training efficiency. Together, these contributions establish that exploiting forward-pass signals offers a practical path toward more reliable, controllable, and efficient LLMs---without requiring architectural modifications or expensive retraining.
+
+\newpage
+\chapter*{Acknowledgements}
+\addcontentsline{toc}{chapter}{Acknowledgements}
+
+I would like to express my gratitude to my supervisor, Alexey Zaytsev, for his guidance and support throughout this research. I also thank my co-authors---Mikhail Sychev, Andrey Grishin, Danil Smorchkov, Ivan Molybog, and Egor Kondusov---for their valuable contributions to the published papers that form the basis of this thesis.
+
+This research was conducted at Skolkovo Institute of Science and Technology (Skoltech). I acknowledge the computational resources provided by the Skoltech HPC cluster.
