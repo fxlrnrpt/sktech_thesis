@@ -1,0 +1,538 @@
+\documentclass[12pt,a4paper]{article}
+
+% ============================================
+% PACKAGES
+% ============================================
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{times}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath,amssymb}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{tocloft}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+
+% ============================================
+% FORMATTING
+% ============================================
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  citecolor=blue,
+  urlcolor=blue
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[R]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+\titleformat{\section}{\normalfont\Large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries}{\thesubsection}{1em}{}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{10pt}
+
+% ============================================
+% TITLE PAGE
+% ============================================
+\begin{document}
+
+\begin{titlepage}
+  \centering
+  \vspace*{1cm}
+
+  {\LARGE\textbf{Skoltech}}\\[0.5cm]
+  \rule{\textwidth}{1pt}\\[2cm]
+
+  {\Large\textbf{MASTER'S THESIS STATUS REPORT}}\\[0.5cm]
+
+  {\Large\textbf{Leveraging Uncertainty Signals and Latent Space Structure\\
+  for Control and Efficiency in LLMs}}\\[3cm]
+
+  {\large Master's Educational Program: \textbf{Data Science}}\\[1cm]
+
+  {\large Student: \textbf{Andrey Goncharov}}\\[0.5cm]
+  {\large Supervisor: \textbf{Alexey Zaytsev}}\\[3cm]
+
+  {\large Moscow 2025}\\[2cm]
+
+  \rule{\textwidth}{0.5pt}\\[0.5cm]
+  {\small Copyright 2025 Author. All rights reserved.\\
+  The author hereby grants to Skoltech permission to reproduce and to distribute publicly paper and electronic copies of this thesis document in whole and in part in any medium now known or hereafter created.}
+
+\end{titlepage}
+
+% ============================================
+% TABLE OF CONTENTS
+% ============================================
+\tableofcontents
+\newpage
+
+% ============================================
+% SECTION 1: RESEARCH PROBLEM
+% ============================================
+\section{Research Problem / Questions}
+
+Large Language Models (LLMs) have demonstrated remarkable capabilities across diverse tasks, yet their deployment in production systems faces critical challenges related to \textbf{controllability} and \textbf{training efficiency}. This thesis investigates how \textbf{uncertainty signals} (token-level entropy) and \textbf{latent space structure} (hidden state geometry) can be leveraged for lightweight interventions without expensive retraining. We address three interconnected problems:
+
+\subsection{Uncertainty and Reliability}
+LLMs often generate responses with unjustified confidence, particularly in knowledge-intensive domains. The confidence gap between a model's certainty and actual correctness poses risks in high-stakes applications like healthcare, law, and education, where overconfidence in incorrect answers can lead to harmful decisions.
+
+\textbf{Research Question 1:} \textit{How can we reliably estimate LLM uncertainty from internal representations, and under what conditions are these estimates justified?}
+
+\subsection{Multilingual Control}
+Multilingual LLMs frequently exhibit unintended code-switching, generating tokens in languages different from the target despite explicit monolingual instructions. This undermines system reliability and complicates evaluation in production environments.
+
+\textbf{Research Question 2:} \textit{Can we identify and manipulate language-specific directions in LLM latent space to control code-switching without fine-tuning?}
+
+\subsection{Training Inefficiency}
+Current fine-tuning approaches apply uniform strategies across all data, ignoring that different question complexities require different learning approaches. This one-size-fits-all methodology leads to suboptimal performance and inefficient use of computational resources.
+
+\textbf{Research Question 3:} \textit{Can complexity-aware training strategies---informed by uncertainty metrics---improve fine-tuning efficiency while reducing data requirements?}
+
+\subsection{Unifying Framework}
+The central thesis is that \textbf{internal representations} of LLMs encode rich information about uncertainty, language identity, and task complexity that can be leveraged for lightweight, interpretable interventions without expensive retraining.
+
+% ============================================
+% SECTION 2: GOALS AND OBJECTIVES
+% ============================================
+\section{Goals and Objectives}
+
+\subsection{Primary Goal}
+To develop a comprehensive framework for analyzing and manipulating internal representations of LLMs to improve their reliability, controllability, and training efficiency.
+
+\subsection{Specific Objectives}
+
+\subsubsection{Objective 1: Uncertainty Characterization (COMPLETED)}
+\begin{itemize}[leftmargin=*]
+  \item Develop automated pipeline for uncertainty quantification using entropy-based and model-as-judge approaches
+  \item Validate correlation between token-level entropy and question difficulty across domains
+  \item Analyze when uncertainty estimates are justified vs.\ unjustified
+  \item \textbf{Status:} Published in arXiv:2503.01688 \cite{sychev2025uncertainty}
+\end{itemize}
+
+\subsubsection{Objective 2: Multilingual Latent-Space Control (COMPLETED)}
+\begin{itemize}[leftmargin=*]
+  \item Identify language-specific directions via PCA on parallel translations
+  \item Develop inference-time steering method with negligible computational overhead
+  \item Validate across multiple language pairs (English, Spanish, Russian, Chinese, Hindi)
+  \item \textbf{Status:} Published in arXiv:2510.13849 \cite{goncharov2025steering}
+\end{itemize}
+
+\subsubsection{Objective 3: Complexity-Aware Fine-Tuning (COMPLETED)}
+\begin{itemize}[leftmargin=*]
+  \item Integrate uncertainty metrics for dataset stratification (easy/medium/hard)
+  \item Implement differentiated training pipelines (SFT for easy, distillation for hard)
+  \item Demonstrate efficiency gains over baseline approaches
+  \item \textbf{Status:} Published in arXiv:2506.21220 \cite{goncharov2025complexity}
+\end{itemize}
+
+\subsubsection{Objective 4: Integration and Thesis Completion (IN PROGRESS)}
+\begin{itemize}[leftmargin=*]
+  \item Synthesize findings into unified theoretical framework
+  \item Combine techniques for end-to-end improved LLM deployment
+  \item Complete thesis document and defense preparation
+  \item \textbf{Status:} In progress
+\end{itemize}
+
+% ============================================
+% SECTION 3: LITERATURE REVIEW
+% ============================================
+\section{Literature Review}
+
+\subsection{Uncertainty Estimation in LLMs}
+
+Uncertainty quantification for LLMs has been approached through both black-box and white-box methods. Model-as-judge approaches \citep{zheng2023mtbench} leverage auxiliary LLMs to evaluate response quality, while token-level probability methods \citep{kadavath2022language} exploit the model's own confidence signals. \citet{fadeeva2023lmpolygraph} provided comprehensive comparisons showing entropy-based methods' effectiveness for free-form responses.
+
+However, existing work suffers from two limitations: (1) lack of domain-specific analysis connecting uncertainty patterns to question types, and (2) failure to leverage uncertainty for downstream applications like adaptive training. Our work addresses both gaps.
+
+\subsection{Multilingual Representation Structure}
+
+Work on mBERT and XLM-R revealed that language identity concentrates in few principal components, separable from semantics in parallel texts \citep{conneau2020emerging, chi2020finding}. \citet{yang2021simple} removed these components for language-agnostic embeddings. \citet{wendler2024llamas} extended this to decoder-only LLMs, revealing latent language preferences.
+
+While prior work focused on analysis, we exploit this structure for \textit{active generation control}, demonstrating practical code-switching mitigation.
+
+\subsection{Code-Switching in Multilingual LLMs}
+
+Code-switching has been studied for mixed-language inputs \citep{aguilar2020lince, bali2014borrowing}, with recent work identifying \textit{unintended} switching in outputs \citep{ryan2024unintended, yoo2024codeswitching}. Standard mitigations require costly fine-tuning or brittle prompt engineering. Our latent-space steering offers a lightweight alternative.
+
+\subsection{Adaptive Training Methods}
+
+Curriculum learning approaches \citep{kim2024strategic} order training examples from easy to hard, showing modest gains. The LIMA approach \citep{zhou2023lima} demonstrated that small, high-quality datasets suffice for alignment. SmallToLarge \citep{yang2024s2l} uses training trajectories for data selection but requires additional model training.
+
+Knowledge distillation \citep{hsieh2023distilling} improves complex task performance but hasn't been selectively applied based on complexity. Our work bridges uncertainty estimation and adaptive training, showing that distillation is beneficial specifically for high-complexity samples.
+
+% ============================================
+% SECTION 4: METHODS
+% ============================================
+\section{Methods}
+
+\subsection{Study 1: Uncertainty Characterization}
+
+\subsubsection{Experimental Design}
+We developed an automated pipeline for evaluating uncertainty estimation on the MMLU-Pro benchmark \citep{wang2024mmlupro} spanning 14 topics with $\sim$12,000 questions. Four LLMs were evaluated: Phi-4, Mistral-Small-24B, Qwen-1.5B, and Qwen-72B.
+
+\subsubsection{Uncertainty Metrics}
+\paragraph{Token-wise Entropy:} For vocabulary size $k$ and logits $\mathbf{z} = (z_1, \ldots, z_k)$, we compute:
+\begin{equation}
+  p_i = \frac{e^{z_i}}{\sum_{j=1}^{k} e^{z_j}}, \quad H = -\sum_{i=1}^{k} p_i \log p_i
+\end{equation}
+
+\paragraph{Model-as-Judge (MASJ):} We prompt Mistral-Large-123B to estimate (1) required education level and (2) number of reasoning steps for each question.
+
+\subsubsection{Evaluation Protocol}
+ROC-AUC scores quantify how well uncertainty predicts incorrect answers, stratified by:
+\begin{itemize}[leftmargin=*]
+  \item Subject domain (14 topics)
+  \item Reasoning requirement (low/medium/high)
+  \item Model architecture and scale
+\end{itemize}
+
+\subsection{Study 2: Latent-Space Language Steering}
+
+\subsubsection{Language Direction Identification}
+Given parallel corpus $\mathcal{D} = \{(s, \ell)\}_{i=1}^{N}$ with semantic content $s$ in language $\ell$, we extract hidden states $\mathbf{h}_i^{(\ell)} \in \mathbb{R}^d$ from each layer. PCA identifies the first principal component as the language direction:
+\begin{equation}
+  \mathbf{v}^{(\ell)} = \arg\max_{\|\mathbf{v}\|=1} \sum_{i=1}^{N} \left(\mathbf{v}^\top (\mathbf{h}_i^{(\ell)} - \bar{\mathbf{h}}^{(\ell)})\right)^2
+\end{equation}
+
+\subsubsection{Steering Mechanism}
+For layers $\ell \geq \ell_{\text{crit}}$, we remove the language component:
+\begin{equation}
+  \tilde{\mathbf{h}}_t^{(\ell)} = \mathbf{h}_t^{(\ell)} - s \cdot (\mathbf{h}_t^{(\ell)} \cdot \mathbf{v}^{(\ell)}) \mathbf{v}^{(\ell)}
+\end{equation}
+where $s \in \mathbb{R}^+$ controls intervention strength.
+
+\subsubsection{Evaluation}
+\begin{itemize}[leftmargin=*]
+  \item \textbf{Classification accuracy:} Logistic regression on PC1 projections
+  \item \textbf{KL divergence:} Measuring distributional shift from code-switched to steered outputs
+  \item \textbf{Models:} Qwen2.5-1.5B, Llama-3.2-1B
+  \item \textbf{Languages:} English, Spanish, Russian, Chinese, Hindi
+\end{itemize}
+
+\subsection{Study 3: Complexity-Aware Fine-Tuning}
+
+\subsubsection{Pipeline Overview}
+\begin{enumerate}[leftmargin=*]
+  \item \textbf{Complexity estimation:} Compute answer token entropy for each training sample
+  \item \textbf{Data stratification:} Split dataset into easy/medium/hard terciles by entropy
+  \item \textbf{Differentiated training:}
+    \begin{itemize}
+      \item Easy/medium: Standard SFT
+      \item Hard: Chain-of-thought distillation from teacher LLM
+    \end{itemize}
+\end{enumerate}
+
+\subsubsection{Baselines}
+\begin{itemize}[leftmargin=*]
+  \item \textbf{SFT:} Uniform supervised fine-tuning on all data
+  \item \textbf{Curriculum:} Easy $\rightarrow$ medium $\rightarrow$ hard ordering
+  \item \textbf{Full distillation:} CoT distillation on all data
+\end{itemize}
+
+\subsubsection{Models and Data}
+Student models: Qwen2.5-3B, Phi-4-Mini. Teacher ensemble: DeepSeek-V3, Qwen-3-235B, Llama-4-Maverick. Dataset: MMLU-Pro.
+
+% ============================================
+% SECTION 5: KEY RESULTS
+% ============================================
+\section{Key Results}
+
+\subsection{Study 1: Uncertainty Estimation}
+
+\subsubsection{Entropy Predicts Errors in Knowledge-Dependent Domains}
+Token-wise entropy achieves strong predictive performance (ROC-AUC up to 0.83 for Biology with Qwen-72B), while MASJ scores perform near-random (ROC-AUC $\approx$ 0.49).
+
+\begin{table}[h]
+  \centering
+  \caption{ROC-AUC for error prediction by domain (Qwen-72B)}
+  \begin{tabular}{lc}
+    \toprule
+    \textbf{Domain} & \textbf{ROC-AUC} \\
+    \midrule
+    Biology & 0.83 \\
+    Economics & 0.80 \\
+    Psychology & 0.77 \\
+    Physics & 0.74 \\
+    Mathematics & 0.73 \\
+    Law & 0.69 \\
+    \bottomrule
+  \end{tabular}
+  \label{tab:roc_auc}
+\end{table}
+
+\subsubsection{Reasoning Requirement Modulates Uncertainty Validity}
+Entropy is a better predictor when no reasoning is required (ROC-AUC 0.79) compared to high-reasoning questions (ROC-AUC 0.73 for Qwen-72B). This suggests entropy primarily captures \textit{knowledge uncertainty} rather than \textit{reasoning difficulty}.
+
+\subsubsection{Model Scale Improves Calibration}
+Larger models show clearer separation between correct (low entropy) and incorrect (high entropy) predictions. Qwen-1.5B achieves the best Expected Calibration Error (ECE = 0.242) despite smaller scale, suggesting architectural factors beyond size affect calibration.
+
+\subsection{Study 2: Language Steering}
+
+\subsubsection{Near-Perfect Language Classification from PC1}
+A single principal component enables 95-99\% language classification accuracy across all tested pairs.
+
+\begin{table}[h]
+  \centering
+  \caption{Language classification accuracy (Qwen2.5-1.5B)}
+  \begin{tabular}{lc}
+    \toprule
+    \textbf{Language Pair} & \textbf{Accuracy} \\
+    \midrule
+    English - Chinese & 0.98 \\
+    English - Russian & 0.99 \\
+    English - Hindi & 0.98 \\
+    English - Spanish & 0.95 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsubsection{Steering Reduces Code-Switching}
+KL divergence from original (English) distribution decreases by up to 42\% after steering:
+
+\begin{table}[h]
+  \centering
+  \caption{KL divergence reduction via steering}
+  \begin{tabular}{lcc}
+    \toprule
+    \textbf{Language Pair} & \textbf{Before} & \textbf{After} \\
+    \midrule
+    English - Chinese & 8.94 & 5.19 \\
+    English - Russian & 7.78 & 5.43 \\
+    English - Spanish & 6.37 & 5.86 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsubsection{Language Identity Concentrates in Final Layers}
+Explained variance for PC1 peaks in final layers ($\sim$10\% at layer 16 for Llama-3.2), with clusters emerging loosely in early layers and sharpening dramatically toward the output.
+
+\subsection{Study 3: Complexity-Aware Fine-Tuning}
+
+\subsubsection{Significant Accuracy Improvements}
+Our pipeline achieves substantial gains over baselines:
+
+\begin{table}[h]
+  \centering
+  \caption{Accuracy after 20 epochs}
+  \begin{tabular}{lcc}
+    \toprule
+    \textbf{Method} & \textbf{Qwen 3B} & \textbf{Phi4-mini} \\
+    \midrule
+    SFT (baseline) & 0.39 & 0.51 \\
+    Curriculum & 0.45 & 0.54 \\
+    Distillation (all data) & 0.50 & 0.63 \\
+    \textbf{Pipeline (ours)} & \textbf{0.52} & \textbf{0.64} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsubsection{81\% Data Efficiency Improvement}
+Our pipeline matches or exceeds full distillation while using only 19\% of the tokens:
+\begin{itemize}[leftmargin=*]
+  \item Qwen 3B: 7.98k tokens (ours) vs.\ 39.45k (full distillation)
+  \item Phi4-mini: 5.35k tokens (ours) vs.\ 30.30k (full distillation)
+\end{itemize}
+
+\subsubsection{Entropy-Based Splitting Outperforms MASJ}
+Single-token entropy achieves ROC-AUC 0.72-0.74 for complexity estimation, while MASJ reasoning scores achieve only 0.54-0.57.
+
+% ============================================
+% SECTION 6: THESIS STRUCTURE
+% ============================================
+\section{Thesis Structure (Planned)}
+
+\begin{enumerate}[leftmargin=*]
+  \item \textbf{Introduction} -- Motivation, research questions, contributions
+  \item \textbf{Background} -- LLM architecture, uncertainty theory, representation analysis
+  \item \textbf{Study 1: Uncertainty Characterization} -- Methods, results, implications
+  \item \textbf{Study 2: Language Steering} -- PCA-based control, steering algorithm, validation
+  \item \textbf{Study 3: Complexity-Aware Training} -- Pipeline design, ablations, efficiency analysis
+  \item \textbf{Unified Framework} -- Connecting uncertainty, control, and training
+  \item \textbf{Discussion} -- Limitations, future directions
+  \item \textbf{Conclusion}
+\end{enumerate}
+
+% ============================================
+% SECTION 7: TIMELINE
+% ============================================
+\section{Timeline and Milestones}
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{lll}
+    \toprule
+    \textbf{Phase} & \textbf{Status} & \textbf{Completion} \\
+    \midrule
+    Phase 1: Uncertainty Characterization & \textcolor{green!60!black}{Completed} & Mar 2025 \\
+    Phase 2: Language Control Development & \textcolor{green!60!black}{Completed} & Oct 2025 \\
+    Phase 3: Complexity-Aware Training & \textcolor{green!60!black}{Completed} & Oct 2025 \\
+    Phase 4: Integration \& Validation & \textcolor{orange}{In Progress} & Dec 2025 \\
+    Phase 5: Thesis Writing \& Defense & \textcolor{orange}{In Progress} & Feb 2026 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+% ============================================
+% REFERENCES
+% ============================================
+\section{List of References}
+
+\begin{thebibliography}{99}
+
+  \bibitem[Sychev et al.(2025)]{sychev2025uncertainty}
+  Sychev, P., Goncharov, A., Vyazhev, D., Khalafyan, E., \& Zaytsev, A. (2025).
+  When an LLM is Apprehensive About Its Answers -- And When Its Uncertainty Is Justified.
+  \textit{arXiv preprint arXiv:2503.01688}.
+
+  \bibitem[Goncharov et al.(2025a)]{goncharov2025complexity}
+  Goncharov, A., Vyazhev, D., Sychev, P., Khalafyan, E., \& Zaytsev, A. (2025).
+  Complexity-aware fine-tuning.
+  \textit{arXiv preprint arXiv:2506.21220}.
+
+  \bibitem[Goncharov et al.(2025b)]{goncharov2025steering}
+  Goncharov, A., Kondusov, N., \& Zaytsev, A. (2025).
+  Language steering in latent space to mitigate unintended code-switching.
+  \textit{arXiv preprint arXiv:2510.13849}.
+
+  \bibitem[Zheng et al.(2023)]{zheng2023mtbench}
+  Zheng, L., et al. (2023).
+  Judging LLM-as-a-judge with MT-bench and Chatbot Arena.
+  \textit{NeurIPS}.
+
+  \bibitem[Kadavath et al.(2022)]{kadavath2022language}
+  Kadavath, S., et al. (2022).
+  Language models (mostly) know what they know.
+  \textit{arXiv preprint arXiv:2207.05221}.
+
+  \bibitem[Fadeeva et al.(2023)]{fadeeva2023lmpolygraph}
+  Fadeeva, E., et al. (2023).
+  LM-polygraph: Uncertainty estimation for language models.
+  \textit{EMNLP System Demonstrations}.
+
+  \bibitem[Conneau et al.(2020)]{conneau2020emerging}
+  Conneau, A., et al. (2020).
+  Emerging cross-lingual structure in pretrained language models.
+  \textit{ACL}.
+
+  \bibitem[Chi et al.(2020)]{chi2020finding}
+  Chi, E.A., Hewitt, J., \& Manning, C.D. (2020).
+  Finding universal grammatical relations in multilingual BERT.
+  \textit{ACL}.
+
+  \bibitem[Wendler et al.(2024)]{wendler2024llamas}
+  Wendler, C., et al. (2024).
+  Do LLamas work in English? On the latent language of multilingual transformers.
+  \textit{ACL}.
+
+  \bibitem[Aguilar et al.(2020)]{aguilar2020lince}
+  Aguilar, G., Kar, S., \& Solorio, T. (2020).
+  LinCE: A centralized benchmark for linguistic code-switching evaluation.
+  \textit{LREC}.
+
+  \bibitem[Bali et al.(2014)]{bali2014borrowing}
+  Bali, K., et al. (2014).
+  ``I am borrowing ya mixing?'' An analysis of English-Hindi code mixing in Facebook.
+  \textit{First Workshop on Computational Approaches to Code Switching}.
+
+  \bibitem[Ryan et al.(2024)]{ryan2024unintended}
+  Ryan, M.J., Held, W., \& Yang, D. (2024).
+  Unintended impacts of LLM alignment on global representation.
+  \textit{ACL}.
+
+  \bibitem[Yoo et al.(2024)]{yoo2024codeswitching}
+  Yoo, H., Yang, Y., \& Lee, H. (2024).
+  Code-switching red-teaming: LLM evaluation for safety and multilingual understanding.
+  \textit{arXiv preprint arXiv:2406.15481}.
+
+  \bibitem[Yang(2021)]{yang2021simple}
+  Yang, Z., et al. (2021).
+  A simple and effective method to eliminate the self language bias in multilingual representations.
+  \textit{EMNLP}.
+
+  \bibitem[Kim \& Lee(2024)]{kim2024strategic}
+  Kim, J., \& Lee, J. (2024).
+  Strategic data ordering: Enhancing large language model performance through curriculum learning.
+  \textit{arXiv preprint}.
+
+  \bibitem[Zhou et al.(2023)]{zhou2023lima}
+  Zhou, C., et al. (2023).
+  LIMA: Less is more for alignment.
+  \textit{arXiv preprint arXiv:2305.11206}.
+
+  \bibitem[Yang et al.(2024)]{yang2024s2l}
+  Yang, Y., et al. (2024).
+  SmallToLarge (S2L): Scalable data selection for fine-tuning large language models.
+  \textit{arXiv preprint arXiv:2403.07384}.
+
+  \bibitem[Hsieh et al.(2023)]{hsieh2023distilling}
+  Hsieh, C.-Y., et al. (2023).
+  Distilling step-by-step! Outperforming larger language models with less training data and smaller model sizes.
+  \textit{ACL}.
+
+  \bibitem[Wang et al.(2024)]{wang2024mmlupro}
+  Wang, Y., et al. (2024).
+  MMLU-Pro: A more robust and challenging multi-task language understanding benchmark.
+  \textit{NeurIPS}.
+
+\end{thebibliography}
+
+% ============================================
+% APPENDIX
+% ============================================
+\newpage
+\section*{Appendix: Publications and Resources}
+
+\subsection*{A. Published Papers}
+
+\begin{enumerate}[leftmargin=*]
+  \item \textbf{Sychev, P., Goncharov, A., Vyazhev, D., Khalafyan, E., \& Zaytsev, A.} (2025). ``When an LLM is Apprehensive About Its Answers -- And When Its Uncertainty Is Justified.'' \textit{arXiv:2503.01688}.
+    \begin{itemize}
+      \item GitHub: \url{https://github.com/LabARSS/question-complexity-estimation}
+    \end{itemize}
+
+  \item \textbf{Goncharov, A., Vyazhev, D., Sychev, P., Khalafyan, E., \& Zaytsev, A.} (2025). ``Complexity-aware fine-tuning.'' \textit{arXiv:2506.21220}.
+    \begin{itemize}
+      \item GitHub: \url{https://github.com/LabARSS/complexity-aware-fine-tuning}
+    \end{itemize}
+
+  \item \textbf{Goncharov, A., Kondusov, N., \& Zaytsev, A.} (2025). ``Language steering in latent space to mitigate unintended code-switching.'' \textit{arXiv:2510.13849}.
+    \begin{itemize}
+      \item GitHub: \url{https://github.com/fxlrnrpt/language-steering-in-latent-space}
+    \end{itemize}
+\end{enumerate}
+
+\subsection*{B. Key Findings Summary}
+
+\begin{table}[h]
+  \centering
+  \caption{Summary of thesis contributions}
+  \begin{tabular}{p{3.5cm}p{4cm}p{4cm}p{3cm}}
+    \toprule
+    \textbf{Study} & \textbf{Key Method} & \textbf{Main Finding} & \textbf{Metric} \\
+    \midrule
+    Uncertainty & Token-wise entropy & Predicts errors in knowledge domains & ROC-AUC 0.83 \\
+    Language Control & PCA + projection & Controls code-switching & 42\% KL reduction \\
+    Complexity Training & Entropy stratification & Matches distillation with 19\% data & 0.52/0.64 accuracy \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection*{C. Datasets Released}
+
+\begin{itemize}[leftmargin=*]
+  \item MMLU-Pro with token probability distributions
+  \item Chain-of-thought responses with entropy annotations
+  \item Parallel translation embeddings for language steering
+\end{itemize}
+
+\end{document}
