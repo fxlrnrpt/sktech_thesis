@@ -54,8 +54,8 @@
 
   {\Large\textbf{MASTER'S THESIS STATUS REPORT}}\\[0.5cm]
 
-  {\Large\textbf{Leveraging Uncertainty Signals and Latent Space Structure\\
-  for Control and Efficiency in LLMs}}\\[3cm]
+  {\Large\textbf{From Internal Representations to Output Distributions:\\
+  Lightweight Signals for LLM Control and Efficiency}}\\[3cm]
 
   {\large Master's Educational Program: \textbf{Data Science}}\\[1cm]
 
@@ -81,25 +81,37 @@
 % ============================================
 \section{Research Problem / Questions}
 
-Large Language Models (LLMs) have demonstrated remarkable capabilities across diverse tasks, yet their deployment in production systems faces critical challenges related to \textbf{controllability} and \textbf{training efficiency}. This thesis investigates how \textbf{uncertainty signals} (token-level entropy) and \textbf{latent space structure} (hidden state geometry) can be leveraged for lightweight interventions without expensive retraining. We address three interconnected problems:
+Large Language Models (LLMs) have demonstrated remarkable capabilities across diverse tasks, yet their deployment in production systems faces critical challenges related to \textbf{controllability} and \textbf{training efficiency}. This thesis investigates how signals extracted from LLMs---both from \textbf{internal representations} (hidden state geometry) and their \textbf{external reflection in output distributions} (token-level entropy)---can be leveraged for efficiency gains at two stages:
 
-\subsection{Uncertainty and Reliability}
+\begin{itemize}[leftmargin=*]
+  \item \textbf{Training time:} Output entropy guides data stratification for more efficient fine-tuning (Study 3).
+  \item \textbf{Runtime:} Output entropy enables uncertainty characterization without additional inference (Study 1), while latent space structure enables generation control without retraining (Study 2)---with potential for future efficient runtime interventions.
+\end{itemize}
+
+The key insight is that the forward pass of an LLM produces a rich hierarchy of information: hidden states encode high-level structure (e.g., language identity), while output logit distributions reflect the model's confidence and uncertainty. This thesis addresses three interconnected problems:
+
+\subsection{Uncertainty Characterization}
 LLMs often generate responses with unjustified confidence, particularly in knowledge-intensive domains. The confidence gap between a model's certainty and actual correctness poses risks in high-stakes applications like healthcare, law, and education, where overconfidence in incorrect answers can lead to harmful decisions.
 
-\textbf{Research Question 1:} \textit{How can we reliably estimate LLM uncertainty from internal representations, and under what conditions are these estimates justified?}
+\textbf{Research Question 1:} \textit{How can we characterize LLM uncertainty using token-level entropy, and under what conditions are these uncertainty signals informative?}
 
-\subsection{Multilingual Control}
-Multilingual LLMs frequently exhibit unintended code-switching, generating tokens in languages different from the target despite explicit monolingual instructions. This undermines system reliability and complicates evaluation in production environments.
+\subsection{Latent Space Structure}
+LLMs encode high-level concepts in their hidden states, but the geometry of these representations remains underexplored. Understanding how ideas---such as language identity, topic, or style---are represented in latent space opens the door to direct manipulation of model behavior without retraining. This thesis presents early exploration of latent space structure, using language identity as an ideal test case: it is discrete, easily verifiable, and has immediate practical applications (e.g., mitigating unintended code-switching). Success here suggests potential for future efficient runtime interventions on other concepts.
 
-\textbf{Research Question 2:} \textit{Can we identify and manipulate language-specific directions in LLM latent space to control code-switching without fine-tuning?}
+\textbf{Research Question 2:} \textit{Can we identify interpretable structure in LLM latent space, and can manipulating this structure control generation behavior?}
 
 \subsection{Training Inefficiency}
 Current fine-tuning approaches apply uniform strategies across all data, ignoring that different question complexities require different learning approaches. This one-size-fits-all methodology leads to suboptimal performance and inefficient use of computational resources.
 
-\textbf{Research Question 3:} \textit{Can complexity-aware training strategies---informed by uncertainty metrics---improve fine-tuning efficiency while reducing data requirements?}
+\textbf{Research Question 3:} \textit{Can uncertainty signals guide complexity-aware training strategies to improve fine-tuning efficiency while reducing data requirements?}
 
-\subsection{Unifying Framework}
-The central thesis is that \textbf{internal representations} of LLMs encode rich information about uncertainty, language identity, and task complexity that can be leveraged for lightweight, interpretable interventions without expensive retraining.
+\subsection{Unifying Theme}
+The central thesis is that the LLM forward pass provides two complementary sources of actionable signal:
+\begin{itemize}[leftmargin=*]
+  \item \textbf{Output distributions:} Token-level entropy reflects model confidence and task complexity, enabling runtime uncertainty characterization (Study 1) and training-time data stratification for efficient fine-tuning (Study 3).
+  \item \textbf{Internal representations:} Hidden states encode interpretable structure (e.g., language identity) that can be directly manipulated for runtime generation control. This thesis presents early exploration of latent space geometry (Study 2), demonstrating feasibility and opening directions for future efficient runtime interventions.
+\end{itemize}
+Together, these signals enable efficiency gains at both training time (smarter fine-tuning) and runtime (uncertainty-aware systems, generation control).
 
 % ============================================
 % SECTION 2: GOALS AND OBJECTIVES
@@ -107,38 +119,39 @@ The central thesis is that \textbf{internal representations} of LLMs encode rich
 \section{Goals and Objectives}
 
 \subsection{Primary Goal}
-To develop a comprehensive framework for analyzing and manipulating internal representations of LLMs to improve their reliability, controllability, and training efficiency.
+To demonstrate that signals from LLM internals---both hidden state geometry and output entropy---can be leveraged for efficiency gains: output entropy for uncertainty-guided efficient training and runtime uncertainty characterization, and latent space structure for runtime generation control (with this thesis providing early exploration toward future efficient runtime interventions).
 
 \subsection{Specific Objectives}
 
-\subsubsection{Objective 1: Uncertainty Characterization (COMPLETED)}
+\subsubsection{Objective 1: Output Distribution Analysis (COMPLETED)}
 \begin{itemize}[leftmargin=*]
-  \item Develop automated pipeline for uncertainty quantification using entropy-based and model-as-judge approaches
+  \item Develop automated pipeline for uncertainty quantification using entropy from output distributions
   \item Validate correlation between token-level entropy and question difficulty across domains
-  \item Analyze when uncertainty estimates are justified vs.\ unjustified
+  \item Analyze when output entropy signals are informative vs.\ misleading
   \item \textbf{Status:} Published in arXiv:2503.01688 \cite{sychev2025uncertainty}
 \end{itemize}
 
-\subsubsection{Objective 2: Multilingual Latent-Space Control (COMPLETED)}
+\subsubsection{Objective 2: Latent Space Structure Exploration (COMPLETED)}
 \begin{itemize}[leftmargin=*]
-  \item Identify language-specific directions via PCA on parallel translations
-  \item Develop inference-time steering method with negligible computational overhead
+  \item Investigate how high-level concepts are encoded in hidden state geometry
+  \item Use language identity as a case study: identify language directions via PCA
+  \item Develop inference-time steering to demonstrate practical control applications
   \item Validate across multiple language pairs (English, Spanish, Russian, Chinese, Hindi)
   \item \textbf{Status:} Published in arXiv:2510.13849 \cite{goncharov2025steering}
 \end{itemize}
 
-\subsubsection{Objective 3: Complexity-Aware Fine-Tuning (COMPLETED)}
+\subsubsection{Objective 3: Uncertainty-Guided Efficient Training (COMPLETED)}
 \begin{itemize}[leftmargin=*]
-  \item Integrate uncertainty metrics for dataset stratification (easy/medium/hard)
+  \item Use output entropy for dataset stratification by complexity (easy/medium/hard)
   \item Implement differentiated training pipelines (SFT for easy, distillation for hard)
-  \item Demonstrate efficiency gains over baseline approaches
+  \item Demonstrate fine-tuning efficiency gains over baseline approaches
   \item \textbf{Status:} Published in arXiv:2506.21220 \cite{goncharov2025complexity}
 \end{itemize}
 
-\subsubsection{Objective 4: Integration and Thesis Completion (IN PROGRESS)}
+\subsubsection{Objective 4: Synthesis and Thesis Completion (IN PROGRESS)}
 \begin{itemize}[leftmargin=*]
-  \item Synthesize findings into unified theoretical framework
-  \item Combine techniques for end-to-end improved LLM deployment
+  \item Articulate unified framework: output distributions for training-time and runtime efficiency, internal representations for runtime control
+  \item Discuss practical implications and future directions (extending latent space exploration)
   \item Complete thesis document and defense preparation
   \item \textbf{Status:} In progress
 \end{itemize}
@@ -148,40 +161,42 @@ To develop a comprehensive framework for analyzing and manipulating internal rep
 % ============================================
 \section{Literature Review}
 
-\subsection{Uncertainty Estimation in LLMs}
+This thesis draws on two complementary research traditions: (1) work analyzing output distributions for uncertainty estimation, and (2) work analyzing internal representations for interpretability and control.
 
-Uncertainty quantification for LLMs has been approached through both black-box and white-box methods. Model-as-judge approaches \citep{zheng2023mtbench} leverage auxiliary LLMs to evaluate response quality, while token-level probability methods \citep{kadavath2022language} exploit the model's own confidence signals. \citet{fadeeva2023lmpolygraph} provided comprehensive comparisons showing entropy-based methods' effectiveness for free-form responses.
+\subsection{Output Distributions: Uncertainty Estimation}
 
-However, existing work suffers from two limitations: (1) lack of domain-specific analysis connecting uncertainty patterns to question types, and (2) failure to leverage uncertainty for downstream applications like adaptive training. Our work addresses both gaps.
+Uncertainty quantification for LLMs has been approached through both black-box and white-box methods. Model-as-judge approaches \citep{zheng2023mtbench} leverage auxiliary LLMs to evaluate response quality, while token-level probability methods \citep{kadavath2022language} exploit the model's own output distributions. \citet{fadeeva2023lmpolygraph} provided comprehensive comparisons showing entropy-based methods' effectiveness for free-form responses.
 
-\subsection{Multilingual Representation Structure}
+However, existing work suffers from two limitations: (1) lack of domain-specific analysis connecting output entropy to question types, and (2) failure to leverage these signals for downstream applications like adaptive training. Our work addresses both gaps.
 
-Work on mBERT and XLM-R revealed that language identity concentrates in few principal components, separable from semantics in parallel texts \citep{conneau2020emerging, chi2020finding}. \citet{yang2021simple} removed these components for language-agnostic embeddings. \citet{wendler2024llamas} extended this to decoder-only LLMs, revealing latent language preferences.
+\subsection{Internal Representations: Interpretable Structure}
 
-While prior work focused on analysis, we exploit this structure for \textit{active generation control}, demonstrating practical code-switching mitigation.
+Work on mBERT and XLM-R revealed that high-level concepts---particularly language identity---concentrate in few principal components of hidden states, separable from semantics in parallel texts \citep{conneau2020emerging, chi2020finding}. \citet{yang2021simple} removed these components for language-agnostic embeddings. \citet{wendler2024llamas} extended this to decoder-only LLMs, revealing interpretable geometric structure in internal representations.
 
-\subsection{Code-Switching in Multilingual LLMs}
+While prior work focused on analysis, we present early exploration of exploiting this structure for \textit{active generation control}. Language identity serves as an ideal case study: it is discrete, verifiable, and has immediate applications (code-switching mitigation). This opens the door to future efficient runtime interventions on other concepts encoded in latent space.
 
-Code-switching has been studied for mixed-language inputs \citep{aguilar2020lince, bali2014borrowing}, with recent work identifying \textit{unintended} switching in outputs \citep{ryan2024unintended, yoo2024codeswitching}. Standard mitigations require costly fine-tuning or brittle prompt engineering. Our latent-space steering offers a lightweight alternative.
+\subsection{Code-Switching as a Testbed}
+
+Code-switching has been studied for mixed-language inputs \citep{aguilar2020lince, bali2014borrowing}, with recent work identifying \textit{unintended} switching in outputs \citep{ryan2024unintended, yoo2024codeswitching}. Standard mitigations require costly fine-tuning or brittle prompt engineering. We use code-switching mitigation as a practical demonstration of latent space steering, validating that manipulating internal representations can control generation behavior.
 
 \subsection{Adaptive Training Methods}
 
 Curriculum learning approaches \citep{kim2024strategic} order training examples from easy to hard, showing modest gains. The LIMA approach \citep{zhou2023lima} demonstrated that small, high-quality datasets suffice for alignment. SmallToLarge \citep{yang2024s2l} uses training trajectories for data selection but requires additional model training.
 
-Knowledge distillation \citep{hsieh2023distilling} improves complex task performance but hasn't been selectively applied based on complexity. Our work bridges uncertainty estimation and adaptive training, showing that distillation is beneficial specifically for high-complexity samples.
+Knowledge distillation \citep{hsieh2023distilling} improves complex task performance but hasn't been selectively applied based on complexity. Our work bridges output distribution analysis and adaptive training, showing that distillation is beneficial specifically for high-complexity samples as identified by output entropy.
 
 % ============================================
 % SECTION 4: METHODS
 % ============================================
 \section{Methods}
 
-\subsection{Study 1: Uncertainty Characterization}
+\subsection{Study 1: Output Distribution Analysis}
 
 \subsubsection{Experimental Design}
 We developed an automated pipeline for evaluating uncertainty estimation on the MMLU-Pro benchmark \citep{wang2024mmlupro} spanning 14 topics with $\sim$12,000 questions. Four LLMs were evaluated: Phi-4, Mistral-Small-24B, Qwen-1.5B, and Qwen-72B.
 
-\subsubsection{Uncertainty Metrics}
-\paragraph{Token-wise Entropy:} For vocabulary size $k$ and logits $\mathbf{z} = (z_1, \ldots, z_k)$, we compute:
+\subsubsection{Signals from Output Distributions}
+\paragraph{Token-wise Entropy:} For vocabulary size $k$ and output logits $\mathbf{z} = (z_1, \ldots, z_k)$, we compute:
 \begin{equation}
   p_i = \frac{e^{z_i}}{\sum_{j=1}^{k} e^{z_j}}, \quad H = -\sum_{i=1}^{k} p_i \log p_i
 \end{equation}
@@ -196,16 +211,16 @@ ROC-AUC scores quantify how well uncertainty predicts incorrect answers, stratif
   \item Model architecture and scale
 \end{itemize}
 
-\subsection{Study 2: Latent-Space Language Steering}
+\subsection{Study 2: Latent Space Structure Exploration}
 
-\subsubsection{Language Direction Identification}
-Given parallel corpus $\mathcal{D} = \{(s, \ell)\}_{i=1}^{N}$ with semantic content $s$ in language $\ell$, we extract hidden states $\mathbf{h}_i^{(\ell)} \in \mathbb{R}^d$ from each layer. PCA identifies the first principal component as the language direction:
+\subsubsection{Probing for Interpretable Structure}
+We investigate whether high-level concepts are encoded as linear directions in hidden state space. Language identity serves as our case study due to its discrete, verifiable nature. Given parallel corpus $\mathcal{D} = \{(s, \ell)\}_{i=1}^{N}$ with semantic content $s$ in language $\ell$, we extract hidden states $\mathbf{h}_i^{(\ell)} \in \mathbb{R}^d$ from each layer. PCA identifies the first principal component as the language direction:
 \begin{equation}
   \mathbf{v}^{(\ell)} = \arg\max_{\|\mathbf{v}\|=1} \sum_{i=1}^{N} \left(\mathbf{v}^\top (\mathbf{h}_i^{(\ell)} - \bar{\mathbf{h}}^{(\ell)})\right)^2
 \end{equation}
 
-\subsubsection{Steering Mechanism}
-For layers $\ell \geq \ell_{\text{crit}}$, we remove the language component:
+\subsubsection{Steering as Validation}
+To validate that the identified structure is causally meaningful, we intervene on hidden states during inference. For layers $\ell \geq \ell_{\text{crit}}$, we remove the language component:
 \begin{equation}
   \tilde{\mathbf{h}}_t^{(\ell)} = \mathbf{h}_t^{(\ell)} - s \cdot (\mathbf{h}_t^{(\ell)} \cdot \mathbf{v}^{(\ell)}) \mathbf{v}^{(\ell)}
 \end{equation}
@@ -219,11 +234,11 @@ where $s \in \mathbb{R}^+$ controls intervention strength.
   \item \textbf{Languages:} English, Spanish, Russian, Chinese, Hindi
 \end{itemize}
 
-\subsection{Study 3: Complexity-Aware Fine-Tuning}
+\subsection{Study 3: Uncertainty-Guided Efficient Training}
 
 \subsubsection{Pipeline Overview}
 \begin{enumerate}[leftmargin=*]
-  \item \textbf{Complexity estimation:} Compute answer token entropy for each training sample
+  \item \textbf{Complexity estimation:} Use output entropy as a signal to estimate complexity for each training sample
   \item \textbf{Data stratification:} Split dataset into easy/medium/hard terciles by entropy
   \item \textbf{Differentiated training:}
     \begin{itemize}
@@ -243,14 +258,14 @@ where $s \in \mathbb{R}^+$ controls intervention strength.
 Student models: Qwen2.5-3B, Phi-4-Mini. Teacher ensemble: DeepSeek-V3, Qwen-3-235B, Llama-4-Maverick. Dataset: MMLU-Pro.
 
 % ============================================
-% SECTION 5: KEY RESULTS
+% SECTION 5: RESULTS
 % ============================================
-\section{Key Results}
+\section{Preliminary Results}
 
-\subsection{Study 1: Uncertainty Estimation}
+\subsection{Study 1: Output Distribution Signals}
 
-\subsubsection{Entropy Predicts Errors in Knowledge-Dependent Domains}
-Token-wise entropy achieves strong predictive performance (ROC-AUC up to 0.83 for Biology with Qwen-72B), while MASJ scores perform near-random (ROC-AUC $\approx$ 0.49).
+\subsubsection{Output Entropy Predicts Errors in Knowledge-Dependent Domains}
+Token-wise entropy from output distributions achieves strong predictive performance (ROC-AUC up to 0.83 for Biology with Qwen-72B), while MASJ scores perform near-random (ROC-AUC $\approx$ 0.49).
 
 \begin{table}[h]
   \centering
@@ -270,16 +285,16 @@ Token-wise entropy achieves strong predictive performance (ROC-AUC up to 0.83 fo
   \label{tab:roc_auc}
 \end{table}
 
-\subsubsection{Reasoning Requirement Modulates Uncertainty Validity}
-Entropy is a better predictor when no reasoning is required (ROC-AUC 0.79) compared to high-reasoning questions (ROC-AUC 0.73 for Qwen-72B). This suggests entropy primarily captures \textit{knowledge uncertainty} rather than \textit{reasoning difficulty}.
+\subsubsection{Reasoning Requirement Modulates Signal Validity}
+Output entropy is a better predictor when no reasoning is required (ROC-AUC 0.79) compared to high-reasoning questions (ROC-AUC 0.73 for Qwen-72B). This suggests output distribution signals primarily capture \textit{knowledge uncertainty} rather than \textit{reasoning difficulty}.
 
 \subsubsection{Model Scale Improves Calibration}
 Larger models show clearer separation between correct (low entropy) and incorrect (high entropy) predictions. Qwen-1.5B achieves the best Expected Calibration Error (ECE = 0.242) despite smaller scale, suggesting architectural factors beyond size affect calibration.
 
-\subsection{Study 2: Language Steering}
+\subsection{Study 2: Latent Space Structure}
 
-\subsubsection{Near-Perfect Language Classification from PC1}
-A single principal component enables 95-99\% language classification accuracy across all tested pairs.
+\subsubsection{Language Identity is Linearly Encoded}
+A single principal component of hidden states enables 95--99\% language classification accuracy across all tested pairs, confirming that language identity is encoded as a linear direction in latent space.
 
 \begin{table}[h]
   \centering
@@ -296,8 +311,8 @@ A single principal component enables 95-99\% language classification accuracy ac
   \end{tabular}
 \end{table}
 
-\subsubsection{Steering Reduces Code-Switching}
-KL divergence from original (English) distribution decreases by up to 42\% after steering:
+\subsubsection{Steering Validates Causal Role of Structure}
+Intervening on the identified language direction causally affects generation. KL divergence from original (English) distribution decreases by up to 42\% after steering, demonstrating that latent space structure can be exploited for control:
 
 \begin{table}[h]
   \centering
@@ -313,13 +328,13 @@ KL divergence from original (English) distribution decreases by up to 42\% after
   \end{tabular}
 \end{table}
 
-\subsubsection{Language Identity Concentrates in Final Layers}
-Explained variance for PC1 peaks in final layers ($\sim$10\% at layer 16 for Llama-3.2), with clusters emerging loosely in early layers and sharpening dramatically toward the output.
+\subsubsection{Structure Emerges Progressively Through Layers}
+Explained variance for PC1 peaks in final layers ($\sim$10\% at layer 16 for Llama-3.2), with clusters emerging loosely in early layers and sharpening dramatically toward the output. This reveals how the model progressively refines high-level concepts, and identifies where latent space structure becomes most amenable to intervention. The concentration in later layers also connects internal representations to output distributions, as these layers most directly influence the final logits.
 
-\subsection{Study 3: Complexity-Aware Fine-Tuning}
+\subsection{Study 3: Uncertainty-Guided Efficient Training}
 
 \subsubsection{Significant Accuracy Improvements}
-Our pipeline achieves substantial gains over baselines:
+Our pipeline, using output entropy to guide data stratification, achieves substantial gains over baselines:
 
 \begin{table}[h]
   \centering
@@ -343,44 +358,8 @@ Our pipeline matches or exceeds full distillation while using only 19\% of the t
   \item Phi4-mini: 5.35k tokens (ours) vs.\ 30.30k (full distillation)
 \end{itemize}
 
-\subsubsection{Entropy-Based Splitting Outperforms MASJ}
-Single-token entropy achieves ROC-AUC 0.72-0.74 for complexity estimation, while MASJ reasoning scores achieve only 0.54-0.57.
-
-% ============================================
-% SECTION 6: THESIS STRUCTURE
-% ============================================
-\section{Thesis Structure (Planned)}
-
-\begin{enumerate}[leftmargin=*]
-  \item \textbf{Introduction} -- Motivation, research questions, contributions
-  \item \textbf{Background} -- LLM architecture, uncertainty theory, representation analysis
-  \item \textbf{Study 1: Uncertainty Characterization} -- Methods, results, implications
-  \item \textbf{Study 2: Language Steering} -- PCA-based control, steering algorithm, validation
-  \item \textbf{Study 3: Complexity-Aware Training} -- Pipeline design, ablations, efficiency analysis
-  \item \textbf{Unified Framework} -- Connecting uncertainty, control, and training
-  \item \textbf{Discussion} -- Limitations, future directions
-  \item \textbf{Conclusion}
-\end{enumerate}
-
-% ============================================
-% SECTION 7: TIMELINE
-% ============================================
-\section{Timeline and Milestones}
-
-\begin{table}[h]
-  \centering
-  \begin{tabular}{lll}
-    \toprule
-    \textbf{Phase} & \textbf{Status} & \textbf{Completion} \\
-    \midrule
-    Phase 1: Uncertainty Characterization & \textcolor{green!60!black}{Completed} & Mar 2025 \\
-    Phase 2: Language Control Development & \textcolor{green!60!black}{Completed} & Oct 2025 \\
-    Phase 3: Complexity-Aware Training & \textcolor{green!60!black}{Completed} & Oct 2025 \\
-    Phase 4: Integration \& Validation & \textcolor{orange}{In Progress} & Dec 2025 \\
-    Phase 5: Thesis Writing \& Defense & \textcolor{orange}{In Progress} & Feb 2026 \\
-    \bottomrule
-  \end{tabular}
-\end{table}
+\subsubsection{Output Entropy Outperforms MASJ for Complexity}
+Single-token output entropy achieves ROC-AUC 0.72--0.74 for complexity estimation, while MASJ reasoning scores achieve only 0.54--0.57. This validates output distributions as a reliable signal source for guiding training strategies.
 
 % ============================================
 % REFERENCES
@@ -516,13 +495,13 @@ Single-token entropy achieves ROC-AUC 0.72-0.74 for complexity estimation, while
 \begin{table}[h]
   \centering
   \caption{Summary of thesis contributions}
-  \begin{tabular}{p{3.5cm}p{4cm}p{4cm}p{3cm}}
+  \begin{tabular}{p{3cm}p{2.5cm}p{3.5cm}p{4cm}p{2cm}}
     \toprule
-    \textbf{Study} & \textbf{Key Method} & \textbf{Main Finding} & \textbf{Metric} \\
+    \textbf{Study} & \textbf{Stage} & \textbf{Signal Source} & \textbf{Main Finding} & \textbf{Metric} \\
     \midrule
-    Uncertainty & Token-wise entropy & Predicts errors in knowledge domains & ROC-AUC 0.83 \\
-    Language Control & PCA + projection & Controls code-switching & 42\% KL reduction \\
-    Complexity Training & Entropy stratification & Matches distillation with 19\% data & 0.52/0.64 accuracy \\
+    Output Distributions & Runtime & Token entropy & Predicts errors in knowledge domains & ROC-AUC 0.83 \\
+    Latent Space Structure & Runtime & Hidden states & Language encoded linearly; steering controls generation & 42\% KL red. \\
+    Uncertainty-Guided Training & Training & Token entropy & Matches distillation with 19\% data & 0.52/0.64 acc. \\
     \bottomrule
   \end{tabular}
 \end{table}

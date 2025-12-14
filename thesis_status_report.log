@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.10.7)  14 DEC 2025 16:06
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.10.7)  14 DEC 2025 16:38
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -455,16 +455,16 @@ File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 LaTeX Font Info:    Trying to load font information for U+msb on input line 1.
  (/usr/local/texlive/2024/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-)
-pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.47 ...{7}Timeline and Milestones}{10}{section.7}
-                                                  % [1])
+))
 \tf@toc=\write4
 \openout4 = `thesis_status_report.toc'.
 
 
+pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.77 \newpage
+              [1]
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 14.49998pt, for example:
@@ -473,6 +473,10 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
 [2]
+LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 86.
+ (/usr/local/texlive/2024/texmf-dist/tex/latex/psnfss/ts1ptm.fd
+File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
+)
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 14.49998pt, for example:
@@ -481,10 +485,10 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
 [3]
-LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 115.
- (/usr/local/texlive/2024/texmf-dist/tex/latex/psnfss/ts1ptm.fd
-File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
-)
+Overfull \hbox (14.32307pt too wide) in paragraph at lines 122--123
+\T1/ptm/m/n/12 To demon-strate that sig-nals from LLM internals---both hid-den state ge-om-e-try and out-put entropy---
+ []
+
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 14.49998pt, for example:
@@ -501,6 +505,10 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
 [5]
+Overfull \hbox (8.83868pt too wide) in paragraph at lines 174--175
+\T1/ptm/m/n/12 Work on mBERT and XLM-R re-vealed that high-level concepts---particularly lan-guage identity---
+ []
+
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 14.49998pt, for example:
@@ -537,6 +545,9 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 [9]
 
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 14.49998pt, for example:
 (fancyhdr)                \setlength{\headheight}{14.49998pt}.
@@ -560,61 +571,71 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
 [12]
-LaTeX Font Info:    Trying to load font information for T1+pcr on input line 500.
+LaTeX Font Info:    Trying to load font information for T1+pcr on input line 479.
  (/usr/local/texlive/2024/texmf-dist/tex/latex/psnfss/t1pcr.fd
 File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
 )
-Overfull \hbox (39.57587pt too wide) in paragraph at lines 500--501
+Overfull \hbox (39.57587pt too wide) in paragraph at lines 479--480
 []\T1/ptm/m/n/12 GitHub: [][]$\T1/pcr/m/n/12 https : / / github . com / LabARSS / question-[]complexity-[]estimation$[][] 
  []
 
 
-Overfull \hbox (9.88115pt too wide) in paragraph at lines 503--505
+Overfull \hbox (9.88115pt too wide) in paragraph at lines 482--484
 []\T1/ptm/b/n/12 Goncharov, A., Vyazhev, D., Sy-chev, P., Kha-lafyan, E., & Za-yt-sev, A. \T1/ptm/m/n/12 (2025). ``Complexity-
  []
 
 
-Overfull \hbox (25.67587pt too wide) in paragraph at lines 505--506
+Overfull \hbox (25.67587pt too wide) in paragraph at lines 484--485
 []\T1/ptm/m/n/12 GitHub: [][]$\T1/pcr/m/n/12 https : / / github . com / LabARSS / complexity-[]aware-[]fine-[]tuning$[][] 
  []
 
 
-Overfull \hbox (69.37585pt too wide) in paragraph at lines 510--511
+Overfull \hbox (69.37585pt too wide) in paragraph at lines 489--490
 []\T1/ptm/m/n/12 GitHub: [][]$\T1/pcr/m/n/12 https : / / github . com / fxlrnrpt / language-[]steering-[]in-[]latent-[]space$[][] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 523--523
+Underfull \hbox (badness 3568) in paragraph at lines 502--502
+[]\T1/ptm/m/n/12 Output Dis-tri-bu-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 502--502
 []\T1/ptm/m/n/12 Predicts er-rors in
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 524--524
-[]\T1/ptm/m/n/12 Controls code-
+Underfull \hbox (badness 10000) in paragraph at lines 502--503
+[]\T1/ptm/m/n/12 ROC-AUC
  []
 
 
-Underfull \hbox (badness 2635) in paragraph at lines 524--525
-[]\T1/ptm/m/n/12 42% KL re-duc-
+Underfull \hbox (badness 10000) in paragraph at lines 503--503
+[]\T1/ptm/m/n/12 Latent Space
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 525--525
-[]\T1/ptm/m/n/12 Complexity Train-
+Underfull \hbox (badness 10000) in paragraph at lines 503--504
+[]\T1/ptm/m/n/12 42% KL
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 525--525
+Underfull \hbox (badness 10000) in paragraph at lines 504--504
+[]\T1/ptm/m/n/12 Uncertainty-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 504--504
 []\T1/ptm/m/n/12 Matches dis-til-la-tion
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 525--526
-[]\T1/ptm/m/n/12 0.52/0.64 ac-cu-
+Underfull \hbox (badness 10000) in paragraph at lines 504--505
+[]\T1/ptm/m/n/12 0.52/0.64
  []
 
 
-Overfull \hbox (5.32083pt too wide) in paragraph at lines 519--528
+Overfull \hbox (31.5472pt too wide) in paragraph at lines 498--507
  [][] 
  []
 
@@ -631,21 +652,21 @@ LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-02-20>
  ***********
 Package rerunfilecheck Info: File `thesis_status_report.out' has not changed.
-(rerunfilecheck)             Checksum: 54BB0B60473E2737BB74033C63717767;9867.
+(rerunfilecheck)             Checksum: 80E4E0F8A4BC234A09E174EFE1FEE7EE;10058.
  ) 
 Here is how much of TeX's memory you used:
- 12606 strings out of 474116
- 190331 string characters out of 5743682
+ 12592 strings out of 474116
+ 190201 string characters out of 5743682
  1943187 words of memory out of 5000000
- 34681 multiletter control sequences out of 15000+600000
+ 34677 multiletter control sequences out of 15000+600000
  595221 words of font info for 82 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,12n,79p,589b,589s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,12n,79p,718b,579s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2024/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on thesis_status_report.pdf (14 pages, 194001 bytes).
+Output written on thesis_status_report.pdf (14 pages, 196263 bytes).
 PDF statistics:
- 481 PDF objects out of 1000 (max. 8388607)
- 430 compressed objects within 5 object streams
- 101 named destinations out of 1000 (max. 500000)
- 369 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 462 PDF objects out of 1000 (max. 8388607)
+ 411 compressed objects within 5 object streams
+ 91 named destinations out of 1000 (max. 500000)
+ 353 words of extra memory for PDF output out of 10000 (max. 10000000)
 
