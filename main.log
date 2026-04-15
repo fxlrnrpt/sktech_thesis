@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999996 (TeX Live 2024) (preloaded format=xelatex 2024.10.7)  15 APR 2026 21:40
+This is XeTeX, Version 3.141592653-2.6-0.999996 (TeX Live 2024) (preloaded format=xelatex 2024.10.7)  15 APR 2026 21:52
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -797,22 +797,22 @@ Overfull \hbox (10.3954pt too wide) in paragraph at lines 46--47
  from hidden states reduces code-switching
  []
 
-) [7]
+) [7] [8]
 \openout2 = `chapters/02_author_contrib.aux'.
 
  (./chapters/02_author_contrib.tex
 Chapter 2.
-[8
+[9
 
 
 
 
-]) [9]
+]) [10]
 \openout2 = `chapters/03_publications.aux'.
 
  (./chapters/03_publications.tex
 Chapter 3.
-) [10
+) [11
 
 
 
@@ -822,7 +822,7 @@ Chapter 3.
 
  (./chapters/04_literature.tex
 Chapter 4.
-[11
+[12
 
 
 
@@ -833,7 +833,7 @@ Overfull \hbox (0.24501pt too wide) in paragraph at lines 23--24
 rely. Iterative null-space projection (INLP) [[]]
  []
 
-[12] [13]) [14]
+[13] [14]) [15]
 \openout2 = `chapters/05_problem_statement.aux'.
 
  (./chapters/05_problem_statement.tex
@@ -845,7 +845,7 @@ sequence of token-wise entropies $\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 H[]; H[]; [
 ] ; H[]\OT1/cmr/m/n/12 )$
  []
 
-[15
+[16
 
 
 
@@ -856,20 +856,26 @@ Overfull \hbox (5.7984pt too wide) in paragraph at lines 77--78
 kes two forms. The first is output distributions—
  []
 
-) [16] [17]
+[17])
+Overfull \hbox (6.22171pt too wide) in paragraph at lines 81--30
+\TU/TimesNewRoman(0)/m/n/12 compose representations into interpretable subspace
+s (e.g., language-specific vs. language-agnostic),
+ []
+
+[18]
 \openout2 = `chapters/06_methods.aux'.
 
  (./chapters/06_methods.tex
 Chapter 6.
-[18
+[19
 
 
 
 
-] [19] [20]
+] [20] [21]
 Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on in
 put line 105.
- [21]) [22] [23]
+ [22]) [23] [24]
 \openout2 = `chapters/07_numerical_experiments.aux'.
 
  (./chapters/07_numerical_experiments.tex
@@ -886,7 +892,7 @@ File: images/paper1/entropy_qwen72.pdf Graphic file (type pdf)
 <use images/paper1/entropy_qwen72.pdf>
 File: images/paper1/entropy_qwen1.5.pdf Graphic file (type pdf)
 <use images/paper1/entropy_qwen1.5.pdf>
-[24
+[25
 
 
 
@@ -902,10 +908,10 @@ y show higher predictive power than
 
 File: images/paper1/models_compare_reasoning.pdf Graphic file (type pdf)
 <use images/paper1/models_compare_reasoning.pdf>
-[25]
+[26]
 File: images/paper1/models_compare_calibration.pdf Graphic file (type pdf)
 <use images/paper1/models_compare_calibration.pdf>
- [26] [27] [28]
+ [27] [28] [29]
 File: images/paper3/language_map/multi/qwen/layer_28.pdf Graphic file (type pdf
 )
 <use images/paper3/language_map/multi/qwen/layer_28.pdf>
@@ -927,18 +933,18 @@ Overfull \hbox (6.83144pt too wide) in paragraph at lines 206--207
 entical semantic content into tight, language-
  []
 
-[29]
+[30]
 Overfull \hbox (2.50803pt too wide) in paragraph at lines 210--211
 \TU/TimesNewRoman(0)/m/n/12 We evaluate steering effectiveness by comparing the
  next-token prediction distribution of the steered
  []
 
-[30] [31] [32] [33]
+[31] [32] [33] [34]
 File: images/paper2/qwen_pipeline_20epochs.pdf Graphic file (type pdf)
 <use images/paper2/qwen_pipeline_20epochs.pdf>
 File: images/paper2/phi_pipeline_20epochs.pdf Graphic file (type pdf)
 <use images/paper2/phi_pipeline_20epochs.pdf>
- [34]
+ [35]
 File: images/paper2/qwen_e_vs_ce.pdf Graphic file (type pdf)
 <use images/paper2/qwen_e_vs_ce.pdf>
 File: images/paper2/phi_e_vs_ce.pdf Graphic file (type pdf)
@@ -953,23 +959,23 @@ Underfull \hbox (badness 4279) in paragraph at lines 421--421
 s for different epoch configurations.
  []
 
-[35]) [36]
+[36]) [37]
 \openout2 = `chapters/08_conclusion.aux'.
 
  (./chapters/08_conclusion.tex
 Chapter 8.
-[37
+[38
 
 
 
 
-] [38]
-Overfull \hbox (4.42079pt too wide) in paragraph at lines 35--36
+] [39]
+Overfull \hbox (4.42079pt too wide) in paragraph at lines 37--38
 \TU/TimesNewRoman(0)/m/n/12 languages remain unexplored. English–Hindi consiste
 ntly showed the weakest improvements across
  []
 
-[39] [40]) [41
+[40] [41]) [42
 
 ]
 \openout2 = `chapters/09_innovations.aux'.
@@ -986,7 +992,7 @@ Overfull \hbox (0.44814pt too wide) in paragraph at lines 26--27
 an(0)/m/n/12 The complexity-aware fine-tuning pipeline from Study 3
  []
 
-[42
+[43
 
 
 
@@ -1003,7 +1009,7 @@ Overfull \hbox (2.44653pt too wide) in paragraph at lines 39--40
 hub.com/LabARSS/complexity-aware-fine-tuning 
  []
 
-) [43]
+) [44]
 \openout2 = `chapters/biblio.aux'.
 
  (./chapters/biblio.tex (./main.bbl
@@ -1011,15 +1017,15 @@ hub.com/LabARSS/complexity-aware-fine-tuning
 LaTeX Font Warning: Font shape `TU/TimesNewRoman(0)/m/sc' undefined
 (Font)              using `TU/TimesNewRoman(0)/m/n' instead on input line 4.
 
-[44
+[45
 
 
 
 
-] [45] [46])) [47]
+] [46] [47])) [48]
 \openout2 = `chapters/10_appendix.aux'.
 
- (./chapters/10_appendix.tex [48
+ (./chapters/10_appendix.tex [49
 
 
 
@@ -1031,7 +1037,7 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-) [49] [50] (./main.aux (./chapters/cover.aux) (./chapters/contents.aux)
+) [50] [51] (./main.aux (./chapters/cover.aux) (./chapters/contents.aux)
 (./chapters/01_intro.aux) (./chapters/02_author_contrib.aux)
 (./chapters/03_publications.aux) (./chapters/04_literature.aux)
 (./chapters/05_problem_statement.aux) (./chapters/06_methods.aux)
@@ -1058,4 +1064,4 @@ Here is how much of TeX's memory you used:
  1348 hyphenation exceptions out of 8191
  94i,12n,107p,1514b,675s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on main.pdf (51 pages).
+Output written on main.pdf (52 pages).
