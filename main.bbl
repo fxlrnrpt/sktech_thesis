@@ -105,7 +105,7 @@
 
 \bibitem{hsieh2023distilling}
 {\sc Hsieh, C.-Y., Li, C.-L., Yeh, C.-K., Nakhost, H., Fujii, Y., Ratner, A.,
-  Krishna, R., Chen, C.-Y., and Lee, T.~P.}
+  Krishna, R., Lee, C.-Y., and Pfister, T.}
 \newblock Distilling step-by-step! outperforming larger language models with
   less training data and smaller model sizes.
 \newblock {\em arXiv preprint arXiv:2305.02301\/} (2023).
@@ -170,11 +170,11 @@
   ensembles.
 \newblock {\em Advances in neural information processing systems 30\/} (2017).
 
-\bibitem{li2024inference}
+\bibitem{li2023inference}
 {\sc Li, K., Patel, O., Vi{\'e}gas, F., Pfister, H., and Wattenberg, M.}
 \newblock Inference-time intervention: Eliciting truthful answers from a
   language model.
-\newblock {\em Advances in Neural Information Processing Systems 36\/} (2024).
+\newblock {\em Advances in Neural Information Processing Systems 36\/} (2023).
 
 \bibitem{lin2022teaching}
 {\sc Lin, S., Hilton, J., and Evans, O.}
