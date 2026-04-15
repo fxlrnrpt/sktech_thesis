@@ -65,6 +65,14 @@
 \newblock Do multilingual language models think better in english?
 \newblock {\em arXiv preprint arXiv:2308.01223\/} (2024).
 
+\bibitem{fadeeva2024factchecking}
+{\sc Fadeeva, E., Rubashevskii, A., Shelmanov, A., Petrakov, S., Li, H.,
+  Mubarak, H., Tsymbalov, E., Kuzmin, G., Panchenko, A., Baldwin, T., et~al.}
+\newblock Fact-checking the output of large language models via token-level
+  uncertainty quantification.
+\newblock In {\em Findings of the Association for Computational Linguistics ACL
+  2024\/} (2024), pp.~9367--9385.
+
 \bibitem{fadeeva2023lmpolygraph}
 {\sc Fadeeva, E., Vashurin, R., Tsvigun, A., Vazhentsev, A., Petrakov, S.,
   Fedyanin, K., Vasilev, D., Goncharova, E., Panchenko, A., Panov, M., et~al.}
@@ -170,7 +178,7 @@
   ensembles.
 \newblock {\em Advances in neural information processing systems 30\/} (2017).
 
-\bibitem{li2023inference}
+\bibitem{li2024inference}
 {\sc Li, K., Patel, O., Vi{\'e}gas, F., Pfister, H., and Wattenberg, M.}
 \newblock Inference-time intervention: Eliciting truthful answers from a
   language model.

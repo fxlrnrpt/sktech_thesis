@@ -10,57 +10,64 @@
 \contentsline {chapter}{\numberline {3}List of publications}{10}{chapter.3}%
 \contentsline {chapter}{\numberline {4}Literature review}{11}{chapter.4}%
 \contentsline {section}{\numberline {4.1}Uncertainty Estimation in Large Language Models}{11}{section.4.1}%
-\contentsline {section}{\numberline {4.2}Internal Representations and Interpretability}{11}{section.4.2}%
+\contentsline {section}{\numberline {4.2}Internal Representations and Interpretability}{12}{section.4.2}%
 \contentsline {section}{\numberline {4.3}Code-Switching in Multilingual Models}{12}{section.4.3}%
-\contentsline {section}{\numberline {4.4}Efficient Fine-Tuning and Data Selection}{12}{section.4.4}%
+\contentsline {section}{\numberline {4.4}Efficient Fine-Tuning and Data Selection}{13}{section.4.4}%
 \contentsline {section}{\numberline {4.5}Summary and Research Gaps}{13}{section.4.5}%
-\contentsline {chapter}{\numberline {5}Problem statement}{14}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Preliminaries and Notation}{14}{section.5.1}%
-\contentsline {section}{\numberline {5.2}Problem 1: Uncertainty Estimation via Output Distributions}{14}{section.5.2}%
+\contentsline {chapter}{\numberline {5}Problem statement}{15}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Preliminaries and Notation}{15}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Problem 1: Uncertainty Estimation via Output Distributions}{15}{section.5.2}%
 \contentsline {section}{\numberline {5.3}Problem 2: Language Control via Latent Space Steering}{15}{section.5.3}%
-\contentsline {section}{\numberline {5.4}Problem 3: Complexity-Aware Fine-Tuning}{15}{section.5.4}%
+\contentsline {section}{\numberline {5.4}Problem 3: Complexity-Aware Fine-Tuning}{16}{section.5.4}%
 \contentsline {section}{\numberline {5.5}Unifying Theme}{16}{section.5.5}%
-\contentsline {chapter}{\numberline {6}Methodology}{17}{chapter.6}%
-\contentsline {section}{\numberline {6.1}Study 1: Uncertainty Estimation via Token-Wise Entropy}{17}{section.6.1}%
-\contentsline {subsection}{Entropy Extraction}{17}{subsection*.6}%
-\contentsline {subsection}{Uncertainty Estimation Approaches}{17}{subsection*.7}%
-\contentsline {subsection}{Model-as-Judge (MASJ) Approach}{17}{subsection*.8}%
-\contentsline {subsection}{Evaluation Protocol}{18}{subsection*.9}%
-\contentsline {section}{\numberline {6.2}Study 2: Language Steering in Latent Space}{18}{section.6.2}%
-\contentsline {subsection}{Hidden State Extraction}{18}{subsection*.10}%
-\contentsline {subsection}{Language Direction Identification via PCA}{18}{subsection*.11}%
-\contentsline {subsection}{Language Classification}{18}{subsection*.12}%
-\contentsline {subsection}{Activation Steering}{19}{subsection*.13}%
-\contentsline {subsection}{Evaluation Metrics}{19}{subsection*.14}%
-\contentsline {section}{\numberline {6.3}Study 3: Complexity-Aware Fine-Tuning}{19}{section.6.3}%
-\contentsline {subsection}{Complexity Estimation}{19}{subsection*.15}%
-\contentsline {subsection}{Data Stratification}{20}{subsection*.16}%
-\contentsline {subsection}{Training Interventions}{20}{subsection*.17}%
-\contentsline {subsection}{Training Pipeline}{20}{subsection*.18}%
-\contentsline {subsection}{Hyperparameter Selection}{21}{subsection*.19}%
-\contentsline {section}{\numberline {6.4}Implementation Details}{21}{section.6.4}%
-\contentsline {chapter}{\numberline {7}Numerical experiments}{22}{chapter.7}%
-\contentsline {section}{\numberline {7.1}Study 1: Uncertainty Estimation via Token-Wise Entropy}{22}{section.7.1}%
-\contentsline {subsection}{Experimental Setup}{22}{subsection*.20}%
-\contentsline {subsection}{Results}{22}{subsection*.21}%
-\contentsline {section}{\numberline {7.2}Study 2: Language Steering in Latent Space}{23}{section.7.2}%
-\contentsline {subsection}{Experimental Setup}{23}{subsection*.26}%
-\contentsline {subsection}{Language Direction Identification}{24}{subsection*.27}%
-\contentsline {subsection}{Code-Switching Reduction: Distributional Evaluation}{25}{subsection*.30}%
-\contentsline {subsection}{Code-Switching Reduction: Generation-Based Evaluation}{27}{subsection*.34}%
-\contentsline {section}{\numberline {7.3}Study 3: Complexity-Aware Fine-Tuning}{27}{section.7.3}%
-\contentsline {subsection}{Experimental Setup}{27}{subsection*.36}%
-\contentsline {subsection}{Main Results}{28}{subsection*.37}%
-\contentsline {subsection}{Sensitivity Study}{29}{subsection*.41}%
-\contentsline {section}{\numberline {7.4}Summary of Results}{29}{section.7.4}%
-\contentsline {chapter}{\numberline {8}Discussion and conclusion}{30}{chapter.8}%
-\contentsline {section}{\numberline {8.1}Summary of Contributions}{30}{section.8.1}%
-\contentsline {section}{\numberline {8.2}Unifying Insights}{30}{section.8.2}%
-\contentsline {section}{\numberline {8.3}Position in the Research Landscape}{31}{section.8.3}%
-\contentsline {section}{\numberline {8.4}Limitations}{31}{section.8.4}%
-\contentsline {section}{\numberline {8.5}Future Directions}{32}{section.8.5}%
-\contentsline {section}{\numberline {8.6}Conclusion}{32}{section.8.6}%
-\contentsline {chapter}{Acknowledgements}{33}{chapter*.42}%
-\contentsline {chapter}{Innovations}{34}{chapter*.43}%
-\contentsline {chapter}{Bibliography}{36}{Item.84}%
-\contentsline {chapter}{Appendix}{40}{chapter*.45}%
+\contentsline {chapter}{\numberline {6}Methodology}{18}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Study 1: Uncertainty Estimation via Token-Wise Entropy}{18}{section.6.1}%
+\contentsline {subsection}{Entropy Extraction}{18}{subsection*.6}%
+\contentsline {subsection}{Uncertainty Estimation Approaches}{18}{subsection*.7}%
+\contentsline {subsection}{Model-as-Judge (MASJ) Approach}{19}{subsection*.8}%
+\contentsline {subsection}{Evaluation Protocol}{19}{subsection*.9}%
+\contentsline {section}{\numberline {6.2}Study 2: Language Steering in Latent Space}{19}{section.6.2}%
+\contentsline {subsection}{Hidden State Extraction}{19}{subsection*.10}%
+\contentsline {subsection}{Language Direction Identification via PCA}{19}{subsection*.11}%
+\contentsline {subsection}{Activation Steering}{20}{subsection*.12}%
+\contentsline {subsection}{Evaluation Metrics}{20}{subsection*.13}%
+\contentsline {section}{\numberline {6.3}Study 3: Complexity-Aware Fine-Tuning}{20}{section.6.3}%
+\contentsline {subsection}{Complexity Estimation}{20}{subsection*.14}%
+\contentsline {subsection}{Data Stratification}{21}{subsection*.15}%
+\contentsline {subsection}{Training Interventions}{21}{subsection*.16}%
+\contentsline {subsection}{Training Pipeline}{21}{subsection*.17}%
+\contentsline {subsection}{Hyperparameter Selection}{22}{subsection*.18}%
+\contentsline {section}{\numberline {6.4}Implementation Details}{23}{section.6.4}%
+\contentsline {chapter}{\numberline {7}Numerical experiments}{24}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Study 1: Uncertainty Estimation via Token-Wise Entropy}{24}{section.7.1}%
+\contentsline {subsection}{Experimental Setup}{24}{subsection*.19}%
+\contentsline {subsection}{Entropy Distribution Analysis}{24}{subsection*.20}%
+\contentsline {subsection}{Predictive Performance by Domain and Reasoning}{25}{subsection*.22}%
+\contentsline {subsection}{Calibration Analysis}{26}{subsection*.26}%
+\contentsline {subsection}{Discussion}{28}{subsection*.28}%
+\contentsline {section}{\numberline {7.2}Study 2: Language Steering in Latent Space}{28}{section.7.2}%
+\contentsline {subsection}{Experimental Setup}{29}{subsection*.29}%
+\contentsline {subsection}{Language Direction Identification}{29}{subsection*.30}%
+\contentsline {subsection}{Layer-Wise Evolution of Language Structure}{29}{subsection*.32}%
+\contentsline {subsection}{Distributional Evaluation of Steering}{30}{subsection*.35}%
+\contentsline {subsection}{Generation-Based Evaluation}{32}{subsection*.39}%
+\contentsline {subsection}{Discussion}{32}{subsection*.41}%
+\contentsline {section}{\numberline {7.3}Study 3: Complexity-Aware Fine-Tuning}{33}{section.7.3}%
+\contentsline {subsection}{Experimental Setup}{33}{subsection*.42}%
+\contentsline {subsection}{Main Results}{33}{subsection*.43}%
+\contentsline {subsection}{Sensitivity Study}{34}{subsection*.47}%
+\contentsline {subsubsection}{Complexity Metric Selection}{34}{subsubsection*.48}%
+\contentsline {subsubsection}{Curriculum Learning Fragility}{35}{subsubsection*.50}%
+\contentsline {subsection}{Discussion}{35}{subsection*.52}%
+\contentsline {section}{\numberline {7.4}Summary of Results}{36}{section.7.4}%
+\contentsline {chapter}{\numberline {8}Discussion and conclusion}{37}{chapter.8}%
+\contentsline {section}{\numberline {8.1}Summary of Contributions}{37}{section.8.1}%
+\contentsline {section}{\numberline {8.2}Unifying Insights}{38}{section.8.2}%
+\contentsline {section}{\numberline {8.3}Position in the Research Landscape}{38}{section.8.3}%
+\contentsline {section}{\numberline {8.4}Limitations}{39}{section.8.4}%
+\contentsline {section}{\numberline {8.5}Future Directions}{39}{section.8.5}%
+\contentsline {section}{\numberline {8.6}Conclusion}{40}{section.8.6}%
+\contentsline {chapter}{Acknowledgements}{41}{chapter*.53}%
+\contentsline {chapter}{Innovations}{42}{chapter*.54}%
+\contentsline {chapter}{Bibliography}{44}{Item.16}%
+\contentsline {chapter}{Appendix}{48}{chapter*.56}%

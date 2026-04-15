@@ -25,15 +25,9 @@ Let $h_l^{(t)} \in \mathbb{R}^d$ denote the hidden state at layer $l$ and positi
 Given a question $q$ and a model-generated answer $a$, the answer correctness prediction problem is to estimate $P(\text{correct} | q, a, \mathcal{M})$ using only information available from a single forward pass through $\mathcal{M}$.
 \end{Def}
 
-The goal is to identify features derived from the output distribution that correlate with answer correctness. Specifically, we investigate:
+The goal is to identify features derived from the output distribution that correlate with answer correctness. Specifically, we investigate the sequence of token-wise entropies $(H_1, H_2, \ldots, H_m)$ during answer generation, aggregate statistics derived from these sequences (including mean entropy, maximum entropy, minimum entropy, and their ratios), and the predictive power of these features for distinguishing correct from incorrect answers across different question domains and reasoning requirements.
 
-\begin{enumerate}
-    \item The sequence of token-wise entropies $(H_1, H_2, \ldots, H_m)$ during answer generation
-    \item Aggregate statistics including mean entropy, maximum entropy, minimum entropy, and their ratios
-    \item The predictive power of these features for distinguishing correct from incorrect answers
-\end{enumerate}
-
-\textbf{Objective}: Develop entropy-based features that achieve high ROC-AUC for predicting answer correctness, improving upon baseline confidence measures.
+\textbf{Objective}: Develop entropy-based features that achieve high ROC-AUC for predicting answer correctness, improving upon baseline confidence measures such as first-token probability, mean sequence probability, and verbalized confidence.
 
 \section{Problem 2: Language Control via Latent Space Steering}
 
@@ -68,17 +62,7 @@ The complexity of a training example $(x, y)$ with respect to model $\mathcal{M}
 \end{equation}
 \end{Def}
 
-The complexity-aware fine-tuning problem is to design a training procedure that:
-
-\begin{enumerate}
-    \item Stratifies training data $\mathcal{D} = \{(x_i, y_i)\}_{i=1}^N$ into complexity tiers based on $C(x_i, y_i; \mathcal{M})$
-    \item Applies appropriate training interventions for each tier:
-    \begin{itemize}
-        \item Low complexity (easy examples): Direct supervised fine-tuning (SFT)
-        \item High complexity (hard examples): Chain-of-thought distillation from a teacher model
-    \end{itemize}
-    \item Achieves higher accuracy with less training data compared to uniform training
-\end{enumerate}
+The complexity-aware fine-tuning problem is to design a training procedure that stratifies training data $\mathcal{D} = \{(x_i, y_i)\}_{i=1}^N$ into complexity tiers based on $C(x_i, y_i; \mathcal{M})$, applies appropriate training interventions for each tier---direct supervised fine-tuning (SFT) for low-complexity examples and chain-of-thought distillation from a teacher model for high-complexity examples---and achieves higher accuracy with less training data compared to uniform training.
 
 Formally, let $\mathcal{D}_{\text{easy}} = \{(x, y) \in \mathcal{D} : C(x, y; \mathcal{M}) < \tau\}$ and $\mathcal{D}_{\text{hard}} = \mathcal{D} \setminus \mathcal{D}_{\text{easy}}$ for some threshold $\tau$. The training objective is:
 \begin{equation}
@@ -90,11 +74,6 @@ Formally, let $\mathcal{D}_{\text{easy}} = \{(x, y) \in \mathcal{D} : C(x, y; \m
 
 \section{Unifying Theme}
 
-All three problems share a common approach: extracting and utilizing information from a single forward pass through the model. This information takes two forms:
-
-\begin{enumerate}
-    \item \textbf{Output distributions}: The probability distributions over tokens (Problems 1 and 3)
-    \item \textbf{Internal representations}: The hidden states at intermediate layers (Problem 2)
-\end{enumerate}
+All three problems share a common approach: extracting and utilizing information from a single forward pass through the model. This information takes two forms. The first is output distributions---the probability distributions over tokens that the model produces at each generation step---which are exploited in Problems 1 and 3 for uncertainty estimation and complexity-aware training respectively. The second is internal representations---the hidden states at intermediate layers of the transformer---which are exploited in Problem 2 for language direction identification and activation steering.
 
 The unifying hypothesis is that these signals encode rich information about model behavior, uncertainty, and input characteristics that can be exploited without architectural modifications or additional training. This thesis validates this hypothesis through empirical investigation of all three problems.

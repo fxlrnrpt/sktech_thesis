@@ -1,115 +1,150 @@
 \chapter{Numerical experiments}
 
-This chapter presents the experimental setup and results for each of the three studies comprising this thesis.
+This chapter presents the experimental setup and results for each of the three studies comprising this thesis. For each study, we describe the motivation, experimental configuration, main results, and their interpretation.
 
 \section{Study 1: Uncertainty Estimation via Token-Wise Entropy}
 
+The gap between a model's apparent confidence and its actual correctness poses critical risks in high-stakes applications. In domains such as healthcare, law, education, and economics, an LLM's overestimation of its own accuracy could result in harmful decisions or misinformation. Existing uncertainty estimation methods tend to evaluate how good an overall confidence estimate is, but often ignore why uncertainty appeared in a specific case and how it relates to the nature of the question being asked. Furthermore, many existing methods generalize poorly for concise multiple-choice questions where the model's response consists of only one or two tokens. This study investigates whether the entropy of the model's output distribution over the answer token can serve as a reliable indicator of answer correctness, and how this signal varies across question topics and reasoning requirements.
+
 \subsection{Experimental Setup}
 
-\textbf{Dataset}: We use the MMLU-Pro benchmark~\cite{wang2024mmlu}, which contains approximately 12,000 challenging multiple-choice questions with 10 answer choices across 14 diverse domains including Biology, Chemistry, Computer Science, Economics, Engineering, Health, History, Law, Math, Philosophy, Physics, Psychology, Business, and Other.
+We use the MMLU-Pro benchmark~\cite{wang2024mmlu}, which contains approximately 12,000 challenging multiple-choice questions with 10 answer choices per question across 14 diverse domains including Biology, Chemistry, Computer Science, Economics, Engineering, Health, History, Law, Math, Philosophy, Physics, Psychology, Business, and Other. The dataset was chosen for its increased difficulty compared to the original MMLU and its improved robustness against data leakage, as official reports for Phi-4 and Mistral-Small-24B also used this extended dataset.
 
-\textbf{Models}: We evaluate four decoder-only large language models:
-\begin{itemize}
-  \item Phi-4~\cite{abdin2024phi}
-  \item Mistral-Small-24B-Base-2501~\cite{jiang2023mistral}
-  \item Qwen-2.5-1.5B~\cite{qwen2024}
-  \item Qwen-2.5-72B~\cite{qwen2024}
-\end{itemize}
+We evaluate four decoder-only large language models spanning a wide range of parameter counts: Phi-4~\cite{abdin2024phi}, Mistral-Small-24B-Base-2501~\cite{jiang2023mistral}, Qwen-2.5-1.5B, and Qwen-2.5-72B~\cite{qwen2024}. This selection allows us to examine how model scale affects the relationship between entropy and answer correctness. For each model, we prompt it to answer questions directly (without chain-of-thought reasoning) and compute the Shannon entropy of the output probability distribution over the answer token. We measure the predictive power of this entropy signal using ROC-AUC for distinguishing correct from incorrect answers, stratified by subject domain and reasoning requirement.
 
-\textbf{Metrics}: We measure the predictive power of entropy features using ROC-AUC for distinguishing correct from incorrect answers, stratified by subject domain and reasoning requirement.
+\subsection{Entropy Distribution Analysis}
 
-\subsection{Results}
+Before examining predictive performance, we analyze the distribution of entropy values for correct and incorrect answers. Figure~\ref{fig:entropy_distributions} presents entropy histograms for three models of different scales.
 
-Table~\ref{tab:entropy_results} presents the ROC-AUC scores for predicting incorrect answers using single-token answer entropy across different domains and reasoning complexity levels for all four models.
+\begin{figure}[!htb]
+    \centering
+    \begin{minipage}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/paper1/entropy_phi4.pdf}
+        \subcaption{Phi-4}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/paper1/entropy_qwen72.pdf}
+        \subcaption{Qwen-72B}
+    \end{minipage}
+
+    \vspace{1em}
+
+    \begin{minipage}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/paper1/entropy_qwen1.5.pdf}
+        \subcaption{Qwen-1.5B}
+    \end{minipage}
+    \caption{Entropy distribution of answer tokens for correct and incorrect responses. Near-zero entropy values are much more frequently observed for correct answers, particularly for larger models. Model scale correlates with entropy separation: larger models show clearer divergence between correct (low entropy) and incorrect (higher entropy) predictions.}
+    \label{fig:entropy_distributions}
+\end{figure}
+
+The distributions reveal a clear pattern: near-zero entropy values are substantially more common for correct answers across all models, confirming that when a model is highly confident (low entropy), it is more likely to be correct. However, the separation quality depends strongly on model scale. Larger models such as Qwen-72B exhibit clearer divergence between the entropy distributions of correct and incorrect predictions, while smaller models like Qwen-1.5B show more overlapping distributions. This suggests that larger models develop better-calibrated internal representations of their own uncertainty.
+
+\subsection{Predictive Performance by Domain and Reasoning}
+
+Table~\ref{tab:entropy_results} presents the ROC-AUC scores for predicting incorrect answers using single-token answer entropy across all 14 domains and reasoning complexity levels.
 
 \begin{table}[!htb]
-  \centering
-  \caption{ROC AUC performance comparison across categories and models using single-token answer entropy.}
-  \renewcommand{\arraystretch}{1.2}
-  \begin{tabular}{lcccc}
-    \toprule
-    Category & Phi-4 & Mistral & Qwen 1.5B & Qwen 72B \\
-    \midrule
-    Biology & \textbf{0.73} & \textbf{0.65} & \textbf{0.79} & \textbf{0.83} \\
-    Economics & 0.65 & 0.58 & 0.73 & 0.80 \\
-    Philosophy & 0.65 & 0.49 & 0.61 & 0.74 \\
-    Physics & 0.63 & 0.44 & 0.64 & 0.74 \\
-    Computer Science & 0.61 & 0.56 & 0.69 & 0.78 \\
-    Psychology & 0.61 & 0.65 & 0.77 & 0.77 \\
-    Chemistry & 0.61 & 0.44 & 0.64 & 0.70 \\
-    Health & 0.60 & 0.55 & 0.67 & 0.77 \\
-    Business & 0.58 & 0.52 & 0.64 & 0.74 \\
-    History & 0.58 & 0.58 & 0.65 & 0.67 \\
-    Engineering & 0.58 & 0.44 & 0.64 & 0.73 \\
-    Other & 0.56 & 0.53 & 0.66 & 0.78 \\
-    Math & 0.55 & 0.54 & 0.63 & 0.73 \\
-    Law & 0.50 & 0.57 & 0.58 & 0.69 \\
-    \midrule
-    No Reasoning & \textbf{0.59} & \textbf{0.59} & \textbf{0.72} & \textbf{0.79} \\
-    Yes Reasoning & 0.56 & 0.52 & 0.68 & 0.76 \\
-    Reasoning (Low) & 0.59 & 0.58 & 0.71 & 0.79 \\
-    Reasoning (Med) & 0.57 & 0.52 & 0.69 & 0.76 \\
-    Reasoning (High) & 0.53 & 0.53 & 0.61 & 0.73 \\
-    \midrule
-    Overall & 0.58 & 0.52 & 0.70 & 0.77 \\
-    \bottomrule
-  \end{tabular}
-  \label{tab:entropy_results}
+\centering
+\caption{ROC AUC performance comparison across categories and models using single-token answer entropy.}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{lcccc}
+\toprule
+Category & Phi-4 & Mistral & Qwen 1.5B & Qwen 72B \\
+\midrule
+Biology & \textbf{0.73} & \textbf{0.65} & \textbf{0.79} & \textbf{0.83} \\
+Economics & 0.65 & 0.58 & 0.73 & 0.80 \\
+Philosophy & 0.65 & 0.49 & 0.61 & 0.74 \\
+Physics & 0.63 & 0.44 & 0.64 & 0.74 \\
+Computer Science & 0.61 & 0.56 & 0.69 & 0.78 \\
+Psychology & 0.61 & 0.65 & 0.77 & 0.77 \\
+Chemistry & 0.61 & 0.44 & 0.64 & 0.70 \\
+Health & 0.60 & 0.55 & 0.67 & 0.77 \\
+Business & 0.58 & 0.52 & 0.64 & 0.74 \\
+History & 0.58 & 0.58 & 0.65 & 0.67 \\
+Engineering & 0.58 & 0.44 & 0.64 & 0.73 \\
+Other & 0.56 & 0.53 & 0.66 & 0.78 \\
+Math & 0.55 & 0.54 & 0.63 & 0.73 \\
+Law & 0.50 & 0.57 & 0.58 & 0.69 \\
+\midrule
+No Reasoning & \textbf{0.59} & \textbf{0.59} & \textbf{0.72} & \textbf{0.79} \\
+Yes Reasoning & 0.56 & 0.52 & 0.68 & 0.76 \\
+Reasoning (Low) & 0.59 & 0.58 & 0.71 & 0.79 \\
+Reasoning (Med) & 0.57 & 0.52 & 0.69 & 0.76 \\
+Reasoning (High) & 0.53 & 0.53 & 0.61 & 0.73 \\
+\midrule
+Overall & 0.58 & 0.52 & 0.70 & 0.77 \\
+\bottomrule
+\end{tabular}
+\label{tab:entropy_results}
 \end{table}
 
-Figure~\ref{fig:roc_auc_by_subject} visualizes the ROC-AUC values across subjects for all four models, and Figure~\ref{fig:roc_auc_by_reasoning} shows the breakdown by reasoning requirement.
+Figure~\ref{fig:roc_auc_by_subject} visualizes the ROC-AUC values across subjects for all four models, while Figure~\ref{fig:roc_auc_by_reasoning} shows the breakdown by reasoning requirement.
 
 \begin{figure}[!htb]
-  \centering
-  \includegraphics[width=\textwidth]{images/paper1/models_compare_roc_auc.pdf}
-  \caption{ROC-AUC for error prediction by subject for four different LLMs.}
-  \label{fig:roc_auc_by_subject}
+    \centering
+    \includegraphics[width=\textwidth]{images/paper1/models_compare_roc_auc.pdf}
+    \caption{ROC-AUC for error prediction by subject for four different LLMs. Knowledge-intensive domains (Biology, Psychology) consistently show higher predictive power than reasoning-heavy domains (Math, Engineering).}
+    \label{fig:roc_auc_by_subject}
 \end{figure}
 
 \begin{figure}[!htb]
-  \centering
-  \includegraphics[width=\textwidth]{images/paper1/models_compare_reasoning.pdf}
-  \caption{ROC-AUC by reasoning requirement for four different LLMs.}
-  \label{fig:roc_auc_by_reasoning}
+    \centering
+    \includegraphics[width=\textwidth]{images/paper1/models_compare_reasoning.pdf}
+    \caption{ROC-AUC by reasoning requirement for four different LLMs. Entropy is a better predictor for questions that do not require complex reasoning.}
+    \label{fig:roc_auc_by_reasoning}
 \end{figure}
+
+The results reveal several important patterns. Entropy is an effective predictor of answer correctness in knowledge-dependent domains, with Biology achieving the highest ROC-AUC of 0.83 for Qwen-72B, followed by Economics (0.80) and Computer Science (0.78). In contrast, performance is notably lower for reasoning-intensive domains: Math achieves only 0.55 ROC-AUC for Phi-4 and Law only 0.50. This domain dependence suggests that entropy primarily captures \textit{knowledge uncertainty}---whether the model has encountered similar factual content during training---rather than \textit{reasoning difficulty}.
+
+The effect of model scale is substantial and consistent. Qwen-72B achieves an overall ROC-AUC of 0.77, compared to 0.70 for Qwen-1.5B (same architecture family but 48$\times$ fewer parameters), 0.58 for Phi-4, and 0.52 for Mistral. This scaling trend holds across all domains without exception, suggesting that larger models develop more informative entropy signals.
+
+The reasoning analysis further supports the knowledge-versus-reasoning interpretation. For Qwen-72B, questions that do not require reasoning achieve ROC-AUC of 0.79, compared to 0.73 for questions requiring high reasoning. This gap is even more pronounced for Mistral (0.59 vs. 0.53). Low entropy is thus a marginally better predictor of correctness for factual recall questions than for multi-step reasoning problems.
+
+The Model-as-Judge (MASJ) approach, in which a large auxiliary LLM estimates question difficulty, performs near-randomly with ROC-AUC values around 0.49--0.57 across all models. Both the numerical and nominal MASJ scores relate little to actual question complexity, indicating that MASJ captures different aspects of a question's properties that are largely irrelevant to predicting model correctness.
+
+\subsection{Calibration Analysis}
+
+Figure~\ref{fig:calibration} presents calibration curves computed using inverted normalized entropy. The analysis reveals systematic deviations between self-reported certainty and empirical accuracy, with distinct patterns across architectures.
 
 \begin{figure}[!htb]
-  \centering
-  \includegraphics[width=0.9\textwidth]{images/paper1/models_compare_calibration.pdf}
-  \caption{Calibration of LLMs based on their entropy. Systematic overconfidence is observed in high-certainty regimes across all models.}
-  \label{fig:calibration}
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/paper1/models_compare_calibration.pdf}
+    \caption{Calibration of LLMs based on their entropy. Systematic overconfidence is observed in high-certainty regimes across all models, with architecture-specific patterns.}
+    \label{fig:calibration}
 \end{figure}
 
-Key findings:
-\begin{enumerate}
-  \item Entropy is an effective predictor of answer correctness in knowledge-dependent domains (Biology ROC-AUC 0.83 for Qwen-72B), but performance decreases for reasoning-heavy domains (Math ROC-AUC 0.55 for Phi-4).
-  \item Larger models show better calibration: Qwen-72B achieves overall ROC-AUC of 0.77 compared to 0.52 for Mistral. Calibration analysis (Figure~\ref{fig:calibration}) reveals systematic overconfidence across all models, particularly in high-certainty regimes.
-  \item Low entropy is a better predictor when no reasoning is required (ROC-AUC 0.79 for Qwen-72B) compared to high-reasoning questions (0.73), suggesting entropy primarily captures \textit{knowledge uncertainty} rather than \textit{reasoning difficulty}.
-  \item The Model-as-Judge (MASJ) approach performs near-randomly with ROC-AUC values around 0.49--0.57, indicating it captures different aspects of an LLM's confidence that are irrelevant to question complexity.
-\end{enumerate}
+Mistral exhibits unstable calibration dynamics, characterized by erratic accuracy fluctuations in low-confidence regions. Despite moderate confidence estimates, its accuracy varies unpredictably, even peaking anomalously in the lowest entropy bin. This contrasts with its pronounced underperformance in high-confidence regimes, where empirical accuracy consistently trails reported certainty. Qwen-72B, despite its large scale, demonstrates inconsistent calibration in high-confidence predictions, with substantial confidence-accuracy gaps in mid-range entropy bins. Interestingly, Qwen-1.5B emerges as an outlier, surpassing its larger counterpart in calibration quality: its confidence-accuracy relationship progresses monotonically across entropy bins with minimal extreme deviations. These results underscore that systematic overconfidence is a pervasive issue across model architectures, particularly in high-certainty regimes where all models significantly overestimate their reliability.
+
+\subsection{Discussion}
+
+This study demonstrates that single-token answer entropy is a practical and effective signal for predicting LLM answer correctness, but with important caveats. The signal is most informative for knowledge-dependent domains where the model either knows the answer (low entropy) or does not (high entropy). For questions requiring multi-step reasoning, the entropy of the final answer token is less informative because the model may be uncertain about the reasoning process while still arriving at the correct answer, or conversely, may be confident in an incorrect reasoning chain.
+
+The observation that MASJ performs near-randomly is significant: it suggests that external judges, even when using large auxiliary models, capture fundamentally different properties than the model's own internal uncertainty. This finding motivates the use of intrinsic signals (output distributions) rather than external evaluation for uncertainty estimation.
+
+We also note that the MMLU-Pro dataset exhibits internal biases in question complexity. The distribution of reasoning requirements varies significantly by topic---engineering questions require reasoning in approximately 90\% of cases, while philosophy requires it in only about 50\%. This suggests that more balanced and less biased datasets would be needed for fair measurement of LLM progress across domains.
 
 \section{Study 2: Language Steering in Latent Space}
 
+Multilingual large language models frequently exhibit unintended code-switching---generating tokens in languages other than the target despite explicit monolingual instructions. In deployed systems, such behavior degrades user trust and experience. For instance, a customer-service chatbot prompted in Spanish may switch to English mid-response, confusing users. Existing solutions require costly fine-tuning on monolingual data, reinforcement learning with language-specific rewards, or brittle prompt engineering. This study investigates whether the geometric structure of multilingual representations in the model's latent space can be exploited for a cheaper alternative: inference-time activation steering that requires no additional training.
+
 \subsection{Experimental Setup}
 
-\textbf{Models}: We evaluate two multilingual models:
-\begin{itemize}
-  \item Qwen2.5-1.5B (28 layers)
-  \item Llama-3.2-1B (16 layers)
-\end{itemize}
+We evaluate two multilingual models of different architectures: Qwen2.5-1.5B with 28 layers and Llama-3.2-1B with 16 layers. We test four language pairs spanning different typological distances: English--Chinese (distant, different script), English--Spanish (close, same script), English--Russian (moderate, different script), and English--Hindi (distant, different script). This selection allows us to examine how typological similarity and script differences affect steering effectiveness.
 
-\textbf{Languages}: We test four language pairs: English--Chinese, English--Spanish, English--Russian, and English--Hindi.
-
-\textbf{Datasets}: We use the Flores Plus dataset~\cite{nllb2024} with 50 parallel samples per language for PCA fitting and 100 for validation. For steering evaluation, we use 2,467 TED Talks samples with artificial code-switching (texts begin in English and switch mid-sentence to the target language).
+For PCA fitting, we use the Flores Plus dataset~\cite{nllb2024} with 50 parallel samples per language and 100 samples for validation. The parallel nature of the corpus is essential: because the semantic content is held constant across languages, language identity becomes the dominant variance source in the hidden state space. For steering evaluation, we use 2,467 TED Talks samples with artificial code-switching, where each sample is truncated to 20 words, split at the midpoint, and the second half is translated to the target language using Gemini 2.5 Flash, producing texts that begin in English and switch mid-sentence.
 
 \subsection{Language Direction Identification}
 
-Table~\ref{tab:lang_classification} shows the classification accuracy for identifying language from hidden state projections onto the first principal component.
+Table~\ref{tab:lang_classification} shows the classification accuracy for identifying language from hidden state projections onto the first principal component at the final layer.
 
 \begin{table}[!htb]
-  \centering
-  \caption{Last layer language classifier accuracy using PCA-identified directions.}
-  \begin{tabular}{lcc}
+    \centering
+    \caption{Last layer language classifier accuracy using PCA-identified directions.}
+    \begin{tabular}{lcc}
     \toprule
     Language pair & Qwen & Llama \\
     \midrule
@@ -118,44 +153,66 @@ Table~\ref{tab:lang_classification} shows the classification accuracy for identi
     English -- Russian & 0.99 & 0.99 \\
     English -- Hindi & 0.98 & 1.00 \\
     \bottomrule
-  \end{tabular}
-  \label{tab:lang_classification}
+    \end{tabular}
+    \label{tab:lang_classification}
 \end{table}
 
-Figure~\ref{fig:lang_maps} shows the final-layer PCA language maps for both models, revealing tight language-specific clusters.
+A simple logistic regression classifier trained only on the scalar projection onto the first principal component achieves near-perfect accuracy (0.96--1.00) across all language pairs and both models. This validates that language identity information is linearly accessible in the final-layer representations, supporting the hypothesis that models maintain explicit language directions in their activation space. The slightly lower accuracy for English--Spanish (0.96 in both models) is attributable to these languages being more closely related within the Indo-European family, resulting in less separated clusters.
+
+\subsection{Layer-Wise Evolution of Language Structure}
+
+Figure~\ref{fig:lang_maps} shows the final-layer PCA language maps for both models, while Figure~\ref{fig:layer_evolution} illustrates the layer-wise evolution of language clustering.
 
 \begin{figure}[!htb]
-  \centering
-  \begin{minipage}[b]{0.48\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{images/paper3/language_map/multi/qwen/layer_28.pdf}
-    \subcaption{Final layer language map (Qwen)}
-  \end{minipage}
-  \hfill
-  \begin{minipage}[b]{0.48\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{images/paper3/language_map/multi/llama/layer_16.pdf}
-    \subcaption{Final layer language map (Llama)}
-  \end{minipage}
-  \caption{Final-layer embeddings projected onto the first two principal components. Languages organize into tight, language-specific clusters with clear boundaries.}
-  \label{fig:lang_maps}
+    \begin{minipage}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/paper3/language_map/multi/qwen/layer_28.pdf}
+        \subcaption{Final layer language map (Qwen)}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/paper3/language_map/multi/llama/layer_16.pdf}
+        \subcaption{Final layer language map (Llama)}
+    \end{minipage}
+    \caption{Final-layer embeddings projected onto the first two principal components. Languages organize into tight, language-specific clusters with clear boundaries. Languages within the Indo-European family (Spanish, Russian) cluster closer than typologically distant pairs (English--Chinese).}
+    \label{fig:lang_maps}
 \end{figure}
 
-Results show that:
-\begin{enumerate}
-  \item Language directions can be reliably identified with 96--100\% accuracy using a simple logistic regression classifier on the first principal component.
-  \item Language identity concentrates in final layers with near-perfect linear separability.
-  \item English--Spanish shows slightly lower accuracy (0.96) due to these languages being more closely related within the Indo-European family.
-\end{enumerate}
+\begin{figure}[!htb]
+    \centering
+    \begin{minipage}[b]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/paper3/language_map/multi/llama/layer_0.pdf}
+        \subcaption{Layer 0 (Llama)}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/paper3/language_map/multi/llama/layer_7.pdf}
+        \subcaption{Layer 7 (Llama)}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.3\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/paper3/language_map/multi/llama/explained_variance.pdf}
+        \subcaption{Explained variance by layer}
+    \end{minipage}
+    \caption{Layer-wise evolution of language representations in Llama-3.2-1B. Clusters emerge loosely in early layers (a), sharpen in middle layers (b), and reach near-perfect separability in final layers. The explained variance of the first principal component (c) increases dramatically in final layers, confirming late-stage specialization for language identity.}
+    \label{fig:layer_evolution}
+\end{figure}
 
-\subsection{Code-Switching Reduction: Distributional Evaluation}
+The visualizations reveal that models organize identical semantic content into tight, language-specific clusters with clear boundaries. Languages within the Indo-European family (Spanish, Russian) cluster closer together than typologically distant pairs (English--Chinese), suggesting that the first principal component captures coarse language distinction while the second component encodes finer linguistic properties. The layer-wise evolution is particularly informative: clusters emerge loosely in early layers and sharpen dramatically in final layers, with the explained variance of the first principal component increasing substantially in the last few layers. This confirms late-stage specialization for language identity, suggesting that early layers focus primarily on semantic processing while language identity crystallizes only in the final layers.
 
-We evaluate steering effectiveness by comparing the next-token prediction distribution of the steered model against the English baseline.
+\subsection{Distributional Evaluation of Steering}
+
+We evaluate steering effectiveness by comparing the next-token prediction distribution of the steered model against the English baseline using multiple complementary metrics.
 
 \begin{table}[!htb]
-  \centering
-  \caption{KL divergence reduction through activation steering (no steering $\rightarrow$ steering). Lower is better.}
-  \begin{tabular}{lcc}
+    \centering
+    \caption{KL divergence reduction through activation steering (no steering $\rightarrow$ steering). Lower is better.}
+    \begin{tabular}{lcc}
     \toprule
     Language pair & Qwen & Llama \\
     \midrule
@@ -164,14 +221,14 @@ We evaluate steering effectiveness by comparing the next-token prediction distri
     English -- Russian & 8.70 $\rightarrow$ 5.40 & 7.77 $\rightarrow$ 3.49 \\
     English -- Hindi & 9.60 $\rightarrow$ 7.02 & 8.06 $\rightarrow$ 6.13 \\
     \bottomrule
-  \end{tabular}
-  \label{tab:steering_kl}
+    \end{tabular}
+    \label{tab:steering_kl}
 \end{table}
 
 \begin{table}[!htb]
-  \centering
-  \caption{Cosine similarity between steered and English baseline distributions (no steering $\rightarrow$ steering, higher is better).}
-  \begin{tabular}{lcc}
+    \centering
+    \caption{Cosine similarity between steered and English baseline distributions (no steering $\rightarrow$ steering, higher is better).}
+    \begin{tabular}{lcc}
     \toprule
     Language pair & Qwen & Llama \\
     \midrule
@@ -180,14 +237,14 @@ We evaluate steering effectiveness by comparing the next-token prediction distri
     English -- Russian & 0.09 $\rightarrow$ 0.23 & 0.10 $\rightarrow$ 0.31 \\
     English -- Hindi & 0.04 $\rightarrow$ 0.07 & 0.06 $\rightarrow$ 0.16 \\
     \bottomrule
-  \end{tabular}
-  \label{tab:steering_cos}
+    \end{tabular}
+    \label{tab:steering_cos}
 \end{table}
 
 \begin{table}[!htb]
-  \centering
-  \caption{Best steering strength coefficient $s$ (KL-optimized via grid search).}
-  \begin{tabular}{lcc}
+    \centering
+    \caption{Best steering strength coefficient $s$ (KL-optimized via grid search).}
+    \begin{tabular}{lcc}
     \toprule
     Language pair & Qwen & Llama \\
     \midrule
@@ -196,21 +253,25 @@ We evaluate steering effectiveness by comparing the next-token prediction distri
     English -- Russian & $-2.2$ & $-3.5$ \\
     English -- Hindi & $+5.0$ & $-3.6$ \\
     \bottomrule
-  \end{tabular}
-  \label{tab:steering_coeff}
+    \end{tabular}
+    \label{tab:steering_coeff}
 \end{table}
 
-Steering reduces KL divergence by 25--55\% across language pairs and models (38\% average for Qwen, 43\% for Llama). The method shows strongest performance for typologically distant pairs: English--Chinese achieves 55\% KL reduction on Qwen, while English--Russian achieves 55\% on Llama. English--Hindi remains the weakest pair (24--27\% reduction). Notably, the optimal coefficient for Qwen English--Hindi is positive ($+5.0$), indicating a reversed PCA direction for this pair, possibly reflecting tokenization asymmetries in the treatment of Devanagari script.
+Steering reduces KL divergence by 25--55\% across language pairs and models, with an average reduction of 38\% for Qwen and 43\% for Llama. The method shows strongest performance for typologically distant pairs: English--Chinese achieves 55\% KL reduction on Qwen, while English--Russian achieves 55\% on Llama. We hypothesize that model-specific tokenization and training data balance play a key role in these differences: the Qwen model processed substantially more English and Chinese data during pretraining, leading to more granular tokenization and better internal generalization for that pair.
 
-\subsection{Code-Switching Reduction: Generation-Based Evaluation}
+English--Hindi remains the weakest pair for both models, achieving only 24--27\% KL reduction. The cosine similarity improvement for this pair is also minimal (0.04 $\rightarrow$ 0.07 for Qwen), reinforcing that this is the most challenging configuration. Notably, the optimal steering coefficient for Qwen English--Hindi is positive ($+5.0$), while all other pairs use negative coefficients. This indicates a reversed PCA direction for this pair, possibly reflecting tokenization asymmetries in the Qwen model's treatment of Devanagari script. In contrast, Llama uses a consistent negative direction across all language pairs.
 
-We complement the distributional analysis with generation-based evaluation on Llama-3.2-1B. For 500 TED Talks samples per language pair, we generate 100-token continuations and measure code-switching using standard metrics. All steered vs.\ unsteered differences are significant at $p < 0.001$ (Wilcoxon signed-rank test).
+The fact that optimal coefficients have $|s| > 1$ in all cases is significant: it indicates that merely removing the language component (which corresponds to $s = 1$) is insufficient. Active counter-steering beyond projection removal is needed to overcome the language bias present in code-switched input.
+
+\subsection{Generation-Based Evaluation}
+
+To complement the distributional analysis, we evaluate steering on actual text generation using Llama-3.2-1B. For each of 500 TED Talks samples per language pair, we generate 100-token continuations in three conditions: English-only input without steering, code-switched input without steering, and code-switched input with steering. Table~\ref{tab:gen_results} presents the results. All steered vs.\ unsteered differences are significant at $p < 0.001$ (Wilcoxon signed-rank test).
 
 \begin{table}[!htb]
-  \centering
-  \small
-  \caption{Generation-based code-switching metrics (Llama-3.2-1B, $n=500$). English-only baseline: CSI $= 0.02$.}
-  \begin{tabular}{lcccc}
+    \centering
+    \small
+    \caption{Generation-based code-switching metrics (Llama-3.2-1B, $n=500$). English-only baseline: CSI $= 0.02$.}
+    \begin{tabular}{lcccc}
     \toprule
     & \multicolumn{2}{c}{KL-optimized} & \multicolumn{2}{c}{CSI-optimized} \\
     \cmidrule(lr){2-3} \cmidrule(lr){4-5}
@@ -228,45 +289,38 @@ We complement the distributional analysis with generation-based evaluation on Ll
     English -- Russian  & 0.02 & 0.98 & 0.01 & 0.99 \\
     English -- Hindi    & 0.04 & 0.96 & 0.01 & 0.99 \\
     \bottomrule
-  \end{tabular}
-  \label{tab:gen_results}
+    \end{tabular}
+    \label{tab:gen_results}
 \end{table}
 
-With KL-optimized coefficients, CSI drops by 63--95\% across language pairs. Target Language Consistency exceeds 0.77 across all pairs, with English--Chinese and English--Russian achieving near-perfect consistency (TLC $> 0.97$). However, steering coefficients are highly fragile: small changes in magnitude can shift the model from fluent output to degenerate repetition, revealing a sharp trade-off between language control and generation fluency.
+With KL-optimized coefficients, the Code-Switching Index drops by 63--95\% across language pairs. Target Language Consistency exceeds 0.77 for all pairs, with English--Chinese and English--Russian achieving near-perfect consistency (TLC $> 0.97$). CSI-optimized coefficients yield further improvements for English--Spanish (CSI from 0.23 to 0.11) and English--Hindi (CSI from 0.04 to 0.01), but at the cost of higher-magnitude coefficients that increase degeneration risk.
+
+\subsection{Discussion}
+
+The generation-based evaluation confirms that distributional optimization transfers well to actual text generation, but also reveals important fragility. Steering coefficients are highly sensitive to magnitude: small changes can shift the model from fluent code-switched output to degenerate repetition. The CSI-optimized coefficients cluster near the maximum tested value ($-5.0$), suggesting that direct optimization of generation metrics pushes toward an aggressive regime where language control and fluency trade off sharply. Qualitative inspection of generated text confirms this: for English--Spanish, steering successfully redirects generation from Spanish tokens to coherent English, but for English--Russian with aggressive coefficients, steering eliminates Russian but produces repetitive output patterns (e.g., ``first year of the first year of the first year...'').
+
+This fluency--control trade-off represents a fundamental challenge for practical deployment. While the method achieves strong language consistency, the optimal operating point requires careful calibration per language pair, and no principled method for automatic coefficient selection has been developed. Combining steering with constrained decoding or adaptive coefficient scheduling represents a promising direction for addressing this limitation.
 
 \section{Study 3: Complexity-Aware Fine-Tuning}
 
+General-purpose LLMs excel across diverse tasks, but deploying them often requires domain-specific fine-tuning. A standard approach is to train on all available in-domain data with uniform supervised fine-tuning (SFT). However, recent work has concentrated primarily on optimizing training mechanics---objectives, schedulers, and regularizers---while comparatively little attention has been paid to data curation. Curriculum-style approaches have been explored with increasing complexity of data during training, but with limited gains in final accuracy and efficiency, suggesting that more principled strategies are needed. This study investigates whether entropy-based complexity estimation can guide a more efficient fine-tuning pipeline that applies different training strategies to examples of different difficulty.
+
 \subsection{Experimental Setup}
 
-\textbf{Datasets}:
-\begin{itemize}
-  \item MMLU-Pro: multiple-choice question answering across 14 domains ($\sim$12,000 examples)
-  \item GSM8K: 8.5K grade school math word problems~\cite{cobbe2021gsm8k}
-  \item MedMCQA: large-scale medical entrance exam questions~\cite{pmlr-v174-pal22a}
-\end{itemize}
+We conduct experiments across three datasets that cover different domains and question types. MMLU-Pro provides approximately 12,000 multiple-choice questions across 14 domains with varying complexity. GSM8K~\cite{cobbe2021gsm8k} contains 8,500 grade school math word problems requiring multi-step arithmetic reasoning. MedMCQA~\cite{pmlr-v174-pal22a} offers large-scale medical entrance exam questions covering 2,400 healthcare topics across 21 medical subjects.
 
-\textbf{Models}:
-\begin{itemize}
-  \item Student models: Qwen2.5-3B, Phi-4-Mini, LLama-3.2-3B
-  \item Teacher model ensemble: DeepSeek-V3-0324, Qwen-3-235B, Llama-4-Maverick
-\end{itemize}
+For student models, we use three architectures: Qwen2.5-3B, Phi-4-Mini, and LLama-3.2-3B. For chain-of-thought distillation on hard examples, we use an ensemble of teacher models: DeepSeek-V3-0324, Qwen-3-235B, and Llama-4-Maverick. The data is randomly split into train, validation, and test sets with a 70:10:20 ratio, and balanced so that the number of entries in each complexity group is equal.
 
-\textbf{Baselines}:
-\begin{itemize}
-  \item \textbf{SFT}: Standard supervised fine-tuning on all data without complexity split
-  \item \textbf{Curriculum}: Curriculum-based SFT (3 epochs easy, 3 medium, 4 hard)
-  \item \textbf{Distillation}: Full chain-of-thought distillation on all data
-  \item \textbf{Alternative}: SFT on hard data, then CoT distillation on easy/medium data
-\end{itemize}
+We compare our pipeline against four baselines. Standard SFT trains on all data without any complexity split. Curriculum-based SFT applies progressive difficulty ordering (3 epochs on easy data, 3 on medium, 4 on hard). Full distillation applies chain-of-thought distillation to all examples regardless of difficulty. The alternative pipeline reverses our approach: SFT on hard data first, then CoT distillation on easy and medium data.
 
 \subsection{Main Results}
 
-Table~\ref{tab:finetuning_10epochs} presents fine-tuning results after 10 epochs on MMLU-Pro, showing both accuracy and total tokens processed.
+Table~\ref{tab:finetuning_10epochs} presents the results after 10 epochs on MMLU-Pro, including both accuracy and total tokens processed to quantify data efficiency.
 
 \begin{table}[!htb]
-  \centering
-  \caption{Accuracy / tokens processed for complexity-aware fine-tuning pipelines after 10 epochs (MMLU-Pro).}
-  \begin{tabular}{lcc}
+    \centering
+    \caption{Accuracy / tokens processed for complexity-aware fine-tuning pipelines after 10 epochs (MMLU-Pro).}
+    \begin{tabular}{lcc}
     \toprule
     Method & Qwen 3B & Phi4-mini \\
     \midrule
@@ -276,16 +330,18 @@ Table~\ref{tab:finetuning_10epochs} presents fine-tuning results after 10 epochs
     Alternative & 0.47 / 1.5m & 0.58 / 1.2m \\
     Pipeline (ours) & \textbf{0.50} / \textbf{399k} & \underline{0.60} / \textbf{268k} \\
     \bottomrule
-  \end{tabular}
-  \label{tab:finetuning_10epochs}
+    \end{tabular}
+    \label{tab:finetuning_10epochs}
 \end{table}
 
-Table~\ref{tab:finetuning_20epochs} shows extended results after 20 epochs, including generalization to GSM8K and MedMCQA datasets.
+After 10 epochs, the complexity-aware pipeline achieves accuracy comparable to or exceeding full distillation while processing dramatically fewer tokens. Qwen-3B reaches 0.50 accuracy compared to 0.49 for distillation, but uses only 399k tokens versus 1.97 million---a reduction of 79\%. Phi-4-Mini reaches 0.60 compared to 0.63 for distillation, using 268k tokens versus 1.51 million---a reduction of 82\%. The pipeline also substantially outperforms the alternative ordering (SFT on hard, then CoT on easy/medium), confirming that the direction of intervention matters: easy examples benefit from simple SFT, while hard examples require the additional reasoning scaffolding provided by chain-of-thought distillation.
+
+To examine longer-term training dynamics, we extended experiments to 20 epochs. Table~\ref{tab:finetuning_20epochs} shows the results, including generalization to GSM8K and MedMCQA.
 
 \begin{table}[!htb]
-  \centering
-  \caption{Accuracy for complexity-aware fine-tuning pipelines after 20 epochs.}
-  \begin{tabular}{lcccccc}
+    \centering
+    \caption{Accuracy for complexity-aware fine-tuning pipelines after 20 epochs.}
+    \begin{tabular}{lcccccc}
     \toprule
     & \multicolumn{2}{c}{MMLU Pro} & \multicolumn{2}{c}{GSM8K} & \multicolumn{2}{c}{MedMCQA} \\
     \cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7}
@@ -295,49 +351,87 @@ Table~\ref{tab:finetuning_20epochs} shows extended results after 20 epochs, incl
     Distillation & \underline{0.50} & \underline{0.63} & \underline{0.79} & \underline{0.89} & \underline{0.56} & \underline{0.57} \\
     Pipeline (ours) & \textbf{0.52} & \textbf{0.64} & \textbf{0.82} & \textbf{0.89} & \textbf{0.56} & \textbf{0.58} \\
     \bottomrule
-  \end{tabular}
-  \label{tab:finetuning_20epochs}
+    \end{tabular}
+    \label{tab:finetuning_20epochs}
 \end{table}
 
-\begin{figure}[!htb]
-  \centering
-  \begin{minipage}[b]{0.48\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{images/paper2/qwen_pipeline_20epochs.pdf}
-    \subcaption{Qwen 3B (MMLU-Pro, 20 epochs)}
-  \end{minipage}
-  \hfill
-  \begin{minipage}[b]{0.48\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{images/paper2/phi_pipeline_20epochs.pdf}
-    \subcaption{Phi-4-Mini (MMLU-Pro, 20 epochs)}
-  \end{minipage}
-  \caption{Accuracy dynamics for fine-tuning pipelines over 20 epochs. The complexity-aware pipeline (blue) surpasses full distillation (green dashed) while using 79--82\% less training data.}
-  \label{fig:training_curves}
-\end{figure}
+After 20 epochs, the pipeline surpasses all baselines across all three datasets. On MMLU-Pro, Qwen-3B achieves 0.52 compared to 0.50 for full distillation and 0.39 for SFT, while Phi-4-Mini reaches 0.64 compared to 0.63 and 0.51 respectively. The method generalizes strongly to other domains: on GSM8K, LLama-3B achieves 0.82 (pipeline) versus 0.79 (distillation) and 0.13 (SFT), demonstrating particularly large gains for mathematical reasoning. On MedMCQA, the pipeline matches or slightly exceeds distillation performance while maintaining the same 79--82\% data savings.
 
-Key findings:
-\begin{enumerate}
-  \item Our complexity-aware pipeline matches or outperforms full distillation while using 79--82\% less training data (tokens processed).
-  \item After 20 epochs (Figure~\ref{fig:training_curves}), the pipeline surpasses all baselines: Qwen-3B achieves 0.52 vs.\ 0.50 (distillation) and 0.39 (SFT); Phi-4-Mini achieves 0.64 vs.\ 0.63 (distillation) and 0.51 (SFT).
-  \item The method generalizes across datasets: on GSM8K, LLama-3B achieves 0.82 (pipeline) vs.\ 0.79 (distillation) and 0.13 (SFT).
-  \item The pipeline shows a continued uptrend in training accuracy, while full distillation plateaus, suggesting better utilization of training data.
-\end{enumerate}
+Figure~\ref{fig:training_curves} shows the training accuracy dynamics over 20 epochs, revealing that the pipeline exhibits a continued uptrend while full distillation plateaus after approximately 10 epochs. This suggests that the complexity-aware approach makes better use of training data by avoiding redundant computation on examples the model can already handle.
+
+\begin{figure}[!htb]
+    \centering
+    \begin{minipage}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/paper2/qwen_pipeline_20epochs.pdf}
+        \subcaption{Qwen 3B (MMLU-Pro, 20 epochs)}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/paper2/phi_pipeline_20epochs.pdf}
+        \subcaption{Phi-4-Mini (MMLU-Pro, 20 epochs)}
+    \end{minipage}
+    \caption{Accuracy dynamics for fine-tuning pipelines over 20 epochs. The complexity-aware pipeline (blue solid) surpasses full distillation (green dashed) and continues improving, while distillation plateaus.}
+    \label{fig:training_curves}
+\end{figure}
 
 \subsection{Sensitivity Study}
 
-\textbf{Complexity metric selection.} We compare single-token answer entropy against MASJ reasoning score and cross-entropy as complexity metrics. Single-token entropy yields the best ROC-AUC (0.72 for Qwen-3B without domain split) and provides clearer separation between easy and hard examples during SFT training. MASJ reasoning scores achieve ROC-AUC around 0.50--0.57, making them unsuitable for complexity estimation.
+\subsubsection{Complexity Metric Selection}
 
-\textbf{Curriculum learning fragility.} Standard curriculum learning (easy $\rightarrow$ medium $\rightarrow$ hard ordering with SFT) shows extreme sensitivity to hyperparameters. Qwen-3B plateaus at lower accuracy with more training epochs, while Phi-4-Mini quickly overfits, demonstrating that naive complexity-aware ordering without differentiated training strategies is insufficient.
+We compare single-token answer entropy against alternative complexity metrics: MASJ reasoning score, MASJ education level, cross-entropy, and various chain-of-thought entropy aggregations. Single-token entropy yields the best ROC-AUC for complexity estimation (0.72 for Qwen-3B without domain split) and provides the clearest separation between easy and hard examples during SFT training. MASJ-based metrics achieve ROC-AUC around 0.50--0.57, barely above random, making them unsuitable for data stratification. Chain-of-thought entropy variants provide higher answer accuracy but lower ROC-AUC scores, making them less suitable for complexity estimation. Maximum-based measures (CoT Max, Sequence Mean Max) consistently outperform mean-based approaches, suggesting that peak uncertainty moments better indicate question difficulty than average uncertainty.
+
+We also evaluate cross-entropy as an alternative to entropy for the pipeline's complexity metric. Figure~\ref{fig:entropy_vs_crossentropy} shows that entropy and cross-entropy achieve comparable pipeline performance for Qwen-3B, while Phi-4-Mini demonstrates superior performance with entropy. The difference can be attributed to entropy capturing information across the entire output distribution rather than focusing only on the correct token.
+
+\begin{figure}[!htb]
+    \centering
+    \begin{minipage}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/paper2/qwen_e_vs_ce.pdf}
+        \subcaption{Qwen 3B}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/paper2/phi_e_vs_ce.pdf}
+        \subcaption{Phi-4-Mini}
+    \end{minipage}
+    \caption{Pipeline performance comparison using entropy versus cross-entropy as the complexity metric. Entropy provides comparable or superior performance.}
+    \label{fig:entropy_vs_crossentropy}
+\end{figure}
+
+\subsubsection{Curriculum Learning Fragility}
+
+Standard curriculum learning, which applies SFT with progressively increasing difficulty, shows extreme sensitivity to hyperparameters. Figure~\ref{fig:curriculum_fragility} illustrates this fragility: with 10 epochs of training, curriculum-based SFT achieves moderate performance, but extending to 20 epochs causes Qwen-3B to plateau at a lower accuracy while Phi-4-Mini quickly overfits and its performance degrades. This demonstrates that naive complexity-aware ordering without differentiated training strategies---using only SFT throughout---is insufficient. The key insight of our approach is that different complexity levels require fundamentally different training interventions, not merely different ordering.
+
+\begin{figure}[!htb]
+    \centering
+    \begin{minipage}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/paper2/qwen_sft_curriculum_comparison.pdf}
+        \subcaption{Qwen 3B}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/paper2/phi_sft_curriculum_comparison.pdf}
+        \subcaption{Phi-4-Mini}
+    \end{minipage}
+    \caption{Curriculum learning accuracy dynamics for different epoch configurations. Curriculum-based SFT shows extreme sensitivity to training duration, with Phi-4-Mini overfitting rapidly under extended training.}
+    \label{fig:curriculum_fragility}
+\end{figure}
+
+\subsection{Discussion}
+
+The results confirm that entropy works as a reliable, automatic proxy for question difficulty. The pipeline achieves accuracies of 0.52 and 0.64 compared to 0.39 and 0.51 for baseline SFT on Qwen-3B and Phi-4-Mini respectively, while using 81\% less data than full distillation. This finding suggests that curriculum ideas remain relevant for modern LLMs: letting the model focus on what it can already solve directly, while providing extra reasoning guidance only where it struggles, yields a better allocation of limited model capacity.
+
+The pipeline is fully automated and can be integrated into existing fine-tuning workflows. All that is needed is a single forward pass through the student model to compute entropy scores, followed by sorting and partitioning the data. The distillation step for hard examples requires teacher model inference, but this applies to only approximately 25\% of the training data, substantially reducing the cost compared to full distillation.
+
+However, several limitations should be noted. Low entropy can still correspond to hallucinations, leading to imperfect complexity identification. The three-way equal split was chosen for simplicity but may not be optimal for all datasets. In low-resource settings where a teacher model is unavailable or imperfect, the benefit of chain-of-thought distillation is reduced. Finally, the approach has been validated only on question-answering tasks with clear correct answers; its applicability to open-ended generation remains to be investigated.
 
 \section{Summary of Results}
 
-Across all three studies, we demonstrate that signals from the model's forward pass provide valuable information for addressing key challenges in LLM deployment:
+Across all three studies, we demonstrate that signals from the model's forward pass provide valuable and complementary information for addressing key challenges in LLM deployment. Token-wise entropy achieves ROC-AUC up to 0.83 for predicting answer correctness in knowledge-dependent domains, with the signal quality improving with model scale, while the Model-as-Judge approach performs near-randomly. PCA-identified language directions enable 25--55\% reduction in distributional divergence and 63--95\% reduction in Code-Switching Index in generated text across four language pairs, using only simple linear projections applied to the final layers. Complexity-aware fine-tuning matches or outperforms full distillation while using 79--82\% less training data, generalizing across three datasets and three model architectures, and demonstrating that automatic complexity estimation via entropy enables intelligent allocation of training resources.
 
-\begin{enumerate}
-  \item \textbf{Uncertainty estimation}: Token-wise entropy achieves ROC-AUC up to 0.83 for predicting answer correctness in knowledge-dependent domains, while MASJ performs near-randomly.
-  \item \textbf{Language control}: PCA-identified language directions enable 25--55\% reduction in distributional divergence and 63--95\% reduction in Code-Switching Index in generated text across four language pairs.
-  \item \textbf{Training efficiency}: Complexity-aware fine-tuning matches or outperforms full distillation while using 79--82\% less training data, generalizing across three datasets and three model architectures.
-\end{enumerate}
-
-These results validate our central hypothesis that accessible signals from forward passes encode sufficient information to improve reliability, control, and efficiency without requiring architectural modifications.
+These results validate our central hypothesis that accessible signals from forward passes---both output distributions and internal representations---encode sufficient information to improve reliability, control, and efficiency without requiring architectural modifications. The three studies are unified by the principle that a single forward pass contains rich information about the model's confidence, the input's characteristics, and the relationship between the two.

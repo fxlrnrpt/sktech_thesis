@@ -4,55 +4,69 @@
 \citation{abdin2024phi}
 \citation{jiang2023mistral}
 \citation{qwen2024}
-\citation{qwen2024}
-\@writefile{toc}{\contentsline {chapter}{\numberline {7}Numerical experiments}{22}{chapter.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {7}Numerical experiments}{24}{chapter.7}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {section}{\numberline {7.1}Study 1: Uncertainty Estimation via Token-Wise Entropy}{22}{section.7.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{Experimental Setup}{22}{subsection*.20}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{Results}{22}{subsection*.21}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {7.1}Study 1: Uncertainty Estimation via Token-Wise Entropy}{24}{section.7.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{Experimental Setup}{24}{subsection*.19}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{Entropy Distribution Analysis}{24}{subsection*.20}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {7.1}{\ignorespaces Entropy distribution of answer tokens for correct and incorrect responses. Near-zero entropy values are much more frequently observed for correct answers, particularly for larger models. Model scale correlates with entropy separation: larger models show clearer divergence between correct (low entropy) and incorrect (higher entropy) predictions.}}{25}{figure.caption.21}\protected@file@percent }
+\newlabel{fig:entropy_distributions}{{7.1}{25}{Entropy distribution of answer tokens for correct and incorrect responses. Near-zero entropy values are much more frequently observed for correct answers, particularly for larger models. Model scale correlates with entropy separation: larger models show clearer divergence between correct (low entropy) and incorrect (higher entropy) predictions}{figure.caption.21}{}}
+\@writefile{toc}{\contentsline {subsection}{Predictive Performance by Domain and Reasoning}{25}{subsection*.22}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {7.1}{\ignorespaces ROC AUC performance comparison across categories and models using single-token answer entropy.}}{26}{table.caption.23}\protected@file@percent }
+\newlabel{tab:entropy_results}{{7.1}{26}{ROC AUC performance comparison across categories and models using single-token answer entropy}{table.caption.23}{}}
+\@writefile{toc}{\contentsline {subsection}{Calibration Analysis}{26}{subsection*.26}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {7.2}{\ignorespaces ROC-AUC for error prediction by subject for four different LLMs. Knowledge-intensive domains (Biology, Psychology) consistently show higher predictive power than reasoning-heavy domains (Math, Engineering).}}{27}{figure.caption.24}\protected@file@percent }
+\newlabel{fig:roc_auc_by_subject}{{7.2}{27}{ROC-AUC for error prediction by subject for four different LLMs. Knowledge-intensive domains (Biology, Psychology) consistently show higher predictive power than reasoning-heavy domains (Math, Engineering)}{figure.caption.24}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.3}{\ignorespaces ROC-AUC by reasoning requirement for four different LLMs. Entropy is a better predictor for questions that do not require complex reasoning.}}{27}{figure.caption.25}\protected@file@percent }
+\newlabel{fig:roc_auc_by_reasoning}{{7.3}{27}{ROC-AUC by reasoning requirement for four different LLMs. Entropy is a better predictor for questions that do not require complex reasoning}{figure.caption.25}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.4}{\ignorespaces Calibration of LLMs based on their entropy. Systematic overconfidence is observed in high-certainty regimes across all models, with architecture-specific patterns.}}{28}{figure.caption.27}\protected@file@percent }
+\newlabel{fig:calibration}{{7.4}{28}{Calibration of LLMs based on their entropy. Systematic overconfidence is observed in high-certainty regimes across all models, with architecture-specific patterns}{figure.caption.27}{}}
+\@writefile{toc}{\contentsline {subsection}{Discussion}{28}{subsection*.28}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {7.2}Study 2: Language Steering in Latent Space}{28}{section.7.2}\protected@file@percent }
 \citation{nllb2024}
-\@writefile{lot}{\contentsline {table}{\numberline {7.1}{\ignorespaces ROC AUC performance comparison across categories and models using single-token answer entropy.}}{23}{table.caption.22}\protected@file@percent }
-\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
-\newlabel{tab:entropy_results}{{7.1}{23}{ROC AUC performance comparison across categories and models using single-token answer entropy}{table.caption.22}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {7.2}Study 2: Language Steering in Latent Space}{23}{section.7.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{Experimental Setup}{23}{subsection*.26}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {7.1}{\ignorespaces ROC-AUC for error prediction by subject for four different LLMs.}}{24}{figure.caption.23}\protected@file@percent }
-\newlabel{fig:roc_auc_by_subject}{{7.1}{24}{ROC-AUC for error prediction by subject for four different LLMs}{figure.caption.23}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7.2}{\ignorespaces ROC-AUC by reasoning requirement for four different LLMs.}}{24}{figure.caption.24}\protected@file@percent }
-\newlabel{fig:roc_auc_by_reasoning}{{7.2}{24}{ROC-AUC by reasoning requirement for four different LLMs}{figure.caption.24}{}}
-\@writefile{toc}{\contentsline {subsection}{Language Direction Identification}{24}{subsection*.27}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {7.3}{\ignorespaces Calibration of LLMs based on their entropy. Systematic overconfidence is observed in high-certainty regimes across all models.}}{25}{figure.caption.25}\protected@file@percent }
-\newlabel{fig:calibration}{{7.3}{25}{Calibration of LLMs based on their entropy. Systematic overconfidence is observed in high-certainty regimes across all models}{figure.caption.25}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {7.2}{\ignorespaces Last layer language classifier accuracy using PCA-identified directions.}}{25}{table.caption.28}\protected@file@percent }
-\newlabel{tab:lang_classification}{{7.2}{25}{Last layer language classifier accuracy using PCA-identified directions}{table.caption.28}{}}
-\@writefile{toc}{\contentsline {subsection}{Code-Switching Reduction: Distributional Evaluation}{25}{subsection*.30}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {7.4}{\ignorespaces Final-layer embeddings projected onto the first two principal components. Languages organize into tight, language-specific clusters with clear boundaries.}}{26}{figure.caption.29}\protected@file@percent }
-\newlabel{fig:lang_maps}{{7.4}{26}{Final-layer embeddings projected onto the first two principal components. Languages organize into tight, language-specific clusters with clear boundaries}{figure.caption.29}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {7.3}{\ignorespaces KL divergence reduction through activation steering (no steering $\rightarrow $ steering). Lower is better.}}{26}{table.caption.31}\protected@file@percent }
-\newlabel{tab:steering_kl}{{7.3}{26}{KL divergence reduction through activation steering (no steering $\rightarrow $ steering). Lower is better}{table.caption.31}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {7.4}{\ignorespaces Cosine similarity between steered and English baseline distributions (no steering $\rightarrow $ steering, higher is better).}}{26}{table.caption.32}\protected@file@percent }
-\newlabel{tab:steering_cos}{{7.4}{26}{Cosine similarity between steered and English baseline distributions (no steering $\rightarrow $ steering, higher is better)}{table.caption.32}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {7.5}{\ignorespaces Best steering strength coefficient $s$ (KL-optimized via grid search).}}{26}{table.caption.33}\protected@file@percent }
-\newlabel{tab:steering_coeff}{{7.5}{26}{Best steering strength coefficient $s$ (KL-optimized via grid search)}{table.caption.33}{}}
+\@writefile{toc}{\contentsline {subsection}{Experimental Setup}{29}{subsection*.29}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{Language Direction Identification}{29}{subsection*.30}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {7.2}{\ignorespaces Last layer language classifier accuracy using PCA-identified directions.}}{29}{table.caption.31}\protected@file@percent }
+\newlabel{tab:lang_classification}{{7.2}{29}{Last layer language classifier accuracy using PCA-identified directions}{table.caption.31}{}}
+\@writefile{toc}{\contentsline {subsection}{Layer-Wise Evolution of Language Structure}{29}{subsection*.32}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {7.5}{\ignorespaces Final-layer embeddings projected onto the first two principal components. Languages organize into tight, language-specific clusters with clear boundaries. Languages within the Indo-European family (Spanish, Russian) cluster closer than typologically distant pairs (English--Chinese).}}{30}{figure.caption.33}\protected@file@percent }
+\newlabel{fig:lang_maps}{{7.5}{30}{Final-layer embeddings projected onto the first two principal components. Languages organize into tight, language-specific clusters with clear boundaries. Languages within the Indo-European family (Spanish, Russian) cluster closer than typologically distant pairs (English--Chinese)}{figure.caption.33}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.6}{\ignorespaces Layer-wise evolution of language representations in Llama-3.2-1B. Clusters emerge loosely in early layers (a), sharpen in middle layers (b), and reach near-perfect separability in final layers. The explained variance of the first principal component (c) increases dramatically in final layers, confirming late-stage specialization for language identity.}}{30}{figure.caption.34}\protected@file@percent }
+\newlabel{fig:layer_evolution}{{7.6}{30}{Layer-wise evolution of language representations in Llama-3.2-1B. Clusters emerge loosely in early layers (a), sharpen in middle layers (b), and reach near-perfect separability in final layers. The explained variance of the first principal component (c) increases dramatically in final layers, confirming late-stage specialization for language identity}{figure.caption.34}{}}
+\@writefile{toc}{\contentsline {subsection}{Distributional Evaluation of Steering}{30}{subsection*.35}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {7.3}{\ignorespaces KL divergence reduction through activation steering (no steering $\rightarrow $ steering). Lower is better.}}{31}{table.caption.36}\protected@file@percent }
+\newlabel{tab:steering_kl}{{7.3}{31}{KL divergence reduction through activation steering (no steering $\rightarrow $ steering). Lower is better}{table.caption.36}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {7.4}{\ignorespaces Cosine similarity between steered and English baseline distributions (no steering $\rightarrow $ steering, higher is better).}}{31}{table.caption.37}\protected@file@percent }
+\newlabel{tab:steering_cos}{{7.4}{31}{Cosine similarity between steered and English baseline distributions (no steering $\rightarrow $ steering, higher is better)}{table.caption.37}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {7.5}{\ignorespaces Best steering strength coefficient $s$ (KL-optimized via grid search).}}{31}{table.caption.38}\protected@file@percent }
+\newlabel{tab:steering_coeff}{{7.5}{31}{Best steering strength coefficient $s$ (KL-optimized via grid search)}{table.caption.38}{}}
+\@writefile{toc}{\contentsline {subsection}{Generation-Based Evaluation}{32}{subsection*.39}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {7.6}{\ignorespaces Generation-based code-switching metrics (Llama-3.2-1B, $n=500$). English-only baseline: CSI $= 0.02$.}}{32}{table.caption.40}\protected@file@percent }
+\newlabel{tab:gen_results}{{7.6}{32}{Generation-based code-switching metrics (Llama-3.2-1B, $n=500$). English-only baseline: CSI $= 0.02$}{table.caption.40}{}}
+\@writefile{toc}{\contentsline {subsection}{Discussion}{32}{subsection*.41}\protected@file@percent }
 \citation{cobbe2021gsm8k}
 \citation{pmlr-v174-pal22a}
-\@writefile{toc}{\contentsline {subsection}{Code-Switching Reduction: Generation-Based Evaluation}{27}{subsection*.34}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {7.6}{\ignorespaces Generation-based code-switching metrics (Llama-3.2-1B, $n=500$). English-only baseline: CSI $= 0.02$.}}{27}{table.caption.35}\protected@file@percent }
-\newlabel{tab:gen_results}{{7.6}{27}{Generation-based code-switching metrics (Llama-3.2-1B, $n=500$). English-only baseline: CSI $= 0.02$}{table.caption.35}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {7.3}Study 3: Complexity-Aware Fine-Tuning}{27}{section.7.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{Experimental Setup}{27}{subsection*.36}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{Main Results}{28}{subsection*.37}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {7.7}{\ignorespaces Accuracy / tokens processed for complexity-aware fine-tuning pipelines after 10 epochs (MMLU-Pro).}}{28}{table.caption.38}\protected@file@percent }
-\newlabel{tab:finetuning_10epochs}{{7.7}{28}{Accuracy / tokens processed for complexity-aware fine-tuning pipelines after 10 epochs (MMLU-Pro)}{table.caption.38}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {7.8}{\ignorespaces Accuracy for complexity-aware fine-tuning pipelines after 20 epochs.}}{28}{table.caption.39}\protected@file@percent }
-\newlabel{tab:finetuning_20epochs}{{7.8}{28}{Accuracy for complexity-aware fine-tuning pipelines after 20 epochs}{table.caption.39}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7.5}{\ignorespaces Accuracy dynamics for fine-tuning pipelines over 20 epochs. The complexity-aware pipeline (blue) surpasses full distillation (green dashed) while using 79--82\% less training data.}}{29}{figure.caption.40}\protected@file@percent }
-\newlabel{fig:training_curves}{{7.5}{29}{Accuracy dynamics for fine-tuning pipelines over 20 epochs. The complexity-aware pipeline (blue) surpasses full distillation (green dashed) while using 79--82\% less training data}{figure.caption.40}{}}
-\@writefile{toc}{\contentsline {subsection}{Sensitivity Study}{29}{subsection*.41}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {7.4}Summary of Results}{29}{section.7.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {7.3}Study 3: Complexity-Aware Fine-Tuning}{33}{section.7.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{Experimental Setup}{33}{subsection*.42}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{Main Results}{33}{subsection*.43}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {7.7}{\ignorespaces Accuracy / tokens processed for complexity-aware fine-tuning pipelines after 10 epochs (MMLU-Pro).}}{33}{table.caption.44}\protected@file@percent }
+\newlabel{tab:finetuning_10epochs}{{7.7}{33}{Accuracy / tokens processed for complexity-aware fine-tuning pipelines after 10 epochs (MMLU-Pro)}{table.caption.44}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {7.8}{\ignorespaces Accuracy for complexity-aware fine-tuning pipelines after 20 epochs.}}{34}{table.caption.45}\protected@file@percent }
+\newlabel{tab:finetuning_20epochs}{{7.8}{34}{Accuracy for complexity-aware fine-tuning pipelines after 20 epochs}{table.caption.45}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.7}{\ignorespaces Accuracy dynamics for fine-tuning pipelines over 20 epochs. The complexity-aware pipeline (blue solid) surpasses full distillation (green dashed) and continues improving, while distillation plateaus.}}{34}{figure.caption.46}\protected@file@percent }
+\newlabel{fig:training_curves}{{7.7}{34}{Accuracy dynamics for fine-tuning pipelines over 20 epochs. The complexity-aware pipeline (blue solid) surpasses full distillation (green dashed) and continues improving, while distillation plateaus}{figure.caption.46}{}}
+\@writefile{toc}{\contentsline {subsection}{Sensitivity Study}{34}{subsection*.47}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Complexity Metric Selection}{34}{subsubsection*.48}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {7.8}{\ignorespaces Pipeline performance comparison using entropy versus cross-entropy as the complexity metric. Entropy provides comparable or superior performance.}}{35}{figure.caption.49}\protected@file@percent }
+\newlabel{fig:entropy_vs_crossentropy}{{7.8}{35}{Pipeline performance comparison using entropy versus cross-entropy as the complexity metric. Entropy provides comparable or superior performance}{figure.caption.49}{}}
+\@writefile{toc}{\contentsline {subsubsection}{Curriculum Learning Fragility}{35}{subsubsection*.50}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{Discussion}{35}{subsection*.52}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {7.9}{\ignorespaces Curriculum learning accuracy dynamics for different epoch configurations. Curriculum-based SFT shows extreme sensitivity to training duration, with Phi-4-Mini overfitting rapidly under extended training.}}{36}{figure.caption.51}\protected@file@percent }
+\newlabel{fig:curriculum_fragility}{{7.9}{36}{Curriculum learning accuracy dynamics for different epoch configurations. Curriculum-based SFT shows extreme sensitivity to training duration, with Phi-4-Mini overfitting rapidly under extended training}{figure.caption.51}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {7.4}Summary of Results}{36}{section.7.4}\protected@file@percent }
 \@setckpt{chapters/07_numerical_experiments}{
-\setcounter{page}{30}
+\setcounter{page}{37}
 \setcounter{equation}{0}
 \setcounter{enumi}{3}
 \setcounter{enumii}{0}
@@ -67,7 +81,7 @@
 \setcounter{subsubsection}{0}
 \setcounter{paragraph}{0}
 \setcounter{subparagraph}{0}
-\setcounter{figure}{5}
+\setcounter{figure}{9}
 \setcounter{table}{8}
 \setcounter{parentequation}{0}
 \setcounter{savepage}{3}
@@ -77,10 +91,16 @@
 \setcounter{Def}{0}
 \setcounter{Lem}{0}
 \setcounter{section@level}{0}
-\setcounter{Item}{65}
+\setcounter{Item}{10}
 \setcounter{Hfootnote}{0}
 \setcounter{Hy@AnnotLevel}{0}
-\setcounter{bookmark@seq@number}{48}
+\setcounter{bookmark@seq@number}{53}
 \setcounter{subfigure}{2}
 \setcounter{subtable}{0}
+\setcounter{float@type}{8}
+\setcounter{algorithm}{1}
+\setcounter{ALC@unique}{31}
+\setcounter{ALC@line}{31}
+\setcounter{ALC@rem}{0}
+\setcounter{ALC@depth}{0}
 }

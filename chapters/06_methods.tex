@@ -1,6 +1,6 @@
 \chapter{Methodology}
 
-This chapter describes the theoretical approaches, methods, and algorithms used in each of the three studies comprising this thesis.
+This chapter describes the theoretical approaches, methods, and algorithms used in each of the three studies comprising this thesis. For each study, we present the formal methodology, the key design choices, and the evaluation protocol.
 
 \section{Study 1: Uncertainty Estimation via Token-Wise Entropy}
 
@@ -10,65 +10,42 @@ For each generated token $y_t$ in a model's response, we extract the full probab
 \begin{equation}
     H_t = -\sum_{v \in \mathcal{V}} p_t(v) \log_2 p_t(v)
 \end{equation}
-where $p_t(v) = p(v | x, y_1, \ldots, y_{t-1})$ is the probability assigned to token $v$ at position $t$.
+where $p_t(v) = p(v | x, y_1, \ldots, y_{t-1})$ is the probability assigned to token $v$ at position $t$. This entropy measures the model's uncertainty at each generation step: low entropy indicates that the model concentrates probability mass on a small number of tokens (high confidence), while high entropy indicates a diffuse distribution across many candidates (low confidence).
 
 \subsection{Uncertainty Estimation Approaches}
 
-We consider two approaches to uncertainty estimation: entropy-based and Model-as-Judge (MASJ).
+We consider two fundamentally different approaches to uncertainty estimation: intrinsic entropy-based methods that analyze the model's own output distribution, and extrinsic Model-as-Judge methods that use an external evaluator.
 
-\textbf{Single-token answer entropy.} For MMLU-Pro questions with multiple-choice answers, the expected answer is one or two tokens long. We prompt the model to answer directly (without chain-of-thought) and compute the token-wise entropy of the answer token from the model's output logits. This serves as our primary complexity metric, as response uncertainty is a natural predictor of question complexity.
+\textbf{Single-token answer entropy.} For MMLU-Pro questions with multiple-choice answers, the expected answer consists of one or two tokens (the option number). We prompt the model to answer directly without chain-of-thought reasoning and compute the Shannon entropy of the output probability distribution over the answer token. This serves as our primary complexity metric, based on the assumption that response uncertainty is a natural predictor of question complexity: questions the model finds easy produce low-entropy (confident) predictions, while difficult questions produce high-entropy (uncertain) predictions.
 
-\textbf{Chain-of-thought entropy variants.} We also analyze entropy when the model produces a chain-of-thought response. From the CoT response, we compute several aggregation features:
-\begin{enumerate}
-    \item \textbf{CoT Mean}: mean entropy across all tokens in the reasoning chain
-    \item \textbf{CoT Max}: maximum entropy in the reasoning chain
-    \item \textbf{Sequence-aggregation methods}: mean/max aggregated at the word level
-    \item \textbf{Marginal difference}: mean difference between top-2 token probabilities
-\end{enumerate}
+\textbf{Chain-of-thought entropy variants.} We also analyze entropy when the model produces a chain-of-thought response, hypothesizing that the reasoning process may incrementally accumulate entropy and provide better separation of certain and uncertain answers. From the CoT response, we compute several aggregation features. CoT Mean computes the average entropy across all tokens in the reasoning chain. CoT Max captures the maximum entropy, corresponding to the point of greatest uncertainty during reasoning. Sequence-aggregation methods compute mean or maximum entropy at the word level rather than the token level, accounting for subword tokenization. Finally, marginal difference measures the mean gap between the top-2 token probabilities, capturing how decisive the model is at each step.
 
 \subsection{Model-as-Judge (MASJ) Approach}
 
-As a complementary approach, we use a large auxiliary LLM (Mistral-Large-Instruct-2411, 123B parameters) to estimate question properties:
-\begin{itemize}
-    \item \textbf{Reasoning requirement}: whether the question requires reasoning and how many steps (low, medium, high)
-    \item \textbf{Education level}: estimated difficulty as educational level (high school, undergraduate, graduate, postgraduate)
-\end{itemize}
-
-The MASJ scores are obtained via specific prompts and filtered using an MT-Bench-style quality assessment: instances where the judge assigns a score below 8 on a scale of 1 to 10 are regenerated.
+As a complementary extrinsic approach, we use a large auxiliary LLM (Mistral-Large-Instruct-2411, 123B parameters) to estimate question properties along two dimensions. The reasoning requirement dimension assesses whether the question requires complex reasoning and estimates the number of logical steps needed (low, medium, or high). The education level dimension estimates the question difficulty as an educational level (high school and easier, undergraduate, graduate, or postgraduate). The MASJ scores are obtained via carefully designed prompts (provided in the Appendix) and filtered using an MT-Bench-style quality assessment: instances where the judge assigns a quality score below 8 on a scale of 1 to 10 are regenerated to ensure consistent evaluation quality.
 
 \subsection{Evaluation Protocol}
 
-We compare uncertainty estimates with ground-truth correctness labels using ROC-AUC, stratified by subject domain (14 topics), reasoning requirement (low/medium/high), and model architecture. Answers with incorrect formatting (less than 5\% of questions) are discarded.
+We compare uncertainty estimates with ground-truth correctness labels using ROC-AUC, which measures the discriminative power of each signal for separating correct from incorrect answers. The analysis is stratified by subject domain (14 topics in MMLU-Pro), reasoning requirement (no reasoning, low, medium, high), and model architecture. Answers with incorrect formatting, which constitute less than 5\% of questions across all models, are excluded from the analysis.
 
 \section{Study 2: Language Steering in Latent Space}
 
 \subsection{Hidden State Extraction}
 
-For a multilingual model $\mathcal{M}$ and a parallel corpus $\mathcal{D} = \{(s_i, k_i)\}_{i=1}^N$ where $s_i$ represents semantically equivalent content in language $k \in \mathcal{K}$, we extract hidden states $h_i^{(\ell)} \in \mathbb{R}^d$ from each layer $\ell$ of the LLM. Specifically, we use the hidden state at the \textbf{last token position} of each sentence. We use the Flores Plus dataset~\cite{nllb2024} with 50 parallel samples across languages (English, Spanish, Russian, Chinese, Hindi) for PCA fitting and 100 for validation.
+For a multilingual model $\mathcal{M}$ and a parallel corpus $\mathcal{D} = \{(s_i, k_i)\}_{i=1}^N$ where $s_i$ represents semantically equivalent content in language $k \in \mathcal{K}$, we extract hidden states $h_i^{(\ell)} \in \mathbb{R}^d$ from each layer $\ell$ of the LLM. Specifically, we use the hidden state at the last token position of each sentence, as this position aggregates information from the entire input sequence through the causal attention mechanism. We use the Flores Plus dataset~\cite{nllb2024} with 50 parallel samples across five languages (English, Spanish, Russian, Chinese, Hindi) for PCA fitting and 100 additional samples for validation. The parallel nature of the corpus is essential: because the semantic content is held constant across languages, any systematic variance in the hidden states must be attributable to language identity rather than meaning.
 
 \subsection{Language Direction Identification via PCA}
 
-We apply Principal Component Analysis (PCA) to the collected hidden states to identify language-specific directions:
-
-\begin{enumerate}
-    \item \textbf{Data preparation}: Collect hidden states from the same layer for texts in two languages $\ell_1$ and $\ell_2$
-    \item \textbf{Centering}: Compute the mean hidden state $\mu = \frac{1}{|H|}\sum_{h \in H} h$ and center the data
-    \item \textbf{PCA}: Compute the principal components of the centered data
-    \item \textbf{Direction extraction}: The first principal component $v_1$ typically captures the language direction
-\end{enumerate}
-
-The language direction $v_{\text{lang}}$ satisfies:
+We apply Principal Component Analysis (PCA) to the collected hidden states to identify language-specific directions. For each layer, we pool hidden states across all languages, compute the mean hidden state $\mu = \frac{1}{|H|}\sum_{h \in H} h$, and center the data by subtracting this mean. We then compute the principal components of the centered data. The first principal component $v_1$ typically captures the language direction, as language identity is the dominant source of variance when semantic content is controlled. Formally, the language direction $v_{\text{lang}}$ satisfies:
 \begin{equation}
     v_{\text{lang}} = \arg\max_{\|v\|=1} \text{Var}(v^\top H)
 \end{equation}
 
-\subsection{Language Classification}
-
-To validate that the identified direction captures language information, we train a linear classifier on the projection of hidden states onto the principal components:
+To validate that the identified direction genuinely captures language information rather than some other property, we train a logistic regression classifier on the scalar projection of hidden states onto the first principal component:
 \begin{equation}
     \hat{\ell} = \text{sign}(v_{\text{lang}}^\top h + b)
 \end{equation}
-where $b$ is a learned bias term. Classification accuracy above 95\% indicates successful language direction identification.
+where $b$ is a learned bias term. Classification accuracy above 95\% indicates successful language direction identification, confirming that language identity is linearly accessible from a single scalar projection.
 
 \subsection{Activation Steering}
 
@@ -77,92 +54,104 @@ During inference, we modify the model's hidden states to reduce code-switching b
     \tilde{h}_l^{(t)} = h_l^{(t)} - s \left(h_l^{(t)} \cdot v^{(l)}\right) v^{(l)}
 \end{equation}
 
-The parameter $s \in \mathbb{R}$ controls intervention strength. When $s = 1$, this is an exact orthogonal projection that removes the language component. Values $0 < s < 1$ partially attenuate it, while $|s| > 1$ goes beyond projection removal, actively pushing representations away from the source language direction. In practice, optimal coefficients have $|s| > 1$, indicating that mere removal is insufficient and active counter-steering is needed to overcome the language bias in code-switched input.
+The parameter $s \in \mathbb{R}$ controls intervention strength. When $s = 1$, this is an exact orthogonal projection that removes the language component entirely. Values $0 < s < 1$ partially attenuate the language signal, while $|s| > 1$ goes beyond projection removal, actively pushing representations away from the source language direction. In practice, optimal coefficients have $|s| > 1$, indicating that mere removal of the language component is insufficient to overcome the language bias present in code-switched input; active counter-steering is needed.
 
-Steering is applied only to the final layers where language variance concentrates: for Qwen2.5-1.5B (28 layers), layers 27--28; for Llama-3.2-1B (16 layers), layers 15--16. The optimal steering coefficient $s$ is selected via grid search to minimize KL divergence between the steered model's output distribution and the target language baseline.
+Steering is applied only to the final layers where language variance concentrates, as determined by the explained variance analysis described in the results chapter. For Qwen2.5-1.5B (28 layers), we steer layers 27--28; for Llama-3.2-1B (16 layers), we steer layers 15--16. The optimal steering coefficient $s$ is selected via grid search over a range of values, optimizing either KL divergence between the steered model's output distribution and the target language baseline (distributional optimization) or Code-Switching Index in generated text (generation-based optimization).
 
 \subsection{Evaluation Metrics}
 
-We evaluate steering effectiveness using two complementary evaluation approaches:
+We evaluate steering effectiveness using two complementary approaches. Distributional evaluation compares the next-token prediction distribution of the steered model against the English baseline using four metrics: KL divergence $\text{KL}(P_{\text{EN}} \| P_{\text{steered}})$ where lower divergence indicates better mitigation; Jensen-Shannon divergence as a symmetric measure of distributional similarity; cosine similarity between the steered and English baseline distributions; and top-50 token overlap, measuring the fraction of shared high-probability tokens with the English baseline.
 
-\textbf{Distributional evaluation.} We compare the next-token prediction distribution of the steered model against the English baseline using four metrics:
-\begin{enumerate}
-    \item \textbf{KL divergence} $\text{KL}(P_{\text{EN}} \| P_{\text{steered}})$: lower divergence indicates better mitigation
-    \item \textbf{Jensen-Shannon divergence}: symmetric measure of distributional similarity
-    \item \textbf{Cosine similarity}: between steered and English baseline distributions (higher is better)
-    \item \textbf{Top-50 token overlap}: fraction of shared high-probability tokens with the English baseline
-\end{enumerate}
-
-\textbf{Generation-based evaluation.} We generate 100-token continuations and measure code-switching using standard metrics:
-\begin{enumerate}
-    \item \textbf{Code-Switching Index (CSI)}: fraction of tokens not in the target language (lower is better)
-    \item \textbf{M-Index}: multilingual diversity measure ($0 = $ monolingual, $1 = $ maximally mixed)
-    \item \textbf{I-Index}: ratio of language switch points to token boundaries
-    \item \textbf{Target Language Consistency (TLC)}: $1 - \text{CSI}$ (higher is better)
-\end{enumerate}
-Token-level language identification uses a FastText classifier with a sliding window of 5 tokens.
+Generation-based evaluation complements the distributional analysis by measuring code-switching in actual generated text. We generate 100-token continuations and compute the Code-Switching Index (CSI), defined as the fraction of tokens not in the target language; the M-Index, a multilingual diversity measure ranging from 0 (monolingual) to 1 (maximally mixed); the I-Index, measuring the ratio of language switch points to token boundaries; and Target Language Consistency (TLC $= 1 - \text{CSI}$). Token-level language identification is performed using a FastText classifier with a sliding window of 5 tokens.
 
 \section{Study 3: Complexity-Aware Fine-Tuning}
 
 \subsection{Complexity Estimation}
 
-For each training example $(x, y)$, we estimate complexity by running the base model on $x$ and measuring the entropy of predicting $y$:
+For each training example $(x, y)$, we estimate complexity by running the base (student) model on $x$ and measuring the entropy of the answer token's probability distribution:
 \begin{equation}
-    C(x, y) = \frac{1}{|y|} \sum_{t=1}^{|y|} H(p(\cdot | x, y_{<t}))
+    C(x, y) = H(p(\cdot | x)) = -\sum_{v \in \mathcal{V}} p(v | x) \log p(v | x)
 \end{equation}
-
-High complexity indicates that the model is uncertain about the correct response, suggesting the example is difficult.
+High complexity indicates that the model is uncertain about the correct response, suggesting the example is difficult for this particular model. This is the same single-token answer entropy signal used in Study 1, but applied here for a different purpose: rather than predicting correctness at inference time, we use it to guide training data selection.
 
 \subsection{Data Stratification}
 
-We partition the training data into three equal complexity tiers by sorting examples by entropy in ascending order:
+We partition the training data into three complexity tiers by sorting all examples by entropy in ascending order and dividing into quartiles. The bottom quartile (lowest entropy) forms the easy set, the middle two quartiles form the medium set, and the top quartile (highest entropy) forms the hard set:
 \begin{align}
     \mathcal{D}_{\text{easy}} &= \mathcal{D}[1 : \lfloor N/4 \rfloor] \\
     \mathcal{D}_{\text{medium}} &= \mathcal{D}[\lfloor N/4 \rfloor : \lfloor 3N/4 \rfloor] \\
     \mathcal{D}_{\text{hard}} &= \mathcal{D}[\lfloor 3N/4 \rfloor + 1 : N]
 \end{align}
-The easy and medium examples are combined into a ``regular'' group $\mathcal{D}_{\text{regular}} = \mathcal{D}_{\text{easy}} \cup \mathcal{D}_{\text{medium}}$ that receives standard SFT, while hard examples receive chain-of-thought distillation.
+The easy and medium examples are combined into a ``regular'' group $\mathcal{D}_{\text{regular}} = \mathcal{D}_{\text{easy}} \cup \mathcal{D}_{\text{medium}}$ that receives standard supervised fine-tuning, while hard examples receive chain-of-thought distillation. This asymmetric treatment reflects the hypothesis that easy and medium questions can be learned through direct supervision, while hard questions require the additional reasoning scaffolding provided by chain-of-thought reasoning from a larger teacher model. Since the number of hard questions is smaller, we balance the groups by filtering medium and easy examples to match the hard group size, ensuring equal representation during training.
 
 \subsection{Training Interventions}
 
-Different complexity tiers receive different training treatments:
-
-\textbf{Easy examples} ($C < \tau$): Direct supervised fine-tuning (SFT) with the standard cross-entropy loss:
+Regular examples (easy and medium complexity) are trained with standard supervised fine-tuning using the cross-entropy loss:
 \begin{equation}
     \mathcal{L}_{\text{SFT}}(x, y) = -\sum_{t=1}^{|y|} \log p_\theta(y_t | x, y_{<t})
 \end{equation}
 
-\textbf{Hard examples} ($C \geq \tau$): Chain-of-thought distillation from a larger teacher model $\mathcal{M}_T$:
-\begin{enumerate}
-    \item Generate reasoning chains $r$ from the teacher: $r \sim \mathcal{M}_T(\cdot | x, \text{``think step by step''})$
-    \item Train the student on the augmented examples:
-    \begin{equation}
-        \mathcal{L}_{\text{distill}}(x, y) = -\sum_{t=1}^{|r|+|y|} \log p_\theta((r \oplus y)_t | x, (r \oplus y)_{<t})
-    \end{equation}
-\end{enumerate}
-where $r \oplus y$ denotes concatenation of the reasoning chain and the answer.
+Hard examples receive chain-of-thought distillation from a teacher model ensemble $\mathcal{M}_T$. First, reasoning chains $r$ are generated from the teacher by prompting it to think step-by-step. Then the student model is trained on the augmented examples that concatenate the reasoning chain with the answer:
+\begin{equation}
+    \mathcal{L}_{\text{distill}}(x, y) = -\sum_{t=1}^{|r|+|y|} \log p_\theta((r \oplus y)_t | x, (r \oplus y)_{<t})
+\end{equation}
+where $r \oplus y$ denotes concatenation of the reasoning chain and the answer. This forces the student model to learn not just the correct answer but also the reasoning process that leads to it.
 
 \subsection{Training Pipeline}
 
-The complete training pipeline consists of:
-\begin{enumerate}
-    \item \textbf{Complexity scoring}: Run the base model on all training examples to compute complexity scores
-    \item \textbf{Stratification}: Partition data into easy and hard subsets based on threshold $\tau$
-    \item \textbf{Teacher generation}: For hard examples, generate chain-of-thought reasoning from the teacher model
-    \item \textbf{Mixed training}: Fine-tune the student model on the combined dataset with appropriate losses
-    \item \textbf{Evaluation}: Assess accuracy on held-out test data
-\end{enumerate}
+Algorithm~\ref{alg:complexity-aware-ft} presents the complete complexity-aware fine-tuning pipeline in pseudocode form.
+
+\begin{algorithm}[!htb]
+\caption{Complexity-Aware Fine-Tuning Pipeline}
+\label{alg:complexity-aware-ft}
+\begin{algorithmic}[1]
+\REQUIRE Training dataset $\mathcal{D} = \{(q_i, a_i)\}_{i=1}^{N}$, Student LLM $\mathcal{M}_S$, Teacher LLM $\mathcal{M}_T$
+\ENSURE Fine-tuned Student LLM $\mathcal{M}_S^*$
+
+\STATE \textbf{// Step 1: Uncertainty Estimation}
+\FOR{each $(q_i, a_i) \in \mathcal{D}$}
+    \STATE $\mathbf{p}_i \gets \mathcal{M}_S(q_i)$ \COMMENT{Get token probability distribution}
+    \STATE $h_i \gets -\sum_{j=1}^{|\mathcal{V}|} p_{ij} \log p_{ij}$ \COMMENT{Compute answer token entropy}
+\ENDFOR
+
+\STATE \textbf{// Step 2: Data Aggregation by Complexity}
+\STATE Sort $\mathcal{D}$ by entropy values $\{h_i\}_{i=1}^{N}$ in ascending order
+\STATE $\mathcal{D}_{\text{easy}} \gets \mathcal{D}[1 : \lfloor N/4 \rfloor]$
+\STATE $\mathcal{D}_{\text{medium}} \gets \mathcal{D}[\lfloor N/4 \rfloor + 1 : \lfloor 3N/4 \rfloor]$
+\STATE $\mathcal{D}_{\text{hard}} \gets \mathcal{D}[\lfloor 3N/4 \rfloor + 1 : N]$
+\STATE $\mathcal{D}_{\text{regular}} \gets \mathcal{D}_{\text{easy}} \cup \mathcal{D}_{\text{medium}}$
+
+\STATE \textbf{// Step 3: Standard SFT on Regular Data}
+\FOR{epoch $= 1$ to $E_1$}
+    \FOR{batch $\mathcal{B} \subset \mathcal{D}_{\text{regular}}$}
+        \STATE $\mathcal{L}_{\text{SFT}} \gets -\sum_{(q,a) \in \mathcal{B}} \log P_{\mathcal{M}_S}(a \mid q)$
+        \STATE $\mathcal{M}_S \gets \mathcal{M}_S - \eta \nabla \mathcal{L}_{\text{SFT}}$
+    \ENDFOR
+\ENDFOR
+
+\STATE \textbf{// Step 4: Distill Chain-of-Thought for Hard Data}
+\FOR{each $(q_i, a_i) \in \mathcal{D}_{\text{hard}}$}
+    \STATE $r_i \gets \mathcal{M}_T(q_i)$ \COMMENT{Generate CoT reasoning from teacher}
+    \STATE $\mathcal{D}_{\text{hard}}^{\text{CoT}} \gets \mathcal{D}_{\text{hard}}^{\text{CoT}} \cup \{(q_i, r_i, a_i)\}$
+\ENDFOR
+
+\STATE \textbf{// Step 5: SFT with Reasoning on Hard Data}
+\FOR{epoch $= 1$ to $E_2$}
+    \FOR{batch $\mathcal{B} \subset \mathcal{D}_{\text{hard}}^{\text{CoT}}$}
+        \STATE $\mathcal{L}_{\text{CoT}} \gets -\sum_{(q,r,a) \in \mathcal{B}} \log P_{\mathcal{M}_S}(r \oplus a \mid q)$
+        \STATE $\mathcal{M}_S \gets \mathcal{M}_S - \eta \nabla \mathcal{L}_{\text{CoT}}$
+    \ENDFOR
+\ENDFOR
+\RETURN $\mathcal{M}_S^* \gets \mathcal{M}_S$
+\end{algorithmic}
+\end{algorithm}
+
+The pipeline proceeds in five stages. First, the student model computes entropy scores for all training examples via a single forward pass. Second, examples are sorted by entropy and partitioned into complexity tiers. Third, the student is fine-tuned on regular (easy + medium) examples using standard SFT for $E_1$ epochs. Fourth, the teacher model generates chain-of-thought reasoning for hard examples. Fifth, the student is fine-tuned on the reasoning-enriched hard examples for $E_2$ epochs. In our experiments, we set $E_1 = E_2 = 5$ for 10-epoch runs and $E_1 = E_2 = 10$ for 20-epoch runs.
 
 \subsection{Hyperparameter Selection}
 
-Key hyperparameters include:
-\begin{itemize}
-    \item Complexity metric: Single-token answer entropy (selected based on ROC-AUC comparison with alternatives including MASJ reasoning score and cross-entropy)
-    \item Teacher model: An ensemble of large models (DeepSeek-V3-0324, Qwen-3-235B, Llama-4-Maverick) for chain-of-thought generation
-    \item Training schedule: SFT on regular data for 5 epochs, followed by SFT with reasoning-enriched data for hard examples for another 5 epochs
-    \item Fine-tuning method: LoRA with rank 64, alpha 128, dropout 0.05
-\end{itemize}
+The complexity metric is selected based on ROC-AUC comparison with alternatives including MASJ reasoning score, MASJ education level, cross-entropy, and various chain-of-thought entropy aggregations. Single-token answer entropy consistently provides the best discrimination between complexity levels. The teacher model ensemble consists of DeepSeek-V3-0324, Qwen-3-235B, and Llama-4-Maverick, chosen for their strong reasoning capabilities. All fine-tuning uses LoRA~\cite{hu2022lora} with rank 64, alpha 128, and dropout 0.05, enabling parameter-efficient training. The optimizer is AdamW with a learning rate of $10^{-4}$ across all configurations. Full hyperparameter details are provided in the Appendix.
 
 \section{Implementation Details}
 
-All experiments are implemented in Python using the PyTorch framework~\cite{paszke2019pytorch} and the Hugging Face Transformers library~\cite{wolf2020transformers}. Hidden state extraction and entropy computation are performed during standard forward passes without requiring gradient computation. Activation steering is implemented using forward hooks that modify hidden states in-place during generation.
+All experiments are implemented in Python using the PyTorch framework~\cite{paszke2019pytorch} and the Hugging Face Transformers library~\cite{wolf2020transformers}. Hidden state extraction and entropy computation are performed during standard forward passes without requiring gradient computation, adding negligible overhead to inference. For Study 2, activation steering is implemented using PyTorch forward hooks that modify hidden states in-place during generation, requiring only one dot product and one vector subtraction per token per steered layer. For Study 3, the complexity scoring step requires a single forward pass through the student model on the entire training set, which is a one-time cost amortized across all subsequent training epochs.
