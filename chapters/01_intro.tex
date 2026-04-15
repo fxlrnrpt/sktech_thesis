@@ -31,11 +31,11 @@ The research addresses three concrete questions:
 This thesis makes several novel contributions to the field of LLM research:
 
 \begin{enumerate}
-    \item We introduce a systematic analysis of token-wise entropy patterns as uncertainty indicators, demonstrating that the ratio of maximum to minimum token entropy provides stronger predictive signal for answer correctness than aggregate confidence measures. This work extends beyond prior approaches that focus on sequence-level or single-token uncertainty.
+    \item We present a systematic analysis of token-wise entropy as an uncertainty indicator, demonstrating that single-token answer entropy effectively predicts answer correctness in knowledge-dependent domains (ROC-AUC up to 0.83) while revealing that entropy primarily captures knowledge uncertainty rather than reasoning difficulty. This work was recognized with the \textbf{Best Paper Award at AINL 2025}.
 
-    \item We discover and characterize language-specific directions in LLM latent space that can be identified through simple PCA analysis with high accuracy (95--99\%). We demonstrate that these directions can be used for inference-time steering to reduce code-switching without any additional training, providing a new mechanism for behavioral control.
+    \item We discover and characterize language-specific directions in LLM latent space that can be identified through PCA with 96--100\% classification accuracy across four language pairs. We demonstrate that projecting out the source language component from hidden states reduces code-switching by 63--95\% in generated text without any additional training, providing a new mechanism for behavioral control.
 
-    \item We develop a complexity-aware fine-tuning pipeline that combines entropy-based data stratification with targeted training interventions (direct SFT vs. chain-of-thought distillation), achieving significant accuracy improvements while reducing training data requirements by 81\%.
+    \item We develop a complexity-aware fine-tuning pipeline that combines entropy-based data stratification with targeted training interventions (direct SFT for regular examples, chain-of-thought distillation for hard examples), achieving accuracy improvements while reducing training data requirements by 79--82\%, validated across three datasets and three model architectures.
 
     \item We establish a unifying framework showing how signals from the forward pass---whether from output distributions or internal representations---can address diverse challenges in LLM deployment, suggesting broader applicability of these techniques.
 \end{enumerate}
@@ -43,11 +43,11 @@ This thesis makes several novel contributions to the field of LLM research:
 \paragraph{Statements for defense.}
 
 \begin{enumerate}
-    \item Token-level entropy patterns, particularly the ratio of maximum to minimum entropy across generated tokens, provide effective signals for predicting LLM answer correctness, achieving ROC-AUC scores up to 0.83 on the MMLU-Pro benchmark.
+    \item Single-token answer entropy provides an effective signal for predicting LLM answer correctness in knowledge-dependent domains, achieving ROC-AUC scores up to 0.83 on the MMLU-Pro benchmark, while Model-as-Judge approaches perform near-randomly (ROC-AUC $\approx$ 0.49--0.57).
 
-    \item Language-specific directions exist in the latent space of multilingual LLMs and can be reliably identified through PCA with 95--99\% classification accuracy. Steering model activations along these directions reduces unwanted code-switching by up to 55\% as measured by KL divergence.
+    \item Language-specific directions exist in the latent space of multilingual LLMs and can be reliably identified through PCA with 96--100\% classification accuracy across four language pairs. Projecting out the source language component from hidden states reduces code-switching by 63--95\% as measured by Code-Switching Index in generated text.
 
-    \item Complexity-aware fine-tuning that stratifies training data by entropy and applies appropriate training strategies (direct SFT for simple examples, chain-of-thought distillation for complex ones) improves model accuracy while requiring substantially less training data than uniform approaches.
+    \item Complexity-aware fine-tuning that stratifies training data by entropy and applies appropriate training strategies (direct SFT for regular examples, chain-of-thought distillation for hard ones) improves model accuracy while requiring 79--82\% less training data than full distillation, generalizing across three datasets and three model architectures.
 
     \item Signals from a single forward pass through an LLM---both output distributions and internal representations---encode sufficient information to address fundamental challenges in reliability, control, and training efficiency without requiring architectural modifications.
 \end{enumerate}

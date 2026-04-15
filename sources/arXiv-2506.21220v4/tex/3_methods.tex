@@ -1,0 +1,130 @@
+\section{Methods}
+
+\subsection{Training pipeline}
+\label{sec:pipeline}
+
+We propose the complexity-aware fine-tuning pipeline detailed in Figure \ref{fig:reasoning_fine_tune_scheme} with the following major stages: complexity estimation, data aggregation, fine-tuning.
+
+\paragraph{1. Complexity estimation.}
+We adopt the entropy of the answer token in the response as our primary complexity metric. We prompt the model to pick the correct option directly, without producing a chain-of-thought. See Section~\ref{sec:method_single_token_entropy} for details.
+
+\paragraph{2. Data aggregation.}
+To aggregate the data into groups by complexity (regular, hard), we evenly divide the dataset into three parts, ordering the entries by entropy of the response. A group with lower entropy values is categorized as easy and with the higher values as hard.
+% , as Figure \ref{fig:reasoning_fine_tune_data_split} depicts.
+
+\paragraph{3. Fine-tuning.}
+We propose applying different fine-tuning strategies based on the complexity of the data.
+
+For the regular groups, we use vanilla SFT \cite{howard2018universallanguagemodelfinetuning, raffel2023exploringlimitstransferlearning}, an established and robust practice. 
+It involves fine-tuning a pretrained LM on labeled examples using a standard supervised objective, specifically, cross-entropy.
+Used prompts are provided in Table~\ref{tab:prs_uqs_uq} in Appendix. 
+
+As to the hard group, we hypothesize that hard questions require multiple logical steps and multiple attempts to learn core facts.
+So, the standard SFT is suboptimal. 
+We propose to elicit a chain-of-thought and allow the model to incrementally build the answer step-by-step as suggested by \citet{wei2023chainofthoughtpromptingelicitsreasoning}.
+
+In this work, we apply the distillation technique, which involves training a smaller student model on the chain-of-thought of a larger LLM. It is a well-known practice supported by \cite{hsieh2023distillingstepbystepoutperforminglarger}. 
+To create the distillation training samples, we prompt a large LLM to answer the multiple-choice question and produce a chain-of-thought in the process. Next, the whole response is attached to the dataset and used to train the smaller model. 
+
+Pseudo-code for the algorithm is provided below in Algorithm~\ref{alg:complexity-aware-ft}.
+% prompt table is missing: (\ref{tab:prompt_cot_response}) 
+
+\begin{algorithm}
+\caption{Complexity-Aware Fine-Tuning Pipeline}
+\label{alg:complexity-aware-ft}
+\begin{algorithmic}[1]
+\Require Training dataset $\mathcal{D} = \{(q_i, a_i)\}_{i=1}^{N}$, Student LLM $\mathcal{M}_S$, Teacher LLM $\mathcal{M}_T$
+\Ensure Fine-tuned Student LLM $\mathcal{M}_S^*$
+
+\Statex \textbf{// Step 1: Uncertainty Estimation}
+\For{each $(q_i, a_i) \in \mathcal{D}$}
+    \State $\mathbf{p}_i \gets \mathcal{M}_S(q_i)$ \Comment{Get token probability distribution}
+    \State $h_i \gets -\sum_{j=1}^{|\mathcal{V}|} p_{ij} \log p_{ij}$ \Comment{Compute answer token entropy}
+\EndFor
+
+\Statex
+\Statex \textbf{// Step 2: Data Aggregation by Complexity}
+\State Sort $\mathcal{D}$ by entropy values $\{h_i\}_{i=1}^{N}$ in ascending order
+\State $\mathcal{D}_{\text{easy}} \gets \mathcal{D}[1 : \lfloor N/4 \rfloor]$ \Comment{Low entropy = easy}
+\State $\mathcal{D}_{\text{medium}} \gets \mathcal{D}[\lfloor N/4 \rfloor + 1 : \lfloor 3N/4 \rfloor]$
+\State $\mathcal{D}_{\text{hard}} \gets \mathcal{D}[\lfloor 3N/4 \rfloor + 1 : N]$ \Comment{High entropy = hard}
+\State $\mathcal{D}_{\text{regular}} \gets \mathcal{D}_{\text{easy}} \cup \mathcal{D}_{\text{medium}}$
+
+\Statex
+\Statex \textbf{// Step 3: Standard SFT on Regular Data}
+\For{epoch $= 1$ to $E_1$}
+    \For{batch $\mathcal{B} \subset \mathcal{D}_{\text{regular}}$}
+        \State $\mathcal{L}_{\text{SFT}} \gets -\sum_{(q,a) \in \mathcal{B}} \log P_{\mathcal{M}_S}(a \mid q)$
+        \State $\mathcal{M}_S \gets \mathcal{M}_S - \eta \nabla \mathcal{L}_{\text{SFT}}$
+    \EndFor
+\EndFor
+
+\Statex
+\Statex \textbf{// Step 4: Distill Chain-of-Thought for Hard Data}
+\For{each $(q_i, a_i) \in \mathcal{D}_{\text{hard}}$}
+    \State $r_i \gets \mathcal{M}_T(q_i)$ \Comment{Generate CoT reasoning from teacher}
+    \State $\mathcal{D}_{\text{hard}}^{\text{CoT}} \gets \mathcal{D}_{\text{hard}}^{\text{CoT}} \cup \{(q_i, r_i, a_i)\}$
+\EndFor
+
+\Statex
+\Statex \textbf{// Step 5: SFT with Reasoning on Hard Data}
+\For{epoch $= 1$ to $E_2$}
+    \For{batch $\mathcal{B} \subset \mathcal{D}_{\text{hard}}^{\text{CoT}}$}
+        \State $\mathcal{L}_{\text{CoT}} \gets -\sum_{(q,r,a) \in \mathcal{B}} \log P_{\mathcal{M}_S}(r \oplus a \mid q)$
+        \State $\mathcal{M}_S \gets \mathcal{M}_S - \eta \nabla \mathcal{L}_{\text{CoT}}$
+    \EndFor
+\EndFor
+
+\State \Return $\mathcal{M}_S^* \gets \mathcal{M}_S$
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Complexity estimation approaches}
+
+To find the most suitable metric for the training pipeline, we analyze the performance of the following techniques:
+a single token answer entropy,
+a chain-of-thought answer entropy,
+a chain-of-thought aggregated response entropy, 
+MASJ reasoning score, and
+MASJ education level.
+Used prompts are available in Appendix~\ref{sec:uq_prompts}.
+
+\subsubsection{Answer entropy}
+\label{sec:method_single_token_entropy}
+
+\paragraph{Single token answer entropy.} In a similar fashion to that proposed by \cite{kadavath2022language}, we calculate the entropy of the answer token in the response.  The assumption is that the response uncertainty is a natural predictor of the question complexity. We prompt the model to answer the question directly (as a single token) and calculate token-wise entropy of the response as follows:
+$$
+h = -\sum_{i = 1}^{n} p_i \log{p_i},
+$$
+where $p_i$ is the probability of a single token and $n$ is the vocabulary size.
+This is the main method used in our pipeline.
+
+Additionally, similarly to \cite{zhou-etal-2023-context}, we examine the performance when we allow the model to explicitly say "I do not know" (IDK).
+
+\paragraph{Chain-of-thought answer entropy.}
+With the same assumption as for the single token entropy, we analyze the entropy of the answer token, but change the prompt to elicit a chain-of-thought type of response. The hypothesis is that, through the chain-of-thought process, the LLM can incrementally accumulate entropy, resulting in a better separation of certain and uncertain answers.
+
+\subsubsection{Chain-of-thought aggregated response entropy.}
+Building upon the single-token entropy approach, we investigate more sophisticated methods in line with \citet{fadeeva2023lmpolygraphuncertaintyestimationlanguage} for complexity estimation by analyzing the entire chain-of-thought (CoT) response. 
+While the answer token entropy provides a localized measure of uncertainty, aggregating entropy across the complete reasoning process potentially offers a more comprehensive complexity assessment.
+
+We evaluate ten distinct aggregation methods applied to CoT responses, comparing their effectiveness through ROC AUC metrics across multiple models, with and without "I don't know" option in the prompt. 
+We consider word aggregation, sequence aggregation, and probability-based methods. See Appendix \ref{sec:aggr_methods} for details.
+
+\subsubsection{MASJ reasoning score}
+
+As one of the expert-like metrics, we ask a large LLM to estimate the number of logical steps required to answer the question. The hypothesis is that the questions that require more reasoning should be harder for the model to answer.
+
+To collect the MASJ-based reasoning score, we go over the multiple-choice question answering dataset and query a large auxiliary LLM for the estimate. We prompt the model to provide the number of logical steps required to answer the question: low, medium, or high. Next, we query the large LLM again to estimate the quality of the previous assessment from 1 to 10, following the practice introduced in MT-Bench by \citet{zheng2023judging}. It allows us to filter out low quality scores by keeping only the ones with rates above or equal to 9.
+
+\subsubsection{MASJ education level}
+
+Like the other expert-like metrics, we ask a large LLM to estimate the required level of education to answer the question correctly. It is a natural human-like value used in other datasets \cite{rein2023gpqagraduatelevelgoogleproofqa, lu2022learn}.
+
+We follow the same procedure as for the MASJ reasoning score, but use a different prompt.
+
+% \subsubsection{Thinking and answer statistics of reasoning model}
+
+% To further investigate how numerical complexity estimates can be applied for uncertainty quantification, we analyze the entropy and length of the reasoning chain for the current state-of-the-art (SOTA) reasoning model. 
+
+% During inference, for each newly generated token, we store the probability distribution over the vocabulary of tokens with non-zero probabilities. To find the importance of the features, we train a logistic regression classifier using the scikit-learn \cite{scikit-learn} to predict the correctness of the model answer.

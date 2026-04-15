@@ -1,43 +1,58 @@
 \relax 
 \providecommand\hyper@newdestlabel[2]{}
 \citation{wang2024mmlu}
-\citation{touvron2023llama}
-\citation{qwen2024}
+\citation{abdin2024phi}
 \citation{jiang2023mistral}
-\@writefile{toc}{\contentsline {chapter}{\numberline {7}Numerical experiments}{21}{chapter.7}\protected@file@percent }
+\citation{qwen2024}
+\citation{qwen2024}
+\@writefile{toc}{\contentsline {chapter}{\numberline {7}Numerical experiments}{22}{chapter.7}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {section}{\numberline {7.1}Study 1: Uncertainty Estimation via Token-Wise Entropy}{21}{section.7.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{Experimental Setup}{21}{subsection*.20}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{Results}{21}{subsection*.21}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {7.1}{\ignorespaces ROC-AUC scores for predicting incorrect answers using max-to-min entropy ratio on MMLU-Pro. Higher values indicate better discrimination between correct and incorrect answers.}}{21}{table.caption.22}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {7.1}Study 1: Uncertainty Estimation via Token-Wise Entropy}{22}{section.7.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{Experimental Setup}{22}{subsection*.20}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{Results}{22}{subsection*.21}\protected@file@percent }
+\citation{nllb2024}
+\@writefile{lot}{\contentsline {table}{\numberline {7.1}{\ignorespaces ROC AUC performance comparison across categories and models using single-token answer entropy.}}{23}{table.caption.22}\protected@file@percent }
 \providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
-\newlabel{tab:entropy_results}{{7.1}{21}{ROC-AUC scores for predicting incorrect answers using max-to-min entropy ratio on MMLU-Pro. Higher values indicate better discrimination between correct and incorrect answers}{table.caption.22}{}}
-\@writefile{toc}{\contentsline {subsection}{Comparison with Baselines}{22}{subsection*.23}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {7.2}{\ignorespaces Comparison of uncertainty estimation methods (average ROC-AUC across domains).}}{22}{table.caption.24}\protected@file@percent }
-\newlabel{tab:baseline_comparison}{{7.2}{22}{Comparison of uncertainty estimation methods (average ROC-AUC across domains)}{table.caption.24}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {7.2}Study 2: Language Steering in Latent Space}{22}{section.7.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{Experimental Setup}{22}{subsection*.25}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{Language Direction Identification}{22}{subsection*.26}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {7.3}{\ignorespaces Language classification accuracy using PCA-identified directions at different layers.}}{23}{table.caption.27}\protected@file@percent }
-\newlabel{tab:lang_classification}{{7.3}{23}{Language classification accuracy using PCA-identified directions at different layers}{table.caption.27}{}}
-\@writefile{toc}{\contentsline {subsection}{Code-Switching Reduction}{23}{subsection*.28}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {7.4}{\ignorespaces Code-switching reduction through activation steering. KL divergence measures distance from target language distribution (lower is better).}}{23}{table.caption.29}\protected@file@percent }
-\newlabel{tab:steering_results}{{7.4}{23}{Code-switching reduction through activation steering. KL divergence measures distance from target language distribution (lower is better)}{table.caption.29}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {7.3}Study 3: Complexity-Aware Fine-Tuning}{23}{section.7.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{Experimental Setup}{23}{subsection*.30}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{Main Results}{23}{subsection*.31}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {7.5}{\ignorespaces Accuracy comparison of fine-tuning approaches on MMLU-Pro test set.}}{24}{table.caption.32}\protected@file@percent }
-\newlabel{tab:finetuning_results}{{7.5}{24}{Accuracy comparison of fine-tuning approaches on MMLU-Pro test set}{table.caption.32}{}}
-\@writefile{toc}{\contentsline {subsection}{Ablation Study}{24}{subsection*.33}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {7.6}{\ignorespaces Ablation study on Qwen-2.5-1.5B.}}{24}{table.caption.34}\protected@file@percent }
-\newlabel{tab:ablation}{{7.6}{24}{Ablation study on Qwen-2.5-1.5B}{table.caption.34}{}}
-\@writefile{toc}{\contentsline {subsection}{Complexity Threshold Analysis}{24}{subsection*.35}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {7.7}{\ignorespaces Effect of complexity threshold (percentile of training data classified as ``hard'').}}{24}{table.caption.36}\protected@file@percent }
-\newlabel{tab:threshold}{{7.7}{24}{Effect of complexity threshold (percentile of training data classified as ``hard'')}{table.caption.36}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {7.4}Summary of Results}{25}{section.7.4}\protected@file@percent }
+\newlabel{tab:entropy_results}{{7.1}{23}{ROC AUC performance comparison across categories and models using single-token answer entropy}{table.caption.22}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {7.2}Study 2: Language Steering in Latent Space}{23}{section.7.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{Experimental Setup}{23}{subsection*.26}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {7.1}{\ignorespaces ROC-AUC for error prediction by subject for four different LLMs.}}{24}{figure.caption.23}\protected@file@percent }
+\newlabel{fig:roc_auc_by_subject}{{7.1}{24}{ROC-AUC for error prediction by subject for four different LLMs}{figure.caption.23}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.2}{\ignorespaces ROC-AUC by reasoning requirement for four different LLMs.}}{24}{figure.caption.24}\protected@file@percent }
+\newlabel{fig:roc_auc_by_reasoning}{{7.2}{24}{ROC-AUC by reasoning requirement for four different LLMs}{figure.caption.24}{}}
+\@writefile{toc}{\contentsline {subsection}{Language Direction Identification}{24}{subsection*.27}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {7.3}{\ignorespaces Calibration of LLMs based on their entropy. Systematic overconfidence is observed in high-certainty regimes across all models.}}{25}{figure.caption.25}\protected@file@percent }
+\newlabel{fig:calibration}{{7.3}{25}{Calibration of LLMs based on their entropy. Systematic overconfidence is observed in high-certainty regimes across all models}{figure.caption.25}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {7.2}{\ignorespaces Last layer language classifier accuracy using PCA-identified directions.}}{25}{table.caption.28}\protected@file@percent }
+\newlabel{tab:lang_classification}{{7.2}{25}{Last layer language classifier accuracy using PCA-identified directions}{table.caption.28}{}}
+\@writefile{toc}{\contentsline {subsection}{Code-Switching Reduction: Distributional Evaluation}{25}{subsection*.30}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {7.4}{\ignorespaces Final-layer embeddings projected onto the first two principal components. Languages organize into tight, language-specific clusters with clear boundaries.}}{26}{figure.caption.29}\protected@file@percent }
+\newlabel{fig:lang_maps}{{7.4}{26}{Final-layer embeddings projected onto the first two principal components. Languages organize into tight, language-specific clusters with clear boundaries}{figure.caption.29}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {7.3}{\ignorespaces KL divergence reduction through activation steering (no steering $\rightarrow $ steering). Lower is better.}}{26}{table.caption.31}\protected@file@percent }
+\newlabel{tab:steering_kl}{{7.3}{26}{KL divergence reduction through activation steering (no steering $\rightarrow $ steering). Lower is better}{table.caption.31}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {7.4}{\ignorespaces Cosine similarity between steered and English baseline distributions (no steering $\rightarrow $ steering, higher is better).}}{26}{table.caption.32}\protected@file@percent }
+\newlabel{tab:steering_cos}{{7.4}{26}{Cosine similarity between steered and English baseline distributions (no steering $\rightarrow $ steering, higher is better)}{table.caption.32}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {7.5}{\ignorespaces Best steering strength coefficient $s$ (KL-optimized via grid search).}}{26}{table.caption.33}\protected@file@percent }
+\newlabel{tab:steering_coeff}{{7.5}{26}{Best steering strength coefficient $s$ (KL-optimized via grid search)}{table.caption.33}{}}
+\citation{cobbe2021gsm8k}
+\citation{pmlr-v174-pal22a}
+\@writefile{toc}{\contentsline {subsection}{Code-Switching Reduction: Generation-Based Evaluation}{27}{subsection*.34}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {7.6}{\ignorespaces Generation-based code-switching metrics (Llama-3.2-1B, $n=500$). English-only baseline: CSI $= 0.02$.}}{27}{table.caption.35}\protected@file@percent }
+\newlabel{tab:gen_results}{{7.6}{27}{Generation-based code-switching metrics (Llama-3.2-1B, $n=500$). English-only baseline: CSI $= 0.02$}{table.caption.35}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {7.3}Study 3: Complexity-Aware Fine-Tuning}{27}{section.7.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{Experimental Setup}{27}{subsection*.36}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{Main Results}{28}{subsection*.37}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {7.7}{\ignorespaces Accuracy / tokens processed for complexity-aware fine-tuning pipelines after 10 epochs (MMLU-Pro).}}{28}{table.caption.38}\protected@file@percent }
+\newlabel{tab:finetuning_10epochs}{{7.7}{28}{Accuracy / tokens processed for complexity-aware fine-tuning pipelines after 10 epochs (MMLU-Pro)}{table.caption.38}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {7.8}{\ignorespaces Accuracy for complexity-aware fine-tuning pipelines after 20 epochs.}}{28}{table.caption.39}\protected@file@percent }
+\newlabel{tab:finetuning_20epochs}{{7.8}{28}{Accuracy for complexity-aware fine-tuning pipelines after 20 epochs}{table.caption.39}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7.5}{\ignorespaces Accuracy dynamics for fine-tuning pipelines over 20 epochs. The complexity-aware pipeline (blue) surpasses full distillation (green dashed) while using 79--82\% less training data.}}{29}{figure.caption.40}\protected@file@percent }
+\newlabel{fig:training_curves}{{7.5}{29}{Accuracy dynamics for fine-tuning pipelines over 20 epochs. The complexity-aware pipeline (blue) surpasses full distillation (green dashed) while using 79--82\% less training data}{figure.caption.40}{}}
+\@writefile{toc}{\contentsline {subsection}{Sensitivity Study}{29}{subsection*.41}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {7.4}Summary of Results}{29}{section.7.4}\protected@file@percent }
 \@setckpt{chapters/07_numerical_experiments}{
-\setcounter{page}{26}
+\setcounter{page}{30}
 \setcounter{equation}{0}
 \setcounter{enumi}{3}
 \setcounter{enumii}{0}
@@ -52,18 +67,20 @@
 \setcounter{subsubsection}{0}
 \setcounter{paragraph}{0}
 \setcounter{subparagraph}{0}
-\setcounter{figure}{0}
-\setcounter{table}{7}
+\setcounter{figure}{5}
+\setcounter{table}{8}
 \setcounter{parentequation}{0}
 \setcounter{savepage}{3}
-\setcounter{caption@flags}{2}
+\setcounter{caption@flags}{6}
 \setcounter{continuedfloat}{0}
 \setcounter{Th}{0}
 \setcounter{Def}{0}
 \setcounter{Lem}{0}
 \setcounter{section@level}{0}
-\setcounter{Item}{61}
+\setcounter{Item}{65}
 \setcounter{Hfootnote}{0}
 \setcounter{Hy@AnnotLevel}{0}
-\setcounter{bookmark@seq@number}{49}
+\setcounter{bookmark@seq@number}{48}
+\setcounter{subfigure}{2}
+\setcounter{subtable}{0}
 }

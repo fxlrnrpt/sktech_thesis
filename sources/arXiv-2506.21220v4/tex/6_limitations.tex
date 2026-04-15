@@ -1,0 +1,9 @@
+\section*{Limitations}
+
+\begin{itemize}
+    \item The proposed pipeline is tested only on small models. Results may differ across other question-answering datasets, open-ended tasks, other domains, or larger LLMs.
+    \item In low-resource settings teacher may be unavailable or imperfect, which reduces the benefit of learning from a distilled chain-of-thought. Additionally, we did not explore how well the approach generalizes to other reasoning-promoting techniques.
+    \item Low entropy can still correspond to hallucinations, which leads to imperfect identification of the question complexity.
+    \item We split the data into 3 equal parts and did not explore other possible boundaries.
+    \item We did not conduct an extensive ablation study, which might reveal that our approach does not yield the best possible training combination or sequence within the current framework. It remains an area for further research.
+\end{itemize}

@@ -1,0 +1,17 @@
+\section{Acknowledgments}
+
+The research was supported by the Russian Science Foundation grant No. 25-11-00355, \url{https://rscf.ru/project/25-11-00355/}. 
+
+\section{Conclusion and discussion}
+
+This paper introduces a complexity-aware fine-tuning pipeline that measures model response uncertainty using the entropy of its predicted answer, then trains on the resulting easy, medium, and hard splits via different tactics.
+
+We confirm that entropy works as a difficulty estimation. Single-token answer entropy reaches ROC AUC values up to $0.8$, clearly beating MASJ-based estimates of $0.57$. 
+This confirms that a model's own confidence is a reliable, automatic proxy for question difficulty.
+
+Using the entropy-based data split, we find that different complexity scores require different training approaches. Standard supervised fine-tuning (SFT) is enough for the easy and medium bands, but lags on the hard band. For hard questions, adding a distilled chain of thought from a large LLM unlocks further gains. Our pipeline achieves accuracies of 0.52/0.64 vs. 0.39/0.51 for Qwen 3B/Phi-4-mini, while using $81\%$ less data.
+
+The pipeline is fully automated and can be included in other fine-tuning workflows. Our findings suggest that curriculum ideas still matter for today's LLMs: letting the model focus on what it can already solve directly, while giving extra guidance only where it struggles, yields a better allocation of limited model capacity.
+
+
+

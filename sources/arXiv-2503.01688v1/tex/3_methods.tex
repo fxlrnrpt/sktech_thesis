@@ -1,0 +1,54 @@
+\section{Methods}
+
+\subsection{General Pipeline}
+
+\textbf{Input.} We consider a set of questions $Q = \{q_i \}_{i = 1}^n$ and a set of answers $A = \{a_i \}_{i = 1}^n$ of size $n$ with generated answers $G = \{g_i \}_{i = 1}^n$.
+The questions are augmented with true topic labels $T = \{t_i \}_{i = 1}^n$ and correctness of the answers $Y = \{y_i \}_{i = 1}^n$, where $y_i$ is binary value which means equality of ground-truth answer $a_i$ and generated answer $g_i$
+
+\textit{Uncertainty estimation.} Our procedures estimate the uncertainty of a model response given a question and a corresponding answer $U = \{u_i \}_{i = 1}^n$, each $u_i = f(q_i, g_i)$ and depends on the LLM used.
+We additionally prompt models to obtain an estimation of the reasoning requirements $R = \{r_i \}_{i = 1}^n$. 
+
+\textit{Uncertainty validation.} Finally, given all this information, we compare the uncertainty estimates $U$ with the correctness labels $Y$ to obtain the ROC-AUC values and other quality measures. Additionally, we examine how good specific uncertainty estimates $U$ are for separate topics $T$ or the required amount of reasoning $R$.
+
+\textit{Technical details.}
+For each question in the dataset, we prompt a considered model for an answer and record the entropy for the answer. We discard answers with incorrect formatting that appear in less than $5\%$ of the questions.
+
+In model-as-judge (MASJ), we use a large 123B Instruct Mistral model \texttt{Mistral-Large-Instruct-2411} to obtain estimated complexity according to the level of education.
+The same MASJ technique with the same large model was utilized to obtain the reasoning estimate. We ask a binary question of the deep reasoning required and how many steps it would take: low, medium, high.
+Specific prompts are available in the Appendix~\ref{prompts}.
+
+For a more detailed analysis, we split the whole set of questions to topics using available labels or reasoning and educational level complexity obtained via MASJ.
+
+\subsection{Uncertainty Estimations}
+
+We consider two reliable approaches for uncertainty estimation: the entropy-based procedure~\cite{kadavath2022language} and the model-as-a-judge~\cite{zheng2023judging}.
+Details on both of them are provided below.
+
+\subsubsection{Entropy Uncertainty Estimation}
+
+Entropy-based uncertainty estimation is a fundamental approach for evaluating LLMs confidence in their predictions~\cite{fadeeva2024fact}. 
+In MMLU, the expected answer is a number with one or two tokens length.
+So, we use token-wise entropy from the model's output logits.
+
+Our implementation computes entropy via a two-step procedure.
+Firstly, we obtain the logits $\mathbf{z} = (z_1, \ldots, z_k)$ from the LLM's final layer for each token position, where $k$ equals the vocabulary size. 
+Secondly, we convert these logits into a probability distribution using the softmax function:
+$$
+p_i = \frac{e^{z_i}}{\sum_{j = 1}^k e^{z_j}}.
+$$
+Next, we calculate the entropy of this distribution:
+$$
+u = -\sum_{i  = 1}^k p_i \log p_i.
+$$
+
+This approach aligns with the work~\cite{kadavath2022language}, which showed that token-level entropy correlates well with model uncertainty and performance. 
+When a model is confident in its next-token prediction, the probability mass concentrates on a small subset of tokens, resulting in a low entropy. Conversely, when uncertain, the model distributes probabilities more evenly across the vocabulary, producing higher entropy values.
+
+We hypothesize that high-entropy responses generally correspond to questions where the model lacks the necessary knowledge or reasoning capacity. By analyzing the relationship between entropy and model performance across domains and difficult reasoning complexity, we can identify specific conditions under which LLMs are most prone to overconfidence or appropriate uncertainty calibration.
+
+\subsubsection{MASJ Uncertainty Estimation}
+
+The model-as-judge (MASJ) paradigm represents an alternative approach to uncertainty estimation that leverages an LLM's ability to evaluate a given response. 
+Unlike entropy-based methods that rely on a probability distribution across output tokens, MASJ employs prompt-based techniques.
+
+Our implementation of MASJ follows a methodology similar to the approach described in the MT-Bench evaluation framework~\cite{zheng2023judging}. This approach extracts explicit confidence assessments that may capture uncertainty beyond what is reflected in the raw probability distribution: including broader reasoning about the model's knowledge boundaries, the ambiguity of questions, and the model's awareness of its own limitations. In instances where MT-Bench assigned a score below 8 on a scale of 1 to 10, we decided to regenerate the estimate.

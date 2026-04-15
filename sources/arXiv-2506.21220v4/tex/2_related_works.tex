@@ -1,0 +1,20 @@
+\section{Related works}
+
+% distillation in a black box setting
+
+% usage of complexity of questions or domains for more efficient fune-tuning or training
+
+% compexity estimation?
+
+\paragraph{Data complexity-aware learning.}
+Curriculum learning has been explored to improve LLM fine-tuning by ordering training examples from easy to hard. \citet{kim2024strategic} propose sorting fine-tuning data by difficulty metrics (e.g. prompt length, model attention scores, and initial loss) so that the model learns on simpler prompts before complex ones. They found that this curriculum strategy yielded slightly higher accuracy than random shuffling, with ordering by an attention-based criterion performing best. This approach is attractive because it boosts performance without adding more data or parameters. However, the gains were modest, and defining difficulty automatically can be tricky - their method requires measuring things like loss or attention per example. 
+
+Another strategy is filtering training data for quality. A notable example is LIMA \cite{zhou2023lima}, which shows that a large pre-trained model can be fine-tuned on just a small, high-quality subset of data. They fine-tuned a 65B Llama model on only 1000 carefully curated prompt-response pairs (chosen for diversity and clarity) without any reinforcement learning. Despite the tiny dataset, the resulting model performed remarkably well, learning to handle complex queries and even generalizing to tasks not seen in training. In a human evaluation, LIMA's answers were preferred over GPT-4's in 0.43 of cases. This "less is more" result suggests that much of an LLM's ability comes from pre-training, and fine-tuning needs only a small amount of exemplary data to unlock it. However, LIMA relied on a large base model and manual data curation. The approach may not scale down to smaller models and requires human intervention.
+
+Another notable example of curated data selection is the SmallToLarge (S2L) method by \citet{yang2024smalltolarges2lscalabledata}, which leverages training trajectories from small models to guide the data selection for larger models. This way, the large LLM is trained on a diverse yet compact dataset covering different difficulty levels. S2L showed impressive results: for a math word problem dataset, they achieved the same accuracy using only 11\% of the data, and even outperformed other selection methods by ~4.7\% on average across several benchmarks. The strength of this approach is that it makes complexity-based data filtering automated and cheap. One caveat is the extra step of training a smaller model and clustering. The approach is mostly tested on specialized domains (math problems, clinical text summarization), so its generality to all types of tasks needs further validation. Additionally, it requires a large amount of data to make a filtered subset.
+
+
+\paragraph{Complexity estimation.}
+\citet{fadeeva2023lmpolygraphuncertaintyestimationlanguage} provides an in-depth comparison of multiple black-box and white-box methods of complexity estimation. They present promising results for white-box methods rooted in sequence probability and entropy aggregation. \citet{sychev2025llmapprehensiveanswers} focus specifically on entropy-based aggregations augmented with model-as-judge (MASJ) categorization by a reasoning score. They confirm that LLM's token-level entropy of the output is a good predictor of question difficulty, especially in knowledge-based domains. They also introduce MASJ reasoning score to estimate the question complexity. However, the authors use these metrics only to analyze model behavior. They do not integrate it into a practical data aggregation or fine-tuning workflow.
+
+\paragraph{Research gap.} The question if we can combine novel complexity estimation techniques based on entropy aggregates with adaptive learning methods remains open. It is also unclear how we can use the insights for the reasoning estimates to dynamically change our learning approach. This paper aims to address these gaps.

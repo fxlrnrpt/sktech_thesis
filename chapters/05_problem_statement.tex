@@ -49,14 +49,14 @@ The language steering problem consists of two sub-problems:
 
 \textbf{Sub-problem 2a (Direction Identification)}: Given a multilingual model $\mathcal{M}$ and a set of languages $\mathcal{L}$, identify language directions $\{v_\ell\}_{\ell \in \mathcal{L}}$ from hidden states using unsupervised methods.
 
-\textbf{Sub-problem 2b (Activation Steering)}: Given identified language directions, modify the model's hidden states during inference to reduce code-switching:
+\textbf{Sub-problem 2b (Activation Steering)}: Given identified language directions, modify the model's hidden states during inference to reduce code-switching by projecting out the source language component:
 \begin{equation}
-    \tilde{h}_l^{(t)} = h_l^{(t)} + \alpha \cdot v_{\ell_{\text{target}}}
+    \tilde{h}_l^{(t)} = h_l^{(t)} - s \left(h_l^{(t)} \cdot v^{(l)}\right) v^{(l)}
     \label{eq:steering}
 \end{equation}
-where $\alpha$ is a steering strength parameter and $\ell_{\text{target}}$ is the desired output language.
+where $s \in \mathbb{R}$ controls intervention strength. When $s = 1$, this is an exact orthogonal projection that removes the language component; values $|s| > 1$ actively push representations away from the source language direction.
 
-\textbf{Objective}: Achieve high language classification accuracy ($>95\%$) for direction identification and significant reduction in code-switching ($>50\%$ reduction in KL divergence from target language distribution).
+\textbf{Objective}: Achieve high language classification accuracy ($>95\%$) for direction identification and significant reduction in code-switching ($>50\%$ reduction in KL divergence; $>60\%$ reduction in Code-Switching Index in generated text).
 
 \section{Problem 3: Complexity-Aware Fine-Tuning}
 

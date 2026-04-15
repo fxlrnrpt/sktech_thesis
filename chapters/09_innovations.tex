@@ -1,8 +1,51 @@
 \chapter*{Innovations}
 \addcontentsline{toc}{chapter}{Innovations}
 
-Innovation component of your research project (if any), i.e.:
-        \begin{itemize}
-            \item Start-up potential 
-            \item Industrial application of research results
-        \end{itemize}
+This chapter describes the practical applications and innovation potential of the research results presented in this thesis.
+
+\section*{Industrial Applications of Research Results}
+
+\begin{enumerate}
+    \item \textbf{Real-time reliability monitoring for LLM deployments.} The uncertainty estimation pipeline developed in Study~1 enables automatic detection of unreliable LLM outputs at inference time, requiring only a single forward pass with no additional models or computational overhead. This is directly applicable to high-stakes domains:
+    \begin{itemize}
+        \item \textit{Healthcare}: Flagging uncertain diagnostic suggestions before they reach clinicians
+        \item \textit{Legal}: Identifying potentially hallucinated legal citations or case references
+        \item \textit{Education}: Warning students when AI-generated explanations may be unreliable
+        \item \textit{Customer support}: Escalating uncertain responses to human agents
+    \end{itemize}
+    The finding that entropy-based uncertainty is domain-dependent (effective for knowledge questions, less so for reasoning) provides actionable guidance for deploying such systems: operators can calibrate confidence thresholds per domain.
+
+    \item \textbf{Multilingual chatbot language control.} The language steering method from Study~2 addresses a concrete industry pain point: multilingual chatbots that unintentionally switch languages mid-response, degrading user experience. The method offers several advantages for industrial deployment:
+    \begin{itemize}
+        \item \textit{Zero training cost}: Steering requires only parallel translations for PCA calibration (as few as 50 sentence pairs), with no fine-tuning
+        \item \textit{Negligible inference overhead}: One dot product and one vector subtraction per token
+        \item \textit{No model modification}: Works with any decoder-only LLM via forward hooks
+    \end{itemize}
+    Potential applications include customer service platforms, content localization pipelines, and real-time translation assistants.
+
+    \item \textbf{Cost-efficient domain adaptation.} The complexity-aware fine-tuning pipeline from Study~3 reduces the computational cost of adapting LLMs to specific domains by 79--82\% in terms of training data (tokens processed), while maintaining or improving accuracy. This has direct implications for:
+    \begin{itemize}
+        \item \textit{Enterprise AI}: Companies can fine-tune domain-specific models (medical, legal, financial) at a fraction of the current cost
+        \item \textit{Resource-constrained settings}: Organizations with limited GPU budgets can achieve competitive performance
+        \item \textit{Rapid iteration}: Faster training cycles enable more frequent model updates as domain knowledge evolves
+    \end{itemize}
+\end{enumerate}
+
+\section*{Open-Source Contributions}
+
+All three research projects have released their code and data publicly to facilitate reproducibility and further research:
+\begin{enumerate}
+    \item Uncertainty estimation pipeline: \texttt{github.com/LabARSS/question-complextiy-estimation}
+    \item Complexity-aware fine-tuning: \texttt{github.com/LabARSS/complexity-aware-fine-tuning}
+    \item Language steering: \texttt{github.com/fxlrnrpt/language-steering-in-latent-space}
+\end{enumerate}
+
+\section*{Start-up Potential}
+
+The combination of the three methods developed in this thesis---uncertainty monitoring, language control, and efficient fine-tuning---forms a coherent product offering for an ``LLM reliability and control'' platform. Such a platform could provide:
+\begin{itemize}
+    \item Automated confidence scoring for LLM outputs (per-domain calibrated)
+    \item Language consistency enforcement for multilingual deployments
+    \item Efficient domain adaptation services with reduced compute requirements
+\end{itemize}
+All methods operate on standard transformer architectures without architectural modifications, making them compatible with the most widely deployed open-source LLMs.

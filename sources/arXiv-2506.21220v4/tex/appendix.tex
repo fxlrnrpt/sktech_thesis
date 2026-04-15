@@ -1,0 +1,360 @@
+\section{Prompts}
+\label{sec:prompts}
+
+
+\subsection{Prompts used for complexity estimation}
+\label{sec:uq_prompts}
+
+\begin{table}[H]
+\small
+\centering
+\begin{tabularx}{\linewidth}{X}
+\hline 
+\emph{System prompt for a single token response} \\
+\\
+The following are multiple choice questions about {subject}. Write down ONLY the NUMBER of the correct answer and nothing else.
+\\
+\hline 
+\emph{System prompt for a single token response with a fallback for unknown answers} \\
+\\
+The following are multiple choice questions about {subject}. If you are certain about the answer return the correct option number, otherwise return 0. Write down ONLY the NUMBER and nothing else. \\
+\hline 
+\emph{System prompt for a single token response with a fallback for unknown answers (alternative)} \\
+\\
+The following are multiple choice questions about {subject}. If you know the answer return the correct option number, otherwise return 0. Write down ONLY the NUMBER and nothing else.
+\\
+\hline 
+\emph{System prompt for a chain-of-thought response} \\
+\\
+The following are multiple choice questions about {subject}. Explain your thinking process step-by-step. At the end, write down the number of the correct answer by strictly following this format: $\lbrack\lbrack\text{number of correct answer}\rbrack\rbrack$.
+\\
+\hline 
+\emph{System prompt for a chain-of-thought response with a fallback for unknown answers} \\
+\\
+The following are multiple choice questions about {subject}. Explain your thinking process step-by-step. At the end, if you are certain about the answer write down the number of the correct answer by strictly following this format: $\lbrack\lbrack\text{number of correct answer}\rbrack\rbrack$, otherwise return $\lbrack\lbrack\text{0}\rbrack\rbrack$.
+\\
+\hline 
+\emph{System prompt for a chain-of-thought response with a fallback for unknown answers (alternative)} \\
+\\
+The following are multiple choice questions about {subject}. Explain your thinking process step-by-step. At the end, if you know the answer write down the number of the correct answer by strictly following this format: $\lbrack\lbrack\text{number of correct answers}\rbrack\rbrack$, otherwise return $\lbrack\lbrack\text{0}\rbrack\rbrack$.
+\\
+\hline 
+\emph{User prompt} \\
+Question: ...\\
+Options:\\
+1. ...\\
+2. ...\\
+...\\
+n. ...\\
+Choose one of the answers. Write down ONLY the NUMBER of the correct answer and nothing else.
+\\
+\hline
+\end{tabularx}
+\caption{Prompts for complexity estimation}
+\label{tab:prs_uqs_uq}
+\end{table}
+
+\subsection{General prompts}
+
+
+\begin{table}[H]
+\small
+\centering
+\begin{tabularx}{\linewidth}{X}
+\hline
+You are an expert in the topic of the question. Please act as an impartial judge and evaluate the complexity of the multiple-choice question with options below.
+Begin your evaluation by providing a short explanation. Be as objective as possible. After providing your explanation, you must not answer the question.
+You must rate the question complexity by strictly following the criteria:
+[[Number of reasoning steps]] - how many reasoning steps do you need to answer this question? Valid answers: low, medium, high.
+Your answer must strictly follow this format: "[[Number of reasoning steps: answer]]".
+Example 1: "Your explanation... [[Number of reasoning steps: low]]".
+Example 2: "Your explanation... [[Number of reasoning steps: high]]".
+Example 3: "Your explanation... [[Number of reasoning steps: medium]]".
+\\
+\hline 
+\end{tabularx}
+\caption{Prompt for MASJ reasoning}
+\label{tab:prompt_masj_reasoning}
+\end{table}
+
+\begin{table}[H]
+\small
+\centering
+\begin{tabularx}{\linewidth}{X}
+\hline
+You are an expert in the topic of the question. Please act as an impartial judge and evaluate the complexity of the multiple-choice question with options below. Begin your evaluation by providing a short explanation. Be as objective as possible. After providing your explanation, you must not answer the question. You must rate the question complexity by strictly following the scale: "high school and easier", "undergraduate", "graduate", "postgraduate". You must return the complexity by strictly following this format: "[[complexity]]", for example: "Your explanation... Complexity: [[undergraduate]]", which corresponds to the undergraduate level.
+\\
+\hline 
+\end{tabularx}
+\caption{Prompt for MASJ education levels}
+\label{tab:prompt_masj_edu_levels}
+\end{table}
+
+
+\section{Aggregation Methods}
+\label{sec:aggr_methods}
+
+Our analysis considers diverse methods to identify the complexity of a questions based on outputs logits with a specific focus on commonly used entropy.
+They are listed in the list with more details provided below:
+\begin{enumerate}
+    \item CoT word-aggregation methods
+    \begin{itemize}
+        \item Single Token Answer Entropy
+        \item CoT Mean
+        \item CoT Max
+        \item Difference between CoT Max and Single Token Answer Entropy
+    \end{itemize}
+    \item CoT sequence-aggregation methods
+    \begin{itemize}
+        \item Sequence Mean of Words Mean 
+        \item Sequence Max of Words Mean
+        \item Sequence Mean of Words Max
+    \end{itemize}
+    \item Probability-based methods
+    \begin{itemize}
+        \item Mean of Marginal Difference - mean of difference between top-2 probabilities for each token of response
+        \item Top-2 Entropy Difference - difference of top-2 highest entropies for response
+    \end{itemize}
+    \item Hybrid method
+    \begin{itemize}
+        \item Mix of CoT word-aggregation methods - linear combination of the best perform methods
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Word-aggregation Methods}
+This CoT aggregations have the same entropy values as in Section \ref{sec:method_single_token_entropy} for each CoT token:
+$$
+h_j = -\sum_{i=1}^{n} p_i \log{p_i},
+$$
+where $p_i$ is the probability of a specific token, $n$ is the vocabulary size, and $h_j$ is the entropy of the corresponded token.
+Aggregating per-token entropies for an answer of length $N$ get:
+\begin{align*}
+\mathrm{CoT}_{\mathrm{mean}} &= \frac{1}{N} \sum_{j=1}^{N} h_j, \\
+\mathrm{CoT}_{\mathrm{max}} &= \max_j h_j.
+\end{align*}
+So, Chain-of-Thought maximum and answer entropy difference is:
+$$
+|\mathrm{CoT}_{\mathrm{max}}  - h_{\mathrm{answer}}|,
+$$
+where $h_{\mathrm{answer}}$ is the entropy of the answer token.
+
+\subsection{Sequence-aggregation Methods}
+For $M$ logical claims, which were split by tokens that corresponded to the end of the sequence, we have tokens sets $C_1, C_2, \ldots, C_M$.
+\begin{align*}
+\mathrm{Seq}_{\mathrm{mean}} &= \frac{1}{M} \sum_{j=1}^M \left[\frac{1}{|C_j|} \sum_{i \in C_j} h_i \right], \\
+\mathrm{Seq}_{\mathrm{mean, max}} &= \frac{1}{M} \sum_{j=1}^M \left[ \max_{i \in C_j} h_i \right], \\    
+\mathrm{Seq}_{\mathrm{max, mean}} &= \max_j \left[ \frac{1}{|C_j|} \sum_{i \in C_j} h_i \right].
+\end{align*}
+
+\subsection{Probability-based Methods}
+Assume that for each token in response, we have the token probability distribution $p_i$. So, the marginal token difference is $\sigma_i$ and mean marginal difference is mean of all $\sigma_i$ in LLM response.
+\begin{align*}
+\sigma_i &= p_i^(1) - p_i^(2), \\   
+\overline{\sigma} &= \frac{1}{N} \sum_{i=1}^N \sigma_i,
+\end{align*}
+here $p_i^(k)$ is the $k$-th top value in the vector $\mathbf{p}_i$ of the probability distribution of the tokens from the dictionary during the generation of $i$-th token.
+
+We can also consider differences between top two entropies in response $\delta$:
+\[
+\delta = \max_{j} h_j - \max_{i | i \ne j} h_i.
+\]
+
+\subsection{Hybrid Method}
+We can also use a linear combination of $2$ best-perform previous methods: $h_{\mathrm{answer}}$ and $\mathrm{CoT}_{\max}$. Also, we tried adding the third element $\mathrm{CoT}_{\mathrm{mean}}$, but it has decreased the ROC-AUC, so we made a decision to remove it.
+\[
+h_{\mathrm{mix}} = (1 - \alpha) h_{\mathrm{answer}} + \alpha \mathrm{CoT}_{\mathrm{max}},
+\]
+where $0 \leq \alpha \leq 1$ is the hyperparameter.
+Empirically we identified that the best value for $\alpha$ is $0.05$ for Qwen-3B.
+
+\subsection{Detailed Results}
+
+\begin{table*}
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{l c c c c c c c c}
+\hline
+Category & Qwen 3B & Qwen 3B* & Phi4-mini & Phi4-mini* & Phi4 & Phi4* & Mistral 24B & Mistral 24B* \\
+\hline
+All & 0.72/0.33 & 0.70/0.33 & 0.72/0.40 & 0.74/0.46 & \textbf{0.80}/0.51 & \textbf{0.80}/0.58 & 0.75/0.49 & 0.74/0.60 \\
+\hline
+Law & 0.63/0.24 & 0.60/0.21 & 0.64/0.29 & 0.62/0.30 & 0.69/0.47 & 0.69/0.48 & 0.69/0.41 & \textbf{0.75}/0.56 \\
+Business & 0.67/0.28 & 0.71/0.26 & 0.67/0.31 & 0.64/0.38 & 0.73/0.36 & \textbf{0.75}/0.44 & 0.69/0.40 & 0.68/0.43 \\
+Psychology & 0.77/0.51 & 0.75/0.51 & \textbf{0.84}/0.57 & 0.82/0.59 & \textbf{0.84}/0.74 & \textbf{0.84}/0.74 & 0.79/0.66 & 0.75/0.68 \\
+Chemistry & 0.69/0.23 & 0.62/0.24 & 0.62/0.34 & 0.64/0.41 & 0.70/0.34 & \textbf{0.77}/0.45 & 0.68/0.38 & 0.75/0.59 \\
+Biology & 0.79/0.59 & 0.79/0.56 & 0.85/0.67 & 0.85/0.73 & \textbf{0.90}/0.80 & \textbf{0.90}/0.83 & 0.81/0.74 & 0.73/0.80 \\
+History & 0.66/0.36 & 0.63/0.35 & 0.68/0.39 & 0.65/0.43 & \textbf{0.76}/0.62 & 0.73/0.63 & 0.69/0.54 & 0.64/0.56 \\
+Other & 0.70/0.33 & 0.67/0.34 & 0.72/0.39 & 0.74/0.43 & 0.81/0.57 & \textbf{0.82}/0.58 & 0.79/0.52 & 0.75/0.59 \\
+Physics & 0.65/0.27 & 0.64/0.28 & 0.65/0.32 & 0.66/0.40 & 0.75/0.39 & \textbf{0.78}/0.46 & 0.74/0.38 & 0.71/0.63 \\
+Computer science & 0.76/0.29 & 0.70/0.32 & 0.73/0.41 & 0.76/0.46 & 0.77/0.55 & \textbf{0.80}/0.57 & 0.77/0.51 & 0.74/0.64 \\
+Health & 0.69/0.39 & 0.66/0.39 & 0.71/0.43 & 0.71/0.47 & \textbf{0.78}/0.64 & 0.77/0.65 & 0.75/0.61 & 0.71/0.63 \\
+Economics & 0.77/0.44 & 0.74/0.43 & 0.79/0.55 & 0.80/0.59 & \textbf{0.85}/0.68 & 0.83/0.72 & 0.77/0.62 & 0.75/0.66 \\
+Math & 0.69/0.24 & 0.67/0.24 & 0.65/0.27 & 0.69/0.31 & 0.73/0.37 & \textbf{0.74}/0.43 & 0.69/0.33 & 0.72/0.44 \\
+Philosophy & 0.66/0.33 & 0.70/0.31 & 0.71/0.39 & 0.70/0.43 & \textbf{0.77}/0.61 & 0.76/0.63 & 0.71/0.53 & 0.70/0.56 \\
+Engineering & 0.67/0.34 & 0.66/0.32 & 0.62/0.39 & 0.64/0.45 & 0.74/0.43 & 0.67/0.53 & 0.70/0.46 & \textbf{0.77}/0.60 \\
+\hline
+Education level \\
+\hline
+High school and easier & 0.73/0.35 & 0.72/0.34 & 0.76/0.38 & 0.75/0.51 & 0.81/0.50 & \textbf{0.82}/0.54 & 0.75/0.48 & 0.70/0.52 \\
+Undergraduate & 0.73/0.34 & 0.71/0.34 & 0.72/0.42 & 0.77/0.44 & 0.81/0.52 & \textbf{0.82}/0.62 & 0.77/0.50 & 0.74/0.64 \\
+Graduate & 0.66/0.28 & 0.65/0.26 & 0.64/0.35 & 0.68/0.37 & 0.74/0.50 & 0.73/0.54 & 0.71/0.46 & \textbf{0.76}/0.58 \\
+Postgraduate & 0.63/0.18 & 0.52/0.20 & 0.64/0.20 & 0.63/0.22 & \textbf{0.67}/0.40 & 0.65/0.41 & 0.62/0.35 & 0.63/0.39 \\
+\hline
+MASJ reasoning score \\
+\hline
+Low & 0.72/0.42 & 0.71/0.42 & 0.78/0.48 & 0.79/0.51 & 0.82/0.64 & \textbf{0.83}/0.65 & 0.79/0.59 & 0.73/0.59 \\
+Medium & 0.72/0.32 & 0.70/0.31 & 0.70/0.39 & 0.72/0.44 & \textbf{0.79}/0.50 & \textbf{0.79}/0.59 & 0.74/0.47 & 0.76/0.63 \\
+High & 0.64/0.27 & 0.62/0.27 & 0.59/0.33 & 0.58/0.36 & \textbf{0.69}/0.41 & 0.64/0.29 & 0.64/0.39 & 0.62/0.45 \\
+\hline
+\end{tabular}}
+\caption{ROC AUC/accuracy for single token response entropy}
+\label{tab:roc_auc_single_token_entropy}
+\footnotesize{* Alternative prompt to allow model answer "I do not know"}\\
+\end{table*}
+
+\begin{table*}
+\centering
+\begin{tabular}{l c c c c}
+\hline
+Category & Qwen 3B & Qwen 3B* & Phi4-mini & Phi4-mini* \\
+\hline
+All & \textbf{0.68}/0.41 & 0.67/0.41 & 0.61/0.43 & 0.58/0.55 \\
+\hline
+Law & \textbf{0.60}/0.24 & 0.57/0.23 & 0.55/0.26 & 0.52/0.28 \\
+Business & \textbf{0.68}/0.45 & 0.67/0.47 & 0.66/0.55 & 0.56/0.65 \\
+Psychology & \textbf{0.73}/0.51 & 0.70/0.51 & 0.68/0.48 & 0.65/0.63 \\
+Chemistry & 0.65/0.41 & \textbf{0.68}/0.39 & 0.65/0.43 & 0.63/0.60 \\
+Biology & \textbf{0.77}/0.56 & 0.68/0.60 & 0.65/0.48 & 0.67/0.71 \\
+History & \textbf{0.62}/0.36 & 0.61/0.36 & 0.59/0.37 & 0.51/0.39 \\
+Other & \textbf{0.63}/0.38 & \textbf{0.63}/0.36 & 0.60/0.42 & 0.58/0.52 \\
+Physics & \textbf{0.68}/0.42 & 0.67/0.41 & 0.62/0.39 & 0.61/0.57 \\
+Computer science & 0.68/0.37 & \textbf{0.73}/0.33 & 0.59/0.41 & 0.58/0.58 \\
+Health & \textbf{0.63}/0.37 & 0.61/0.40 & 0.62/0.33 & 0.56/0.50 \\
+Economics & \textbf{0.70}/0.48 & 0.68/0.50 & 0.61/0.47 & 0.65/0.63 \\
+Math & \textbf{0.73}/0.51 & \textbf{0.73}/0.48 & 0.63/0.58 & 0.60/0.67 \\
+Philosophy & 0.63/0.33 & 0.62/0.35 & \textbf{0.66}/0.37 & 0.59/0.48 \\
+Engineering & 0.63/0.31 & \textbf{0.64}/0.33 & 0.60/0.37 & 0.55/0.45 \\
+\hline
+Education level \\
+\hline
+High school and easier & \textbf{0.72}/0.56 & 0.70/0.53 & 0.66/0.57 & 0.60/0.73 \\
+Undergraduate & \textbf{0.67}/0.41 & \textbf{0.67}/0.41 & 0.62/0.42 & 0.60/0.55 \\
+Graduate & \textbf{0.61}/0.27 & 0.60/0.28 & 0.58/0.30 & 0.57/0.38 \\
+Postgraduate & 0.63/0.22 & \textbf{0.66}/0.15 & 0.41/0.22 & 0.41/0.20 \\
+\hline
+MASJ reasoning score \\
+\hline
+Low & \textbf{0.69}/0.49 & 0.67/0.49 & 0.64/0.46 & 0.61/0.62 \\
+Medium & \textbf{0.67}/0.41 & 0.66/0.41 & 0.60/0.43 & 0.57/0.55 \\
+High & \textbf{0.65}/0.26 & 0.60/0.26 & 0.53/0.32 & 0.54/0.36 \\
+\hline
+\end{tabular}
+\caption{ROC AUC/accuracy for single token response entropy after chain-of-thought}
+\label{tab:roc_auc_cot_entropy}
+\footnotesize{* Alternative prompt to allow model answer "I do not know"}\\
+\end{table*}
+
+\section{Additional experiments}
+\label{sec:additional_experiments}
+
+
+\subsection{MASJ education level and reasoning score}
+\label{sec:masj_evaluation}
+
+\begin{table}[t]
+\centering
+\begin{tabular}{l c c}
+\hline
+Model & Education level & Reasoning \\
+\hline
+Qwen 3B & \underline{0.53} & 0.55 \\
+Qwen 3B* & \underline{0.53} & 0.55 \\
+Phi4-mini & 0.52 & 0.55 \\
+Phi4-mini* & 0.52 & 0.54 \\
+Phi4 & 0.50 & \underline{0.57} \\
+Phi4* & 0.50 & 0.55 \\
+Mistral 24B & 0.50 & 0.56 \\
+Mistral 24B* & 0.52 & 0.53 \\
+\hline
+\end{tabular}
+\caption{ROC AUC for MASJ}
+\label{tab:roc_auc_masj}
+\footnotesize{* Alternative prompt to allow model answer "I do not know"}\\
+\end{table}
+
+Table~\ref{tab:roc_auc_masj} shows ROC AUC values for MASJ evaluations of education levels and reasoning scores.
+
+We can see that MASJ reasoning score has a slightly higher ROC AUC of 0.55 on average compared to education levels with ROC AUC of 0.52. There is no significant difference between prompts that allow IDK answers and the ones that do not. 
+
+The results indicate that MASJ scores divide the data into complexity groups with moderate quality. On the other hand, results depend on encoding of nominal scores provided by MASJ, and a more comprehensive study could improve this method.
+% It suggests that MASJ scores might not be the best metrics to split the data into complexity groups. However, ROC AUC calculations are highly sensitive to the encoding of the nominal MASJ scores. It suggests further research of the MASJ reasoning score that shows an edge even with the current uniformly distributed encodings.
+
+\paragraph{Technical details.}
+To calculate ROC AUC we encode MASJ results on a scale from 0 to 1 and prompt the model to answer questions directly, using prompts. For education levels, we take "High school and easier" - 0.2, "Undergraduate" - 0.4, "Graduate" - 0.6, "Postgraduate" - 0.8. For reasoning scores, "Low" - 0.25, "Medium" - 0.5, "High" - 0.75.
+IDK responses and results with invalid formatting are excluded from the calculations.
+
+
+\subsection{Feature importances of reasoning model}
+\label{sec:reasoner_feat_imp}
+
+We evaluated logistic regression weights, that reflect feature importance. Our classifier achieves $0.721$, $0.717$ and $0.731$ accuracies by using thinking total entropy, length of the reasoning chain or both features combined correspondingly, thus producing a reasonable model for the evaluation of a probability of the error for question.
+
+Table \ref{tab:param_importances} shows that total entropy and number of tokens of the reasoning chain are the most important parameters influencing the correctness of the model's prediction. 
+
+\paragraph{Technical details.}
+
+To avoid excessively long reasoning chains, we set a maximum generation length of 5000 tokens. We also use normalized parameters to remove the mean and scale to unit variance. We take model coefficients of the corresponding parameters as their importance. 
+
+\begin{table}[t]
+\centering
+\begin{tabular}{l c}
+\hline
+Statistics & Importance \\
+\hline
+Thinking total entropy & \underline{1.45}\\
+Thinking number of tokens & \underline{1.08}\\
+Answer total entropy & 0.25\\
+Answer length & 0.20\\
+\hline
+\end{tabular}
+\caption{Absolute values of parameter weights}
+\label{tab:param_importances}
+\end{table}
+
+\section{Hyperparameters}
+\label{sec:hyperparameters}
+
+\begin{table*}[ht]
+\centering
+\begin{tabular}{l c c c c}
+\hline
+Parameter & SFT & Pipeline (easy/mid) & Pipeline (hard) & Distillation \\
+\hline
+Effective batch size & 64 & 64 & 64 & 64\\
+Max new tokens & 30 & 30 & 8192 & 8192\\
+Optimizer & AdamW & AdamW & AdamW & AdamW \\
+Learning Rate & 1e-4 & 1e-4 & 1e-4 & 1e-4\\
+\hline
+\end{tabular}
+\caption{Training hyperparameters (MMLU Pro)}
+\label{tab:hypers_mmlu}
+\end{table*}
+
+\begin{table*}[ht]
+\centering
+\begin{tabular}{l c c c c}
+\hline
+Parameter & SFT & Pipeline (easy/mid) & Pipeline (hard) & Distillation \\
+\hline
+Effective batch size & 256 & 256 & 256 & 256\\
+Max new tokens & 100 & 100 & 8192 & 8192\\
+Optimizer & AdamW & AdamW & AdamW & AdamW \\
+Learning Rate & 1e-4 & 1e-4 & 1e-4 & 1e-4\\
+LoRA rank & 64 & 64 & 64 & 64\\
+LoRA alpha & 128 & 128 & 128 & 128\\
+LoRA dropout & 0.05 & 0.05 & 0.05 & 0.05\\
+\hline
+\end{tabular}
+\caption{Training hyperparameters (GSM8K/MedMCQA)}
+\label{tab:hypers_rest}
+\end{table*}

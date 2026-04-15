@@ -2,32 +2,32 @@
 
 This thesis is based on three research papers that have been submitted to peer-reviewed venues. Below we describe the author's specific contributions to each work.
 
-\section*{Paper 1: When an LLM is Apprehensive About Its Answers}
+\section*{Paper 1: When an LLM is Apprehensive About Its Answers --- And When Its Uncertainty is Justified}
 
-\textbf{Authors}: M. Sychev, A. Goncharov, A. Grishin, D. Smorchkov, I. Molybog, A. Zaytsev
+\textbf{Authors}: P. Sychev, A. Goncharov, D. Vyazhev, E. Khalafyan, A. Zaytsev
 
-\textbf{Venue}: arXiv preprint arXiv:2503.01688, 2025
+\textbf{Venue}: Proceedings of AINL 2025 (\textbf{Best Paper Award}). arXiv preprint arXiv:2503.01688.
 
-\textbf{Summary}: This paper investigates uncertainty estimation in large language models by analyzing token-level entropy patterns. We demonstrate that entropy-based features can predict answer correctness with ROC-AUC up to 0.83, and introduce a Model-as-Judge (MASJ) approach for uncertainty characterization.
+\textbf{Summary}: This paper investigates uncertainty estimation in large language models by analyzing token-level entropy patterns across different question topics and reasoning requirements. We demonstrate that entropy-based features can predict answer correctness with ROC-AUC up to 0.83 in knowledge-dependent domains, while Model-as-Judge (MASJ) performs near-randomly. We also reveal internal biases in the MMLU-Pro dataset regarding question complexity.
 
 \textbf{Author contribution}: The thesis author (A. Goncharov) contributed to the experimental design, implementation of entropy analysis methods, data collection and processing, and analysis of results. The author participated in developing the methodology for extracting and analyzing token-wise entropy patterns and contributed to writing the experimental sections of the paper.
 
-\section*{Paper 2: Complexity-Aware Fine-Tuning for Efficient LLM Training}
+\section*{Paper 2: Complexity-Aware Fine-Tuning}
 
-\textbf{Authors}: A. Goncharov, M. Sychev, A. Zaytsev
+\textbf{Authors}: A. Goncharov, D. Vyazhev, P. Sychev, E. Khalafyan, A. Zaytsev
 
-\textbf{Venue}: arXiv preprint arXiv:2506.21220, 2025
+\textbf{Venue}: Proceedings of EACL 2026. arXiv preprint arXiv:2506.21220.
 
-\textbf{Summary}: This paper presents a complexity-aware fine-tuning pipeline that uses entropy to stratify training data and applies targeted training interventions. The approach achieves significant accuracy improvements while using 81\% less training data than baseline methods.
+\textbf{Summary}: This paper presents a complexity-aware fine-tuning pipeline that uses single-token answer entropy to stratify training data by complexity and applies targeted training interventions: standard SFT for regular examples and chain-of-thought distillation for hard examples. The approach achieves significant accuracy improvements while using 79--82\% less training data than full distillation baselines, validated across three datasets (MMLU-Pro, GSM8K, MedMCQA).
 
 \textbf{Author contribution}: The thesis author (A. Goncharov) is the lead author and primary contributor. The author designed the overall methodology, implemented the entropy-based data stratification system, developed the training pipeline combining SFT and chain-of-thought distillation, conducted all experiments, analyzed results, and wrote the majority of the paper.
 
-\section*{Paper 3: Language Steering in Latent Space}
+\section*{Paper 3: Language Steering in Latent Space to Mitigate Unintended Code-Switching}
 
-\textbf{Authors}: A. Goncharov, E. Kondusov, A. Zaytsev
+\textbf{Authors}: A. Goncharov, N. Kondusov, A. Zaytsev
 
-\textbf{Venue}: arXiv preprint arXiv:2510.13849, 2025
+\textbf{Venue}: Proceedings of AINL 2026. arXiv preprint arXiv:2510.13849.
 
-\textbf{Summary}: This paper explores the geometric structure of multilingual representations in LLM latent space. We discover that language-specific directions can be identified through PCA with 95--99\% classification accuracy and demonstrate that steering activations along these directions reduces code-switching by up to 55\%.
+\textbf{Summary}: This paper explores the geometric structure of multilingual representations in LLM latent space. We discover that language-specific directions can be identified through PCA with 96--100\% classification accuracy across four language pairs (English--Chinese, English--Spanish, English--Russian, English--Hindi). Steering activations via projection onto these directions reduces distributional divergence by up to 55\% and achieves 63--99\% reduction in Code-Switching Index in generated text.
 
-\textbf{Author contribution}: The thesis author (A. Goncharov) is the lead author and primary contributor. The author conceived the idea of using PCA to identify language directions, designed and implemented the steering methodology, conducted experiments across multiple model architectures, performed the analysis of results, and wrote the majority of the paper.
+\textbf{Author contribution}: The thesis author (A. Goncharov) is the lead author and primary contributor. The author conceived the idea of using PCA to identify language directions, designed and implemented the steering methodology, conducted experiments across multiple model architectures and language pairs, performed the analysis of results, and wrote the majority of the paper.

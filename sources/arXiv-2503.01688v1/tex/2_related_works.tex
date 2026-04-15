@@ -1,0 +1,33 @@
+\section{Related Works}
+
+Tests have been a popular way to estimate an individual's proficiency for more than 500 years~\cite{buyske2005optimal}. 
+After their emergence, LLMs have also been tested extensively and compared to each other or humans~\cite{sizov2024analysing}. 
+Several papers established benchmarks, with natural ones being QA datasets: an LLM receives a prompt and should generate a response~cite{rogers2023qa}.
+Different questions exist, but automated evaluation of answers is available only for multiple-choice questions.
+For LLMs, slight changes in the way the questions are asked can significantly affect the accuracy of a model, probably due to data leakage and format overfitting~\cite{elhady2025wicked},
+other options are much more expensive and challenging.
+One of the recent options that takes into account possible leakages - and, on the other hand, is widely used is an expanded version of the MMLU dataset, called MMLU-Pro~\cite{wang2025mmlu} with about $0.56$ accuracy for Llama-70B model.
+The presented $\sim 12 000$ questions span $13$ diverse topics, including STEM and other areas of scientific studies.
+The complexity, volume, and diversity of the dataset provide a strong foundation for our study of how different aspects of the questions affect the probability of correctly answering them.
+
+
+
+
+
+
+In related works, datasets such as ARC-AI2~\cite{clark2018think} and GPQA~\cite{rein2023gpqagraduatelevelgoogleproofqa} have been widely used for evaluating multiple-choice QA in the scientific domain as well. However, ARC-AI2 is often criticized for its relatively low difficulty, while GPQA, though highly challenging, suffers from a dataset size of fewer than $500$ samples, which restricts its utility for robust evaluation. To address these limitations and ensure a comprehensive assessment, we focus our final experiments on MMLU-Pro, which offers a larger scale and a more balanced difficulty level for evaluating model performance in scientific reasoning tasks.
+
+MMLU-Pro is suited for evaluating a model's ability to identify uncertainty in the generated output and signal potential errors, which addresses a fundamental question in AI safety. 
+In a broader context, we can refer to this effect as hallucination~\cite{huang2025survey}; in a more classic context, it is a prediction error~\cite{fadeeva2023lm}.
+Another related approach is assessing the question difficulty, provided in~\cite{gabburo2024measuring}, but suitable there only for an RAG scenario. Universal Model-as-judge (MASJ) approaches use available models or a bigger and more powerful model to evaluate LM outputs~\cite{zheng2023judging} and can be applied in a broader context.
+
+What makes the problem more difficult is the diverse nature of possible uncertainty sources.
+Classic works decompose uncertainty into the model part, related to lack of knowledge of a model about a specific output, and the data part, related to the complexity of the data itself~\cite{hullermeier2021aleatoric}.
+For natural language, model uncertainty refers to the familiarity of a specific domain and the presence of relevant content in a training sample.
+Data uncertainty refers to noise in the example or the overall complexity of a question at hand.
+While broader classification exists with five different features for a generated question~\cite{wan2024sciqag}, we follow this approach while identifying the considered parts of the uncertainty. Using entropy-based measures, such as semantic entropy~\cite{kuhn2023semanticuncertaintylinguisticinvariances} and word-sequence entropy~\cite{wang2024wordsequenceentropyuncertaintyestimation}, is highly effective for evaluating uncertainty in LLMs because these methods capture the variability and confidence of model predictions in a structured way. Semantic entropy, as proposed, quantifies uncertainty by considering the meaning of generated text, making it robust to paraphrasing and linguistic variations. Similarly, word-sequence entropy demonstrates that word-sequence entropy effectively measures uncertainty in open-ended tasks such as medical QA, providing insights into model confidence and reliability. In our case, we use the token-wise entropy approach~\cite{kadavath2022language} due to its simplicity and suitability for MMLU cases with multiple-choice short answers.
+For model uncertainty, we consider a variation of the MASJ approach with a specific prompt~\cite{zheng2023judging}, ~\cite{chern2024largelanguagemodelstrusted}.
+
+This~\cite{shorinwa2024surveyuncertaintyquantificationlarge} survey paper provides a comprehensive taxonomy of uncertainty estimation methods in LLMs, highlighting state-of-the-art approaches such as evaluation via LLM and tokenwise entropy.
+For an MMLU-type dataset, we would be able to identify how different types of uncertainties are combined for typical questions in different subjects and how our measurement corresponds to the estimate of the required amount of reasoning for specific questions.
+These results would help identify hallucinations and errors in language model outputs and provide insights into how to reduce the frequency of these effects by training the model using additional data and varying the model size.

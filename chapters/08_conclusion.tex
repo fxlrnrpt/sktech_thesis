@@ -4,11 +4,11 @@
 
 This thesis investigated how signals from a single forward pass through large language models---both output distributions and internal representations---can be leveraged to address fundamental challenges in LLM deployment. We presented three interconnected studies that demonstrate the practical utility of this approach.
 
-\textbf{Study 1: Uncertainty Estimation via Token-Wise Entropy.} We demonstrated that analyzing token-level entropy patterns during generation provides effective signals for predicting answer correctness. The max-to-min entropy ratio achieved ROC-AUC scores up to 0.83 on the MMLU-Pro benchmark, outperforming baseline confidence measures including first-token probability, mean sequence probability, and verbalized confidence. This work shows that the dynamics of uncertainty throughout generation---not just aggregate measures---contain valuable information about model reliability.
+\textbf{Study 1: Uncertainty Estimation via Token-Wise Entropy.} We demonstrated that single-token answer entropy provides effective signals for predicting answer correctness in knowledge-dependent domains, achieving ROC-AUC scores up to 0.83 on the MMLU-Pro benchmark across four models (Phi-4, Mistral-Small-24B, Qwen-1.5B, Qwen-72B). Entropy primarily captures knowledge uncertainty rather than reasoning difficulty, with performance decreasing for reasoning-heavy domains. The Model-as-Judge approach performs near-randomly (ROC-AUC $\approx$ 0.49), indicating that different uncertainty estimation methods capture fundamentally different signals. This work was recognized with the Best Paper Award at AINL 2025.
 
-\textbf{Study 2: Language Steering in Latent Space.} We discovered that language-specific directions can be reliably identified in LLM latent space through simple PCA analysis, achieving 95--99\% classification accuracy. By steering model activations along these directions during inference, we reduced unwanted code-switching by up to 55\% as measured by KL divergence, without requiring additional training or significant degradation in generation quality. This demonstrates that behavioral control can be achieved through geometric manipulation of internal representations.
+\textbf{Study 2: Language Steering in Latent Space.} We discovered that language-specific directions can be reliably identified in LLM latent space through PCA, achieving 96--100\% classification accuracy across four language pairs (English--Chinese, English--Spanish, English--Russian, English--Hindi) on Qwen2.5-1.5B and Llama-3.2-1B. By projecting out the source language component from hidden states during inference, we reduced distributional divergence by 25--55\% and achieved 63--95\% reduction in Code-Switching Index in generated text, without requiring additional training. This demonstrates that behavioral control can be achieved through geometric manipulation of internal representations, though steering coefficients are fragile and require careful calibration.
 
-\textbf{Study 3: Complexity-Aware Fine-Tuning.} We developed a training pipeline that uses entropy to stratify training data by complexity and applies targeted interventions: direct supervised fine-tuning for easy examples and chain-of-thought distillation for hard examples. This approach achieved accuracy improvements from 0.39 to 0.52 (Qwen-2.5-1.5B) and 0.51 to 0.64 (Qwen-2.5-3B) while using 81\% less training data than baseline methods. This shows that understanding input complexity through output distributions enables more efficient use of training resources.
+\textbf{Study 3: Complexity-Aware Fine-Tuning.} We developed a training pipeline that uses single-token answer entropy to stratify training data by complexity and applies targeted interventions: direct supervised fine-tuning for regular examples and chain-of-thought distillation from a teacher model ensemble for hard examples. This approach achieved accuracy improvements from 0.39 to 0.52 (Qwen-3B) and 0.51 to 0.64 (Phi-4-Mini) on MMLU-Pro while using 79--82\% less training data, with results generalizing to GSM8K and MedMCQA datasets across three model architectures.
 
 \section{Unifying Insights}
 
@@ -39,13 +39,15 @@ Our work contributes to several active research areas:
 Several limitations should be acknowledged:
 
 \begin{enumerate}
-    \item \textbf{Model dependence}: Our methods have been evaluated primarily on the Llama and Qwen model families. Generalization to other architectures (e.g., Mixture of Experts models) requires further validation.
+    \item \textbf{Model scale}: The uncertainty estimation study uses models from 1.5B to 72B parameters, but the language steering and fine-tuning experiments are limited to small models (1--3B parameters). Generalization to larger models and diverse architectures (e.g., Mixture of Experts) requires further validation.
 
-    \item \textbf{Language coverage}: The language steering experiments focused on English-Russian pairs. Extension to more diverse language combinations and low-resource languages remains future work.
+    \item \textbf{Language coverage}: While language steering was validated on four language pairs (English--Chinese, English--Spanish, English--Russian, English--Hindi), low-resource languages, right-to-left scripts, and typologically distant languages (agglutinative, tonal) remain unexplored. English--Hindi showed the weakest improvements across all metrics.
 
-    \item \textbf{Task specificity}: Experiments were conducted primarily on multiple-choice question answering (MMLU-Pro). Performance on other task types (open-ended generation, reasoning, coding) needs investigation.
+    \item \textbf{Task specificity}: Uncertainty estimation and fine-tuning experiments were conducted on multiple-choice question answering. Performance on open-ended generation, reasoning, and coding tasks needs investigation. The fine-tuning results generalize across MMLU-Pro, GSM8K, and MedMCQA, but all are question-answering tasks.
 
-    \item \textbf{Scaling behavior}: While we observed that larger models show better entropy-correctness calibration, the scaling behavior of all proposed methods requires systematic study.
+    \item \textbf{Steering fragility}: Steering coefficients are highly sensitive---small changes in magnitude can shift the model from fluent output to degenerate repetition. Principled or adaptive coefficient selection methods have not been developed.
+
+    \item \textbf{Evaluation limitations}: The language steering evaluation uses artificial code-switching (mid-sentence translation), which may not capture the full complexity of naturally occurring code-switching patterns. Human evaluation of semantic preservation and output quality was not conducted.
 \end{enumerate}
 
 \section{Future Directions}
@@ -66,12 +68,12 @@ This research opens several promising directions:
 
 \section{Conclusion}
 
-This thesis demonstrated that accessible signals from a single forward pass through large language models provide valuable information for addressing fundamental deployment challenges. Token-wise entropy patterns predict answer correctness, latent space geometry enables language control, and complexity-aware data stratification improves training efficiency. Together, these contributions establish that exploiting forward-pass signals offers a practical path toward more reliable, controllable, and efficient LLMs---without requiring architectural modifications or expensive retraining.
+This thesis demonstrated that accessible signals from a single forward pass through large language models provide valuable information for addressing fundamental deployment challenges. Single-token answer entropy predicts answer correctness with ROC-AUC up to 0.83, latent space geometry enables language control with 63--95\% reduction in code-switching, and complexity-aware data stratification improves training efficiency while using 79--82\% less data. Together, these contributions establish that exploiting forward-pass signals offers a practical path toward more reliable, controllable, and efficient LLMs---without requiring architectural modifications or expensive retraining.
 
 \newpage
 \chapter*{Acknowledgements}
 \addcontentsline{toc}{chapter}{Acknowledgements}
 
-I would like to express my gratitude to my supervisor, Alexey Zaytsev, for his guidance and support throughout this research. I also thank my co-authors---Mikhail Sychev, Andrey Grishin, Danil Smorchkov, Ivan Molybog, and Egor Kondusov---for their valuable contributions to the published papers that form the basis of this thesis.
+I would like to express my gratitude to my supervisor, Alexey Zaytsev, for his guidance and support throughout this research. I also thank my co-authors---Petr Sychev, Daniil Vyazhev, Edvard Khalafyan, and Nikolai Kondusov---for their valuable contributions to the published papers that form the basis of this thesis.
 
-This research was conducted at Skolkovo Institute of Science and Technology (Skoltech). I acknowledge the computational resources provided by the Skoltech HPC cluster.
+This research was conducted at Skolkovo Institute of Science and Technology (Skoltech). I acknowledge the computational resources provided by the Skoltech HPC cluster. The research was partially supported by the Russian Science Foundation grant No. 25-11-00355.

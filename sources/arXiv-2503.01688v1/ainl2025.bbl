@@ -1,0 +1,91 @@
+\providecommand{\bysame}{\leavevmode\hbox to3em{\hrulefill}\thinspace}
+\providecommand{\MR}{\relax\ifhmode\unskip\space\fi MR }
+% \MRhref is called by the amsart/book/proc definition of \MR.
+\providecommand{\MRhref}[2]{%
+  \href{http://www.ams.org/mathscinet-getitem?mr=#1}{#2}
+}
+\providecommand{\href}[2]{#2}
+\begin{thebibliography}{10}
+
+\bibitem{abbasi2025believe}
+Yasin Abbasi~Yadkori, Ilja Kuzborskij, Andr{\'a}s Gy{\"o}rgy, and Csaba Szepesvari, \emph{To believe or not to believe your llm: Iterative prompting for estimating epistemic uncertainty}, Advances in Neural Information Processing Systems \textbf{37} (2025), 58077--58117.
+
+\bibitem{abdin2024phi}
+Marah Abdin, Jyoti Aneja, Harkirat Behl, S{\'e}bastien Bubeck, Ronen Eldan, Suriya Gunasekar, Michael Harrison, Russell~J Hewett, Mojan Javaheripi, Piero Kauffmann, et~al., \emph{Phi-4 technical report}, arXiv preprint arXiv:2412.08905 (2024).
+
+\bibitem{buyske2005optimal}
+Steven Buyske, \emph{Optimal design in educational testing}, Applied optimal designs (2005), 1--19.
+
+\bibitem{chern2024largelanguagemodelstrusted}
+Steffi Chern, Ethan Chern, Graham Neubig, and Pengfei Liu, \emph{Can large language models be trusted for evaluation? scalable meta-evaluation of llms as evaluators via agent debate}, 2024.
+
+\bibitem{chhikara2025mindconfidencegapoverconfidence}
+Prateek Chhikara, \emph{Mind the confidence gap: Overconfidence, calibration, and distractor effects in large language models}, 2025.
+
+\bibitem{clark2018think}
+Peter Clark, Isaac Cowhey, Oren Etzioni, Tushar Khot, Ashish Sabharwal, Carissa Schoenick, and Oyvind Tafjord, \emph{Think you have solved question answering? try arc, the ai2 reasoning challenge}, arXiv preprint arXiv:1803.05457 (2018).
+
+\bibitem{Dahl_2024}
+Matthew Dahl, Varun Magesh, Mirac Suzgun, and Daniel~E Ho, \emph{Large legal fictions: Profiling legal hallucinations in large language models}, Journal of Legal Analysis \textbf{16} (2024), no.~1, 64–93.
+
+\bibitem{elhady2025wicked}
+Ahmed Elhady, Eneko Agirre, and Mikel Artetxe, \emph{{WiCkeD}: A simple method to make multiple choice benchmarks more challenging}, arXiv preprint arXiv:2502.18316 (2025).
+
+\bibitem{fadeeva2024fact}
+Ekaterina Fadeeva, Aleksandr Rubashevskii, Artem Shelmanov, Sergey Petrakov, Haonan Li, Hamdy Mubarak, Evgenii Tsymbalov, Gleb Kuzmin, Alexander Panchenko, Timothy Baldwin, et~al., \emph{Fact-checking the output of large language models via token-level uncertainty quantification}, Findings of the Association for Computational Linguistics ACL 2024, 2024, pp.~9367--9385.
+
+\bibitem{fadeeva2023lm}
+Ekaterina Fadeeva, Roman Vashurin, Akim Tsvigun, Artem Vazhentsev, Sergey Petrakov, Kirill Fedyanin, Daniil Vasilev, Elizaveta Goncharova, Alexander Panchenko, Maxim Panov, et~al., \emph{{LM}-polygraph: Uncertainty estimation for language models}, Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing: System Demonstrations, 2023, pp.~446--461.
+
+\bibitem{gabburo2024measuring}
+Matteo Gabburo, Nicolaas Jedema, Siddhant Garg, Leonardo Ribeiro, and Alessandro Moschitti, \emph{Measuring question answering difficulty for retrieval-augmented generation},  (2024).
+
+\bibitem{gema2025mmlu}
+Aryo~Pradipta Gema, Joshua Ong~Jun Leang, Giwon Hong, Alessio Devoto, Alberto Carlo~Maria Mancino, Rohit Saxena, Xuanli He, Yu~Zhao, Xiaotang Du, Mohammad Reza~Ghasemi Madani, Claire Barale, Robert McHardy, Joshua Harris, Jean Kaddour, Emile van Krieken, and Pasquale Minervini, \emph{Are we done with mmlu?}, 2025.
+
+\bibitem{hendrycks2020measuring}
+Dan Hendrycks, Collin Burns, Steven Basart, Andy Zou, Mantas Mazeika, Dawn Song, and Jacob Steinhardt, \emph{Measuring massive multitask language understanding}, International Conference on Learning Representations, 2021.
+
+\bibitem{huang2025survey}
+Lei Huang, Weijiang Yu, Weitao Ma, Weihong Zhong, Zhangyin Feng, Haotian Wang, Qianglong Chen, Weihua Peng, Xiaocheng Feng, Bing Qin, et~al., \emph{A survey on hallucination in large language models: Principles, taxonomy, challenges, and open questions}, ACM Transactions on Information Systems \textbf{43} (2025), no.~2, 1--55.
+
+\bibitem{hullermeier2021aleatoric}
+Eyke H{\"u}llermeier and Willem Waegeman, \emph{Aleatoric and epistemic uncertainty in machine learning: An introduction to concepts and methods}, Machine learning \textbf{110} (2021), no.~3, 457--506.
+
+\bibitem{jiang2023mistral}
+A.~Q. Jiang, A.~Sablayrolles, A.~Mensch, C.~Bamford, D.~S. Chaplot, D.~de~las Casas, F.~Bressand, G.~Lengyel, G.~Lample, L.~Saulnier, et~al., \emph{Mistral 7b}, arXiv preprint \textbf{arXiv:2310.06825} (2023).
+
+\bibitem{kadavath2022language}
+Saurav Kadavath, Tom Conerly, Amanda Askell, Tom Henighan, Dawn Drain, Ethan Perez, Nicholas Schiefer, Zac Hatfield-Dodds, Nova DasSarma, Eli Tran-Johnson, et~al., \emph{Language models (mostly) know what they know}, arXiv preprint arXiv:2207.05221 (2022).
+
+\bibitem{kuhn2023semanticuncertaintylinguisticinvariances}
+Lorenz Kuhn, Yarin Gal, and Sebastian Farquhar, \emph{Semantic uncertainty: Linguistic invariances for uncertainty estimation in natural language generation}, 2023.
+
+\bibitem{qwen2025qwen25technicalreport}
+Qwen, :, An~Yang, Baosong Yang, Beichen Zhang, Binyuan Hui, Bo~Zheng, Bowen Yu, Chengyuan Li, Dayiheng Liu, Fei Huang, Haoran Wei, Huan Lin, Jian Yang, Jianhong Tu, Jianwei Zhang, Jianxin Yang, Jiaxi Yang, Jingren Zhou, Junyang Lin, Kai Dang, Keming Lu, Keqin Bao, Kexin Yang, Le~Yu, Mei Li, Mingfeng Xue, Pei Zhang, Qin Zhu, Rui Men, Runji Lin, Tianhao Li, Tianyi Tang, Tingyu Xia, Xingzhang Ren, Xuancheng Ren, Yang Fan, Yang Su, Yichang Zhang, Yu~Wan, Yuqiong Liu, Zeyu Cui, Zhenru Zhang, and Zihan Qiu, \emph{Qwen2.5 technical report}, 2025.
+
+\bibitem{rein2023gpqagraduatelevelgoogleproofqa}
+David Rein, Betty~Li Hou, Asa~Cooper Stickland, Jackson Petty, Richard~Yuanzhe Pang, Julien Dirani, Julian Michael, and Samuel~R. Bowman, \emph{Gpqa: A graduate-level google-proof q\&a benchmark}, 2023.
+
+\bibitem{shorinwa2024surveyuncertaintyquantificationlarge}
+Ola Shorinwa, Zhiting Mei, Justin Lidard, Allen~Z. Ren, and Anirudha Majumdar, \emph{A survey on uncertainty quantification of large language models: Taxonomy, open research challenges, and future directions}, 2024.
+
+\bibitem{sizov2024analysing}
+Fedor Sizov, Cristina Espa{\~n}a-Bonet, Josef van Genabith, Roy Xie, and Koel~Dutta Chowdhury, \emph{Analysing translation artifacts: A comparative study of {LLM}s, {NMT}s, and human translations}, Proceedings of the Ninth Conference on Machine Translation, 2024, pp.~1183--1199.
+
+\bibitem{wan2024sciqag}
+Yuwei Wan, Yixuan Liu, Aswathy Ajith, Clara Grazian, Bram Hoex, Wenjie Zhang, Chunyu Kit, Tong Xie, and Ian Foster, \emph{{SciQAG}: A framework for auto-generated science question answering dataset with fine-grained evaluation}, arXiv preprint arXiv:2405.09939 (2024).
+
+\bibitem{wang2025mmlu}
+Yubo Wang, Xueguang Ma, Ge~Zhang, Yuansheng Ni, Abhranil Chandra, Shiguang Guo, Weiming Ren, Aaran Arulraj, Xuan He, Ziyan Jiang, et~al., \emph{{MMLU-Pro}: A more robust and challenging multi-task language understanding benchmark}, Advances in Neural Information Processing Systems \textbf{37} (2024), 95266--95290.
+
+\bibitem{wang2024wordsequenceentropyuncertaintyestimation}
+Zhiyuan Wang, Jinhao Duan, Chenxi Yuan, Qingyu Chen, Tianlong Chen, Yue Zhang, Ren Wang, Xiaoshuang Shi, and Kaidi Xu, \emph{Word-sequence entropy: Towards uncertainty estimation in free-form medical question answering applications and beyond}, 2024.
+
+\bibitem{yang2024logulongformgenerationuncertainty}
+Ruihan Yang, Caiqi Zhang, Zhisong Zhang, Xinting Huang, Sen Yang, Nigel Collier, Dong Yu, and Deqing Yang, \emph{Logu: Long-form generation with uncertainty expressions}, 2024.
+
+\bibitem{zheng2023judging}
+Lianmin Zheng, Wei-Lin Chiang, Ying Sheng, Siyuan Zhuang, Zhanghao Wu, Yonghao Zhuang, Zi~Lin, Zhuohan Li, Dacheng Li, Eric Xing, et~al., \emph{Judging {LLM}-as-a-judge with {MT}-bench and chatbot arena}, Advances in Neural Information Processing Systems \textbf{36} (2023), 46595--46623.
+
+\end{thebibliography}

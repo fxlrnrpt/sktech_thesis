@@ -6,241 +6,338 @@ This chapter presents the experimental setup and results for each of the three s
 
 \subsection{Experimental Setup}
 
-\textbf{Dataset}: We use the MMLU-Pro benchmark~\cite{wang2024mmlu}, which contains challenging multiple-choice questions across 14 diverse domains including Biology, Chemistry, Computer Science, Economics, Engineering, Health, History, Law, Math, Philosophy, Physics, Psychology, Business, and Other.
+\textbf{Dataset}: We use the MMLU-Pro benchmark~\cite{wang2024mmlu}, which contains approximately 12,000 challenging multiple-choice questions with 10 answer choices across 14 diverse domains including Biology, Chemistry, Computer Science, Economics, Engineering, Health, History, Law, Math, Philosophy, Physics, Psychology, Business, and Other.
 
-\textbf{Models}: We evaluate several large language models:
+\textbf{Models}: We evaluate four decoder-only large language models:
 \begin{itemize}
-    \item Llama-3-8B and Llama-3-70B~\cite{touvron2023llama}
-    \item Qwen-2.5 family (1.5B, 3B, 7B, 14B, 32B, 72B)~\cite{qwen2024}
-    \item Mistral-7B~\cite{jiang2023mistral}
+    \item Phi-4~\cite{abdin2024phi}
+    \item Mistral-Small-24B-Base-2501~\cite{jiang2023mistral}
+    \item Qwen-2.5-1.5B~\cite{qwen2024}
+    \item Qwen-2.5-72B~\cite{qwen2024}
 \end{itemize}
 
-\textbf{Metrics}: We measure the predictive power of entropy features using ROC-AUC for distinguishing correct from incorrect answers.
+\textbf{Metrics}: We measure the predictive power of entropy features using ROC-AUC for distinguishing correct from incorrect answers, stratified by subject domain and reasoning requirement.
 
 \subsection{Results}
 
-Table~\ref{tab:entropy_results} presents the ROC-AUC scores for predicting incorrect answers using the max-to-min entropy ratio feature across different domains.
+Table~\ref{tab:entropy_results} presents the ROC-AUC scores for predicting incorrect answers using single-token answer entropy across different domains and reasoning complexity levels for all four models.
 
 \begin{table}[!htb]
-    \centering
-    \caption{ROC-AUC scores for predicting incorrect answers using max-to-min entropy ratio on MMLU-Pro. Higher values indicate better discrimination between correct and incorrect answers.}
-    \begin{tabular}{lccc}
-    \toprule
-    Domain & Llama-3-8B & Qwen-2.5-7B & Qwen-2.5-72B \\
-    \midrule
-    Biology & 0.78 & 0.81 & $\mathbf{0.83}$ \\
-    Chemistry & 0.72 & 0.75 & 0.79 \\
-    Computer Science & 0.69 & 0.73 & 0.77 \\
-    Economics & 0.71 & 0.74 & 0.78 \\
-    Math & 0.65 & 0.68 & 0.72 \\
-    Physics & 0.67 & 0.71 & 0.76 \\
-    \midrule
-    Average & 0.70 & 0.74 & 0.78 \\
-    \bottomrule
-    \end{tabular}
-    \label{tab:entropy_results}
+\centering
+\caption{ROC AUC performance comparison across categories and models using single-token answer entropy.}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{lcccc}
+\toprule
+Category & Phi-4 & Mistral & Qwen 1.5B & Qwen 72B \\
+\midrule
+Biology & \textbf{0.73} & \textbf{0.65} & \textbf{0.79} & \textbf{0.83} \\
+Economics & 0.65 & 0.58 & 0.73 & 0.80 \\
+Philosophy & 0.65 & 0.49 & 0.61 & 0.74 \\
+Physics & 0.63 & 0.44 & 0.64 & 0.74 \\
+Computer Science & 0.61 & 0.56 & 0.69 & 0.78 \\
+Psychology & 0.61 & 0.65 & 0.77 & 0.77 \\
+Chemistry & 0.61 & 0.44 & 0.64 & 0.70 \\
+Health & 0.60 & 0.55 & 0.67 & 0.77 \\
+Business & 0.58 & 0.52 & 0.64 & 0.74 \\
+History & 0.58 & 0.58 & 0.65 & 0.67 \\
+Engineering & 0.58 & 0.44 & 0.64 & 0.73 \\
+Other & 0.56 & 0.53 & 0.66 & 0.78 \\
+Math & 0.55 & 0.54 & 0.63 & 0.73 \\
+Law & 0.50 & 0.57 & 0.58 & 0.69 \\
+\midrule
+No Reasoning & \textbf{0.59} & \textbf{0.59} & \textbf{0.72} & \textbf{0.79} \\
+Yes Reasoning & 0.56 & 0.52 & 0.68 & 0.76 \\
+Reasoning (Low) & 0.59 & 0.58 & 0.71 & 0.79 \\
+Reasoning (Med) & 0.57 & 0.52 & 0.69 & 0.76 \\
+Reasoning (High) & 0.53 & 0.53 & 0.61 & 0.73 \\
+\midrule
+Overall & 0.58 & 0.52 & 0.70 & 0.77 \\
+\bottomrule
+\end{tabular}
+\label{tab:entropy_results}
 \end{table}
+
+Figure~\ref{fig:roc_auc_by_subject} visualizes the ROC-AUC values across subjects for all four models, and Figure~\ref{fig:roc_auc_by_reasoning} shows the breakdown by reasoning requirement.
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=\textwidth]{images/paper1/models_compare_roc_auc.pdf}
+    \caption{ROC-AUC for error prediction by subject for four different LLMs.}
+    \label{fig:roc_auc_by_subject}
+\end{figure}
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=\textwidth]{images/paper1/models_compare_reasoning.pdf}
+    \caption{ROC-AUC by reasoning requirement for four different LLMs.}
+    \label{fig:roc_auc_by_reasoning}
+\end{figure}
+
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/paper1/models_compare_calibration.pdf}
+    \caption{Calibration of LLMs based on their entropy. Systematic overconfidence is observed in high-certainty regimes across all models.}
+    \label{fig:calibration}
+\end{figure}
 
 Key findings:
 \begin{enumerate}
-    \item The max-to-min entropy ratio consistently outperforms other entropy features (mean, max, min, standard deviation) across all domains.
-    \item Larger models show better calibration between entropy patterns and correctness.
-    \item Domain-specific performance varies, with Biology showing the highest ROC-AUC (0.83) and Math showing the lowest (0.72).
-    \item The Model-as-Judge approach provides complementary signal that can be combined with entropy features for improved prediction.
+    \item Entropy is an effective predictor of answer correctness in knowledge-dependent domains (Biology ROC-AUC 0.83 for Qwen-72B), but performance decreases for reasoning-heavy domains (Math ROC-AUC 0.55 for Phi-4).
+    \item Larger models show better calibration: Qwen-72B achieves overall ROC-AUC of 0.77 compared to 0.52 for Mistral. Calibration analysis (Figure~\ref{fig:calibration}) reveals systematic overconfidence across all models, particularly in high-certainty regimes.
+    \item Low entropy is a better predictor when no reasoning is required (ROC-AUC 0.79 for Qwen-72B) compared to high-reasoning questions (0.73), suggesting entropy primarily captures \textit{knowledge uncertainty} rather than \textit{reasoning difficulty}.
+    \item The Model-as-Judge (MASJ) approach performs near-randomly with ROC-AUC values around 0.49--0.57, indicating it captures different aspects of an LLM's confidence that are irrelevant to question complexity.
 \end{enumerate}
-
-\subsection{Comparison with Baselines}
-
-We compare our entropy-based approach with baseline uncertainty measures:
-
-\begin{table}[!htb]
-    \centering
-    \caption{Comparison of uncertainty estimation methods (average ROC-AUC across domains).}
-    \begin{tabular}{lc}
-    \toprule
-    Method & ROC-AUC \\
-    \midrule
-    First-token probability & 0.62 \\
-    Mean sequence probability & 0.65 \\
-    Verbalized confidence & 0.68 \\
-    Mean entropy & 0.71 \\
-    Max-to-min entropy ratio (ours) & $\mathbf{0.78}$ \\
-    \bottomrule
-    \end{tabular}
-    \label{tab:baseline_comparison}
-\end{table}
 
 \section{Study 2: Language Steering in Latent Space}
 
 \subsection{Experimental Setup}
 
-\textbf{Models}: We evaluate multilingual models:
+\textbf{Models}: We evaluate two multilingual models:
 \begin{itemize}
-    \item Llama-3-8B-Instruct
-    \item Qwen-2.5-7B-Instruct
-    \item Mistral-7B-Instruct-v0.3
+    \item Qwen2.5-1.5B (28 layers)
+    \item Llama-3.2-1B (16 layers)
 \end{itemize}
 
-\textbf{Languages}: We focus on English-Russian language pairs, as code-switching between these languages is common in multilingual deployments.
+\textbf{Languages}: We test four language pairs: English--Chinese, English--Spanish, English--Russian, and English--Hindi.
 
-\textbf{Dataset}: We collect hidden states from 1,000 text samples per language from Wikipedia and news articles.
-
-\textbf{Metrics}:
-\begin{itemize}
-    \item Classification accuracy for language direction identification
-    \item KL divergence reduction for code-switching mitigation
-    \item Perplexity change to measure generation quality
-\end{itemize}
+\textbf{Datasets}: We use the Flores Plus dataset~\cite{nllb2024} with 50 parallel samples per language for PCA fitting and 100 for validation. For steering evaluation, we use 2,467 TED Talks samples with artificial code-switching (texts begin in English and switch mid-sentence to the target language).
 
 \subsection{Language Direction Identification}
 
-Table~\ref{tab:lang_classification} shows the classification accuracy for identifying language from hidden state projections.
+Table~\ref{tab:lang_classification} shows the classification accuracy for identifying language from hidden state projections onto the first principal component.
 
 \begin{table}[!htb]
     \centering
-    \caption{Language classification accuracy using PCA-identified directions at different layers.}
-    \begin{tabular}{lccc}
+    \caption{Last layer language classifier accuracy using PCA-identified directions.}
+    \begin{tabular}{lcc}
     \toprule
-    Model & Layer 8 & Layer 16 & Layer 24 \\
+    Language pair & Qwen & Llama \\
     \midrule
-    Llama-3-8B & 0.92 & $\mathbf{0.98}$ & 0.96 \\
-    Qwen-2.5-7B & 0.94 & $\mathbf{0.99}$ & 0.97 \\
-    Mistral-7B & 0.91 & $\mathbf{0.97}$ & 0.95 \\
+    English -- Chinese & 0.98 & 0.98 \\
+    English -- Spanish & 0.96 & 0.96 \\
+    English -- Russian & 0.99 & 0.99 \\
+    English -- Hindi & 0.98 & 1.00 \\
     \bottomrule
     \end{tabular}
     \label{tab:lang_classification}
 \end{table}
 
+Figure~\ref{fig:lang_maps} shows the final-layer PCA language maps for both models, revealing tight language-specific clusters.
+
+\begin{figure}[!htb]
+    \centering
+    \begin{minipage}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/paper3/language_map/multi/qwen/layer_28.pdf}
+        \subcaption{Final layer language map (Qwen)}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/paper3/language_map/multi/llama/layer_16.pdf}
+        \subcaption{Final layer language map (Llama)}
+    \end{minipage}
+    \caption{Final-layer embeddings projected onto the first two principal components. Languages organize into tight, language-specific clusters with clear boundaries.}
+    \label{fig:lang_maps}
+\end{figure}
+
 Results show that:
 \begin{enumerate}
-    \item Language directions can be reliably identified with 95--99\% accuracy.
-    \item Middle layers (around layer 16 for 32-layer models) provide the best separation.
-    \item The first principal component captures the majority of language-related variance.
+    \item Language directions can be reliably identified with 96--100\% accuracy using a simple logistic regression classifier on the first principal component.
+    \item Language identity concentrates in final layers with near-perfect linear separability.
+    \item English--Spanish shows slightly lower accuracy (0.96) due to these languages being more closely related within the Indo-European family.
 \end{enumerate}
 
-\subsection{Code-Switching Reduction}
+\subsection{Code-Switching Reduction: Distributional Evaluation}
 
-We evaluate steering effectiveness by prompting models in Russian and measuring the fraction of non-Russian tokens in the response.
+We evaluate steering effectiveness by comparing the next-token prediction distribution of the steered model against the English baseline.
 
 \begin{table}[!htb]
     \centering
-    \caption{Code-switching reduction through activation steering. KL divergence measures distance from target language distribution (lower is better).}
-    \begin{tabular}{lccc}
+    \caption{KL divergence reduction through activation steering (no steering $\rightarrow$ steering). Lower is better.}
+    \begin{tabular}{lcc}
     \toprule
-    Model & Baseline KL & Steered KL & Reduction \\
+    Language pair & Qwen & Llama \\
     \midrule
-    Llama-3-8B & 0.42 & 0.21 & 50\% \\
-    Qwen-2.5-7B & 0.38 & 0.17 & $\mathbf{55\%}$ \\
-    Mistral-7B & 0.45 & 0.24 & 47\% \\
+    English -- Chinese & 10.15 $\rightarrow$ 4.52 & 9.05 $\rightarrow$ 4.77 \\
+    English -- Spanish & 7.25 $\rightarrow$ 4.90 & 6.52 $\rightarrow$ 3.48 \\
+    English -- Russian & 8.70 $\rightarrow$ 5.40 & 7.77 $\rightarrow$ 3.49 \\
+    English -- Hindi & 9.60 $\rightarrow$ 7.02 & 8.06 $\rightarrow$ 6.13 \\
     \bottomrule
     \end{tabular}
-    \label{tab:steering_results}
+    \label{tab:steering_kl}
 \end{table}
 
-Steering reduces code-switching by 47--55\% without significant degradation in generation quality (perplexity increase $<5\%$).
+\begin{table}[!htb]
+    \centering
+    \caption{Cosine similarity between steered and English baseline distributions (no steering $\rightarrow$ steering, higher is better).}
+    \begin{tabular}{lcc}
+    \toprule
+    Language pair & Qwen & Llama \\
+    \midrule
+    English -- Chinese & 0.02 $\rightarrow$ 0.22 & 0.05 $\rightarrow$ 0.21 \\
+    English -- Spanish & 0.12 $\rightarrow$ 0.18 & 0.12 $\rightarrow$ 0.29 \\
+    English -- Russian & 0.09 $\rightarrow$ 0.23 & 0.10 $\rightarrow$ 0.31 \\
+    English -- Hindi & 0.04 $\rightarrow$ 0.07 & 0.06 $\rightarrow$ 0.16 \\
+    \bottomrule
+    \end{tabular}
+    \label{tab:steering_cos}
+\end{table}
+
+\begin{table}[!htb]
+    \centering
+    \caption{Best steering strength coefficient $s$ (KL-optimized via grid search).}
+    \begin{tabular}{lcc}
+    \toprule
+    Language pair & Qwen & Llama \\
+    \midrule
+    English -- Chinese & $-3.2$ & $-5.0$ \\
+    English -- Spanish & $-2.8$ & $-3.7$ \\
+    English -- Russian & $-2.2$ & $-3.5$ \\
+    English -- Hindi & $+5.0$ & $-3.6$ \\
+    \bottomrule
+    \end{tabular}
+    \label{tab:steering_coeff}
+\end{table}
+
+Steering reduces KL divergence by 25--55\% across language pairs and models (38\% average for Qwen, 43\% for Llama). The method shows strongest performance for typologically distant pairs: English--Chinese achieves 55\% KL reduction on Qwen, while English--Russian achieves 55\% on Llama. English--Hindi remains the weakest pair (24--27\% reduction). Notably, the optimal coefficient for Qwen English--Hindi is positive ($+5.0$), indicating a reversed PCA direction for this pair, possibly reflecting tokenization asymmetries in the treatment of Devanagari script.
+
+\subsection{Code-Switching Reduction: Generation-Based Evaluation}
+
+We complement the distributional analysis with generation-based evaluation on Llama-3.2-1B. For 500 TED Talks samples per language pair, we generate 100-token continuations and measure code-switching using standard metrics. All steered vs.\ unsteered differences are significant at $p < 0.001$ (Wilcoxon signed-rank test).
+
+\begin{table}[!htb]
+    \centering
+    \small
+    \caption{Generation-based code-switching metrics (Llama-3.2-1B, $n=500$). English-only baseline: CSI $= 0.02$.}
+    \begin{tabular}{lcccc}
+    \toprule
+    & \multicolumn{2}{c}{KL-optimized} & \multicolumn{2}{c}{CSI-optimized} \\
+    \cmidrule(lr){2-3} \cmidrule(lr){4-5}
+    Language pair & CSI ($\downarrow$) & TLC ($\uparrow$) & CSI ($\downarrow$) & TLC ($\uparrow$) \\
+    \midrule
+    \multicolumn{5}{l}{\textit{Unsteered (code-switched input, no steering):}} \\
+    English -- Chinese  & \multicolumn{2}{c}{0.64 / 0.36} & \multicolumn{2}{c}{---} \\
+    English -- Spanish  & \multicolumn{2}{c}{0.62 / 0.38} & \multicolumn{2}{c}{---} \\
+    English -- Russian  & \multicolumn{2}{c}{0.59 / 0.41} & \multicolumn{2}{c}{---} \\
+    English -- Hindi    & \multicolumn{2}{c}{0.81 / 0.19} & \multicolumn{2}{c}{---} \\
+    \midrule
+    \multicolumn{5}{l}{\textit{Steered:}} \\
+    English -- Chinese  & 0.03 & 0.97 & 0.03 & 0.97 \\
+    English -- Spanish  & 0.23 & 0.77 & 0.11 & 0.89 \\
+    English -- Russian  & 0.02 & 0.98 & 0.01 & 0.99 \\
+    English -- Hindi    & 0.04 & 0.96 & 0.01 & 0.99 \\
+    \bottomrule
+    \end{tabular}
+    \label{tab:gen_results}
+\end{table}
+
+With KL-optimized coefficients, CSI drops by 63--95\% across language pairs. Target Language Consistency exceeds 0.77 across all pairs, with English--Chinese and English--Russian achieving near-perfect consistency (TLC $> 0.97$). However, steering coefficients are highly fragile: small changes in magnitude can shift the model from fluent output to degenerate repetition, revealing a sharp trade-off between language control and generation fluency.
 
 \section{Study 3: Complexity-Aware Fine-Tuning}
 
 \subsection{Experimental Setup}
 
-\textbf{Dataset}: MMLU-Pro training split, containing approximately 12,000 examples across 14 domains.
+\textbf{Datasets}:
+\begin{itemize}
+    \item MMLU-Pro: multiple-choice question answering across 14 domains ($\sim$12,000 examples)
+    \item GSM8K: 8.5K grade school math word problems~\cite{cobbe2021gsm8k}
+    \item MedMCQA: large-scale medical entrance exam questions~\cite{pmlr-v174-pal22a}
+\end{itemize}
 
 \textbf{Models}:
 \begin{itemize}
-    \item Student models: Qwen-2.5-1.5B, Qwen-2.5-3B
-    \item Teacher model: Qwen-2.5-72B-Instruct
+    \item Student models: Qwen2.5-3B, Phi-4-Mini, LLama-3.2-3B
+    \item Teacher model ensemble: DeepSeek-V3-0324, Qwen-3-235B, Llama-4-Maverick
 \end{itemize}
 
 \textbf{Baselines}:
 \begin{itemize}
-    \item Full SFT: Train on all examples with direct supervision
-    \item Random subset: Train on randomly selected subset matching our data budget
-    \item CoT distillation only: Apply chain-of-thought distillation to all examples
+    \item \textbf{SFT}: Standard supervised fine-tuning on all data without complexity split
+    \item \textbf{Curriculum}: Curriculum-based SFT (3 epochs easy, 3 medium, 4 hard)
+    \item \textbf{Distillation}: Full chain-of-thought distillation on all data
+    \item \textbf{Alternative}: SFT on hard data, then CoT distillation on easy/medium data
 \end{itemize}
-
-\textbf{Metrics}: Accuracy on MMLU-Pro test set.
 
 \subsection{Main Results}
 
-Table~\ref{tab:finetuning_results} presents the main fine-tuning results.
+Table~\ref{tab:finetuning_10epochs} presents fine-tuning results after 10 epochs on MMLU-Pro, showing both accuracy and total tokens processed.
 
 \begin{table}[!htb]
     \centering
-    \caption{Accuracy comparison of fine-tuning approaches on MMLU-Pro test set.}
-    \begin{tabular}{lcccc}
+    \caption{Accuracy / tokens processed for complexity-aware fine-tuning pipelines after 10 epochs (MMLU-Pro).}
+    \begin{tabular}{lcc}
     \toprule
-    Method & Data Used & Qwen-2.5-1.5B & Qwen-2.5-3B \\
+    Method & Qwen 3B & Phi4-mini \\
     \midrule
-    Base model & -- & 0.28 & 0.35 \\
-    Full SFT & 100\% & 0.39 & 0.51 \\
-    Random subset & 19\% & 0.34 & 0.44 \\
-    CoT distill (all) & 100\% & 0.45 & 0.57 \\
-    Complexity-aware (ours) & 19\% & $\mathbf{0.52}$ & $\mathbf{0.64}$ \\
+    SFT & 0.42 / 29k & 0.55 / 27k \\
+    Curriculum & 0.45 / 29k & 0.54 / 27k \\
+    Distillation & \underline{0.49} / 1.97m & \textbf{0.63} / 1.51m \\
+    Alternative & 0.47 / 1.5m & 0.58 / 1.2m \\
+    Pipeline (ours) & \textbf{0.50} / \textbf{399k} & \underline{0.60} / \textbf{268k} \\
     \bottomrule
     \end{tabular}
-    \label{tab:finetuning_results}
+    \label{tab:finetuning_10epochs}
 \end{table}
+
+Table~\ref{tab:finetuning_20epochs} shows extended results after 20 epochs, including generalization to GSM8K and MedMCQA datasets.
+
+\begin{table}[!htb]
+    \centering
+    \caption{Accuracy for complexity-aware fine-tuning pipelines after 20 epochs.}
+    \begin{tabular}{lcccccc}
+    \toprule
+    & \multicolumn{2}{c}{MMLU Pro} & \multicolumn{2}{c}{GSM8K} & \multicolumn{2}{c}{MedMCQA} \\
+    \cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7}
+    Method & Qwen 3B & Phi4-mini & LLama 3B & Phi4-mini & LLama 3B & Phi4-mini \\
+    \midrule
+    SFT & 0.39 & 0.51 & 0.13 & 0.19 & 0.51 & 0.51 \\
+    Distillation & \underline{0.50} & \underline{0.63} & \underline{0.79} & \underline{0.89} & \underline{0.56} & \underline{0.57} \\
+    Pipeline (ours) & \textbf{0.52} & \textbf{0.64} & \textbf{0.82} & \textbf{0.89} & \textbf{0.56} & \textbf{0.58} \\
+    \bottomrule
+    \end{tabular}
+    \label{tab:finetuning_20epochs}
+\end{table}
+
+\begin{figure}[!htb]
+    \centering
+    \begin{minipage}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/paper2/qwen_pipeline_20epochs.pdf}
+        \subcaption{Qwen 3B (MMLU-Pro, 20 epochs)}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/paper2/phi_pipeline_20epochs.pdf}
+        \subcaption{Phi-4-Mini (MMLU-Pro, 20 epochs)}
+    \end{minipage}
+    \caption{Accuracy dynamics for fine-tuning pipelines over 20 epochs. The complexity-aware pipeline (blue) surpasses full distillation (green dashed) while using 79--82\% less training data.}
+    \label{fig:training_curves}
+\end{figure}
 
 Key findings:
 \begin{enumerate}
-    \item Our complexity-aware approach achieves the highest accuracy while using only 19\% of the training data.
-    \item Compared to full SFT, we improve accuracy from 0.39 to 0.52 (+33\%) for Qwen-2.5-1.5B and from 0.51 to 0.64 (+25\%) for Qwen-2.5-3B.
-    \item Even compared to full CoT distillation on all data, our targeted approach achieves higher accuracy with 81\% less data.
+    \item Our complexity-aware pipeline matches or outperforms full distillation while using 79--82\% less training data (tokens processed).
+    \item After 20 epochs (Figure~\ref{fig:training_curves}), the pipeline surpasses all baselines: Qwen-3B achieves 0.52 vs.\ 0.50 (distillation) and 0.39 (SFT); Phi-4-Mini achieves 0.64 vs.\ 0.63 (distillation) and 0.51 (SFT).
+    \item The method generalizes across datasets: on GSM8K, LLama-3B achieves 0.82 (pipeline) vs.\ 0.79 (distillation) and 0.13 (SFT).
+    \item The pipeline shows a continued uptrend in training accuracy, while full distillation plateaus, suggesting better utilization of training data.
 \end{enumerate}
 
-\subsection{Ablation Study}
+\subsection{Sensitivity Study}
 
-We ablate the key components of our approach:
+\textbf{Complexity metric selection.} We compare single-token answer entropy against MASJ reasoning score and cross-entropy as complexity metrics. Single-token entropy yields the best ROC-AUC (0.72 for Qwen-3B without domain split) and provides clearer separation between easy and hard examples during SFT training. MASJ reasoning scores achieve ROC-AUC around 0.50--0.57, making them unsuitable for complexity estimation.
 
-\begin{table}[!htb]
-    \centering
-    \caption{Ablation study on Qwen-2.5-1.5B.}
-    \begin{tabular}{lc}
-    \toprule
-    Configuration & Accuracy \\
-    \midrule
-    Full method & $\mathbf{0.52}$ \\
-    Without stratification (CoT all) & 0.45 \\
-    Without CoT (SFT all) & 0.39 \\
-    Easy examples only (SFT) & 0.36 \\
-    Hard examples only (CoT) & 0.48 \\
-    \bottomrule
-    \end{tabular}
-    \label{tab:ablation}
-\end{table}
-
-The ablation confirms that both stratification and the combination of SFT (for easy examples) and CoT distillation (for hard examples) are necessary for optimal performance.
-
-\subsection{Complexity Threshold Analysis}
-
-We analyze the effect of the complexity threshold $\tau$ on performance:
-
-\begin{table}[!htb]
-    \centering
-    \caption{Effect of complexity threshold (percentile of training data classified as ``hard'').}
-    \begin{tabular}{lccc}
-    \toprule
-    Hard Fraction & Easy (SFT) & Hard (CoT) & Accuracy \\
-    \midrule
-    10\% & 90\% & 10\% & 0.47 \\
-    20\% & 80\% & 20\% & $\mathbf{0.52}$ \\
-    30\% & 70\% & 30\% & 0.51 \\
-    50\% & 50\% & 50\% & 0.49 \\
-    \bottomrule
-    \end{tabular}
-    \label{tab:threshold}
-\end{table}
-
-Optimal performance is achieved when approximately 20\% of examples are classified as hard and receive CoT distillation.
+\textbf{Curriculum learning fragility.} Standard curriculum learning (easy $\rightarrow$ medium $\rightarrow$ hard ordering with SFT) shows extreme sensitivity to hyperparameters. Qwen-3B plateaus at lower accuracy with more training epochs, while Phi-4-Mini quickly overfits, demonstrating that naive complexity-aware ordering without differentiated training strategies is insufficient.
 
 \section{Summary of Results}
 
 Across all three studies, we demonstrate that signals from the model's forward pass provide valuable information for addressing key challenges in LLM deployment:
 
 \begin{enumerate}
-    \item \textbf{Uncertainty estimation}: Token-wise entropy patterns achieve ROC-AUC up to 0.83 for predicting answer correctness.
-    \item \textbf{Language control}: PCA-identified language directions enable 47--55\% reduction in code-switching.
-    \item \textbf{Training efficiency}: Complexity-aware fine-tuning improves accuracy while using 81\% less training data.
+    \item \textbf{Uncertainty estimation}: Token-wise entropy achieves ROC-AUC up to 0.83 for predicting answer correctness in knowledge-dependent domains, while MASJ performs near-randomly.
+    \item \textbf{Language control}: PCA-identified language directions enable 25--55\% reduction in distributional divergence and 63--95\% reduction in Code-Switching Index in generated text across four language pairs.
+    \item \textbf{Training efficiency}: Complexity-aware fine-tuning matches or outperforms full distillation while using 79--82\% less training data, generalizing across three datasets and three model architectures.
 \end{enumerate}
 
 These results validate our central hypothesis that accessible signals from forward passes encode sufficient information to improve reliability, control, and efficiency without requiring architectural modifications.

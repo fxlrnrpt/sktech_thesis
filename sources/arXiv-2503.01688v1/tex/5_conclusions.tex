@@ -1,0 +1,12 @@
+\section{Conclusion and discussion}
+
+Risks in LLMs involve possible errors in answering questions with high confidence.
+One possible way to mitigate this problem is by highlighting those questions that, with high probability, would be answered incorrectly.
+We suggest using uncertainty estimations for LLMs to identify possible errors.
+For a more detailed analysis, the paper examines various subject areas, question types, and specific requirements for knowledge and reasoning.
+We explored how different uncertainty estimates for LLMs highlight potential errors of a model and examined various aspects of problems in QA to identify what type of problems a specific uncertainty estimate can highlight.
+Our focus was on reliable and popular methods, including a model as a judge and an entropy-based approach.
+
+Experimental evidence suggests that different uncertainty estimates perform differently across diverse subject areas.
+Our findings also demonstrate that the key factor is the varying composition of question sets within a subject area collected for a specific subject area: entropy performs much better when no reasoning or little reasoning is required. Thus, it primarily highlights the lack of the required knowledge. 
+The conclusion also depends on the model used: for reasoning-oriented, such as Qwen-72B, entropy better highlights the possibility of an error compared to Mistral.
