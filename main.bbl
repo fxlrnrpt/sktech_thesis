@@ -1,8 +1,7 @@
 \begin{thebibliography}{10}
 
 \bibitem{abdin2024phi}
-{\sc Abdin, M., Aneja, J., Behl, H., Bubeck, S., Eldan, R., Gunasekar, S.,
-  Harrison, M., Hewett, R.~J., Javaheripi, M., Kauffmann, P., et~al.}
+{\sc Abdin, M., Aneja, J., Behl, H., Bubeck, S., Eldan, R., Gunasekar, S., Harrison, M., Hewett, R.~J., Javaheripi, M., Kauffmann, P., et~al.}
 \newblock Phi-4 technical report.
 \newblock {\em arXiv preprint arXiv:2412.08905\/} (2024).
 
@@ -17,79 +16,64 @@
 \newblock {\em arXiv preprint arXiv:1704.03471\/} (2017).
 
 \bibitem{belrose2023leace}
-{\sc Belrose, N., Schneider-Joseph, D., Ravfogel, S., Cotterell, R., Raff, E.,
-  and Biderman, S.}
+{\sc Belrose, N., Schneider-Joseph, D., Ravfogel, S., Cotterell, R., Raff, E., and Biderman, S.}
 \newblock Leace: Perfect linear concept erasure in closed form.
 \newblock {\em Advances in Neural Information Processing Systems 36\/} (2023).
 
 \bibitem{bengio2009curriculum}
 {\sc Bengio, Y., Louradour, J., Collobert, R., and Weston, J.}
 \newblock Curriculum learning.
-\newblock In {\em Proceedings of the 26th annual international conference on
-  machine learning\/} (2009), pp.~41--48.
+\newblock In {\em Proceedings of the 26th annual international conference on machine learning\/} (2009), pp.~41--48.
 
 \bibitem{brown2020language}
-{\sc Brown, T., Mann, B., Ryder, N., Subbiah, M., Kaplan, J.~D., Dhariwal, P.,
-  Neelakantan, A., Shyam, P., Sastry, G., Askell, A., et~al.}
+{\sc Brown, T., Mann, B., Ryder, N., Subbiah, M., Kaplan, J.~D., Dhariwal, P., Neelakantan, A., Shyam, P., Sastry, G., Askell, A., et~al.}
 \newblock Language models are few-shot learners.
-\newblock {\em Advances in neural information processing systems 33\/} (2020),
-  1877--1901.
+\newblock {\em Advances in neural information processing systems 33\/} (2020), 1877--1901.
 
 \bibitem{chi2020finding}
 {\sc Chi, E.~A., Hewitt, J., and Manning, C.~D.}
 \newblock Finding universal grammatical relations in multilingual bert.
-\newblock In {\em Proceedings of the 58th Annual Meeting of the Association for
-  Computational Linguistics\/} (2020), pp.~5564--5577.
+\newblock In {\em Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics\/} (2020), pp.~5564--5577.
 
 \bibitem{cobbe2021gsm8k}
-{\sc Cobbe, K., Kosaraju, V., Bavarian, M., Chen, M., Jun, H., Kaiser, L.,
-  Plappert, M., Tworek, J., Hilton, J., Nakano, R., et~al.}
+{\sc Cobbe, K., Kosaraju, V., Bavarian, M., Chen, M., Jun, H., Kaiser, L., Plappert, M., Tworek, J., Hilton, J., Nakano, R., et~al.}
 \newblock Training verifiers to solve math word problems.
 \newblock {\em arXiv preprint arXiv:2110.14168\/} (2021).
 
 \bibitem{conneau2018you}
 {\sc Conneau, A., Kruszewski, G., Lample, G., Barrault, L., and Baroni, M.}
-\newblock What you can cram into a single \$\&!\#* vector: Probing sentence
-  embeddings for linguistic properties.
+\newblock What you can cram into a single \$\&!\#* vector: Probing sentence embeddings for linguistic properties.
 \newblock {\em arXiv preprint arXiv:1805.01070\/} (2018).
 
 \bibitem{conneau2020emerging}
 {\sc Conneau, A., Wu, S., Li, H., Zettlemoyer, L., and Stoyanov, V.}
 \newblock Emerging cross-lingual structure in pretrained language models.
-\newblock In {\em Proceedings of the 58th Annual Meeting of the Association for
-  Computational Linguistics\/} (2020), pp.~6022--6034.
+\newblock In {\em Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics\/} (2020), pp.~6022--6034.
 
 \bibitem{elhage2022toy}
-{\sc Elhage, N., Hume, T., Olsson, C., Schiefer, N., Henighan, T., Kravec, S.,
-  Hatfield-Dodds, Z., Lasenby, R., Drain, D., Chen, C., et~al.}
+{\sc Elhage, N., Hume, T., Olsson, C., Schiefer, N., Henighan, T., Kravec, S., Hatfield-Dodds, Z., Lasenby, R., Drain, D., Chen, C., et~al.}
 \newblock Toy models of superposition.
 \newblock {\em arXiv preprint arXiv:2209.10652\/} (2022).
 
 \bibitem{fadeeva2023lmpolygraph}
-{\sc Fadeeva, E., Vashurin, R., Tsvigun, A., Vazhentsev, A., Petrakov, S.,
-  Fedyanin, K., Vasilev, D., Goncharova, E., Panchenko, A., Panov, M., et~al.}
+{\sc Fadeeva, E., Vashurin, R., Tsvigun, A., Vazhentsev, A., Petrakov, S., Fedyanin, K., Vasilev, D., Goncharova, E., Panchenko, A., Panov, M., et~al.}
 \newblock Lm-polygraph: Uncertainty estimation for language models.
-\newblock In {\em Proceedings of the 2023 Conference on Empirical Methods in
-  Natural Language Processing: System Demonstrations\/} (2023), pp.~446--461.
+\newblock In {\em Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing: System Demonstrations\/} (2023), pp.~446--461.
 
 \bibitem{furlanello2018born}
 {\sc Furlanello, T., Lipton, Z., Tschannen, M., Itti, L., and Anandkumar, A.}
 \newblock Born again neural networks.
-\newblock {\em International Conference on Machine Learning\/} (2018),
-  1607--1616.
+\newblock {\em International Conference on Machine Learning\/} (2018), 1607--1616.
 
 \bibitem{gal2016dropout}
 {\sc Gal, Y., and Ghahramani, Z.}
-\newblock Dropout as a bayesian approximation: Representing model uncertainty
-  in deep learning.
-\newblock In {\em International conference on machine learning\/} (2016), PMLR,
-  pp.~1050--1059.
+\newblock Dropout as a bayesian approximation: Representing model uncertainty in deep learning.
+\newblock In {\em International conference on machine learning\/} (2016), PMLR, pp.~1050--1059.
 
 \bibitem{guo2017calibration}
 {\sc Guo, C., Pleiss, G., Sun, Y., and Weinberger, K.~Q.}
 \newblock On calibration of modern neural networks.
-\newblock In {\em International conference on machine learning\/} (2017), PMLR,
-  pp.~1321--1330.
+\newblock In {\em International conference on machine learning\/} (2017), PMLR, pp.~1321--1330.
 
 \bibitem{ho2023large}
 {\sc Ho, N., Schmid, L., and Yun, S.-Y.}
@@ -97,22 +81,17 @@
 \newblock {\em arXiv preprint arXiv:2212.10071\/} (2023).
 
 \bibitem{houlsby2019parameter}
-{\sc Houlsby, N., Giurgiu, A., Jastrzebski, S., Morrone, B., De~Laroussilhe,
-  Q., Gesmundo, A., Attariyan, M., and Gelly, S.}
+{\sc Houlsby, N., Giurgiu, A., Jastrzebski, S., Morrone, B., De~Laroussilhe, Q., Gesmundo, A., Attariyan, M., and Gelly, S.}
 \newblock Parameter-efficient transfer learning for nlp.
-\newblock In {\em International Conference on Machine Learning\/} (2019), PMLR,
-  pp.~2790--2799.
+\newblock In {\em International Conference on Machine Learning\/} (2019), PMLR, pp.~2790--2799.
 
 \bibitem{hsieh2023distilling}
-{\sc Hsieh, C.-Y., Li, C.-L., Yeh, C.-K., Nakhost, H., Fujii, Y., Ratner, A.,
-  Krishna, R., Chen, C.-Y., and Lee, T.~P.}
-\newblock Distilling step-by-step! outperforming larger language models with
-  less training data and smaller model sizes.
+{\sc Hsieh, C.-Y., Li, C.-L., Yeh, C.-K., Nakhost, H., Fujii, Y., Ratner, A., Krishna, R., Chen, C.-Y., and Lee, T.~P.}
+\newblock Distilling step-by-step! outperforming larger language models with less training data and smaller model sizes.
 \newblock {\em arXiv preprint arXiv:2305.02301\/} (2023).
 
 \bibitem{hu2022lora}
-{\sc Hu, E.~J., Shen, Y., Wallis, P., Allen-Zhu, Z., Li, Y., Wang, S., Wang,
-  L., and Chen, W.}
+{\sc Hu, E.~J., Shen, Y., Wallis, P., Allen-Zhu, Z., Li, Y., Wang, S., Wang, L., and Chen, W.}
 \newblock Lora: Low-rank adaptation of large language models.
 \newblock {\em arXiv preprint arXiv:2106.09685\/} (2022).
 
@@ -122,58 +101,48 @@
 \newblock {\em ACL 2019\/} (2019).
 
 \bibitem{ji2023survey}
-{\sc Ji, Z., Lee, N., Frieske, R., Yu, T., Su, D., Xu, Y., Ishii, E., Bang,
-  Y.~J., Madotto, A., and Fung, P.}
+{\sc Ji, Z., Lee, N., Frieske, R., Yu, T., Su, D., Xu, Y., Ishii, E., Bang, Y.~J., Madotto, A., and Fung, P.}
 \newblock Survey of hallucination in natural language generation.
 \newblock {\em ACM Computing Surveys 55}, 12 (2023), 1--38.
 
 \bibitem{jiang2023mistral}
-{\sc Jiang, A.~Q., Sablayrolles, A., Mensch, A., Bamford, C., Chaplot, D.~S.,
-  Casas, D. d.~l., Bressand, F., Lengyel, G., Lample, G., Saulnier, L., et~al.}
+{\sc Jiang, A.~Q., Sablayrolles, A., Mensch, A., Bamford, C., Chaplot, D.~S., Casas, D. d.~l., Bressand, F., Lengyel, G., Lample, G., Saulnier, L., et~al.}
 \newblock Mistral 7b.
 \newblock {\em arXiv preprint arXiv:2310.06825\/} (2023).
 
 \bibitem{jiang2021can}
 {\sc Jiang, Z., Araki, J., Ding, H., and Neubig, G.}
-\newblock How can we know when language models know? on the calibration of
-  language models for question answering.
-\newblock {\em Transactions of the Association for Computational Linguistics
-  9\/} (2021), 962--977.
+\newblock How can we know when language models know? on the calibration of language models for question answering.
+\newblock {\em Transactions of the Association for Computational Linguistics 9\/} (2021), 962--977.
 
 \bibitem{kadavath2022language}
-{\sc Kadavath, S., Conerly, T., Askell, A., Henighan, T., Drain, D., Perez, E.,
-  Schiefer, N., Hatfield-Dodds, Z., DasSarma, N., Tran-Johnson, E., et~al.}
+{\sc Kadavath, S., Conerly, T., Askell, A., Henighan, T., Drain, D., Perez, E., Schiefer, N., Hatfield-Dodds, Z., DasSarma, N., Tran-Johnson, E., et~al.}
 \newblock Language models (mostly) know what they know.
 \newblock {\em arXiv preprint arXiv:2207.05221\/} (2022).
 
 \bibitem{kim2024strategic}
 {\sc Kim, J., and Lee, J.}
-\newblock Strategic data ordering: Enhancing large language model performance
-  through curriculum learning.
+\newblock Strategic data ordering: Enhancing large language model performance through curriculum learning.
 \newblock {\em arXiv preprint arXiv:2405.07490\/} (2024).
 
 \bibitem{koh2017understanding}
 {\sc Koh, P.~W., and Liang, P.}
 \newblock Understanding black-box predictions via influence functions.
-\newblock In {\em International conference on machine learning\/} (2017), PMLR,
-  pp.~1885--1894.
+\newblock In {\em International conference on machine learning\/} (2017), PMLR, pp.~1885--1894.
 
 \bibitem{kuhn2023semantic}
 {\sc Kuhn, L., Gal, Y., and Farquhar, S.}
-\newblock Semantic uncertainty: Linguistic invariances for uncertainty
-  estimation in natural language generation.
+\newblock Semantic uncertainty: Linguistic invariances for uncertainty estimation in natural language generation.
 \newblock {\em arXiv preprint arXiv:2302.09664\/} (2023).
 
 \bibitem{lakshminarayanan2017simple}
 {\sc Lakshminarayanan, B., Pritzel, A., and Blundell, C.}
-\newblock Simple and scalable predictive uncertainty estimation using deep
-  ensembles.
+\newblock Simple and scalable predictive uncertainty estimation using deep ensembles.
 \newblock {\em Advances in neural information processing systems 30\/} (2017).
 
 \bibitem{li2024inference}
 {\sc Li, K., Patel, O., Vi{\'e}gas, F., Pfister, H., and Wattenberg, M.}
-\newblock Inference-time intervention: Eliciting truthful answers from a
-  language model.
+\newblock Inference-time intervention: Eliciting truthful answers from a language model.
 \newblock {\em Advances in Neural Information Processing Systems 36\/} (2024).
 
 \bibitem{lin2022teaching}
@@ -213,26 +182,21 @@
 
 \bibitem{pmlr-v174-pal22a}
 {\sc Pal, A., Umapathi, L.~K., and Sankarasubbu, M.}
-\newblock Medmcqa: A large-scale multi-subject multi-choice dataset for medical
-  domain question answering.
-\newblock In {\em Proceedings of the Conference on Health, Inference, and
-  Learning\/} (2022), PMLR, pp.~248--260.
+\newblock Medmcqa: A large-scale multi-subject multi-choice dataset for medical domain question answering.
+\newblock In {\em Proceedings of the Conference on Health, Inference, and Learning\/} (2022), PMLR, pp.~248--260.
 
 \bibitem{park2023linear}
 {\sc Park, K., Choe, Y.~J., and Veitch, V.}
-\newblock The linear representation hypothesis and the geometry of large
-  language models.
+\newblock The linear representation hypothesis and the geometry of large language models.
 \newblock {\em arXiv preprint arXiv:2311.03658\/} (2023).
 
 \bibitem{paszke2019pytorch}
-{\sc Paszke, A., Gross, S., Massa, F., Lerer, A., Bradbury, J., Chanan, G.,
-  Killeen, T., Lin, Z., Gimelshein, N., Antiga, L., et~al.}
+{\sc Paszke, A., Gross, S., Massa, F., Lerer, A., Bradbury, J., Chanan, G., Killeen, T., Lin, Z., Gimelshein, N., Antiga, L., et~al.}
 \newblock Pytorch: An imperative style, high-performance deep learning library.
 \newblock {\em Advances in neural information processing systems 32\/} (2019).
 
 \bibitem{pfeiffer2020adapterhub}
-{\sc Pfeiffer, J., R{\"u}ckl{\'e}, A., Poth, C., Kamath, A., Vuli{\'c}, I.,
-  Ruder, S., Cho, K., and Gurevych, I.}
+{\sc Pfeiffer, J., R{\"u}ckl{\'e}, A., Poth, C., Kamath, A., Vuli{\'c}, I., Ruder, S., Cho, K., and Gurevych, I.}
 \newblock Adapterhub: A framework for adapting transformers.
 \newblock {\em arXiv preprint arXiv:2007.07779\/} (2020).
 
@@ -243,41 +207,32 @@
 
 \bibitem{ravfogel2020null}
 {\sc Ravfogel, S., Elazar, Y., Gonen, H., Twiton, M., and Goldberg, Y.}
-\newblock Null it out: Guarding protected attributes by iterative nullspace
-  projection.
-\newblock In {\em Proceedings of the 58th Annual Meeting of the Association for
-  Computational Linguistics\/} (2020), pp.~7237--7256.
+\newblock Null it out: Guarding protected attributes by iterative nullspace projection.
+\newblock In {\em Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics\/} (2020), pp.~7237--7256.
 
 \bibitem{settles2009active}
 {\sc Settles, B.}
 \newblock Active learning literature survey.
-\newblock {\em University of Wisconsin-Madison Department of Computer
-  Sciences\/} (2009).
+\newblock {\em University of Wisconsin-Madison Department of Computer Sciences\/} (2009).
 
 \bibitem{touvron2023llama}
-{\sc Touvron, H., Martin, L., Stone, K., Albert, P., Almahairi, A., Babaei, Y.,
-  Bashlykov, N., Batra, S., Bhargava, P., Bhosale, S., et~al.}
+{\sc Touvron, H., Martin, L., Stone, K., Albert, P., Almahairi, A., Babaei, Y., Bashlykov, N., Batra, S., Bhargava, P., Bhosale, S., et~al.}
 \newblock Llama 2: Open foundation and fine-tuned chat models.
 \newblock {\em arXiv preprint arXiv:2307.09288\/} (2023).
 
 \bibitem{turner2023activation}
-{\sc Turner, A.~M., Thiergart, L., Udell, D., Leech, G., Mini, U., and
-  MacDiarmid, M.}
+{\sc Turner, A.~M., Thiergart, L., Udell, D., Leech, G., Mini, U., and MacDiarmid, M.}
 \newblock Activation addition: Steering language models without optimization.
 \newblock {\em arXiv preprint arXiv:2308.10248\/} (2023).
 
 \bibitem{wang2024mmlu}
-{\sc Wang, Y., Ma, X., Zhang, G., Ni, Y., Chandra, A., Guo, S., Ren, W.,
-  Arulraj, A., He, X., Jiang, Z., et~al.}
-\newblock Mmlu-pro: A more robust and challenging multi-task language
-  understanding benchmark.
+{\sc Wang, Y., Ma, X., Zhang, G., Ni, Y., Chandra, A., Guo, S., Ren, W., Arulraj, A., He, X., Jiang, Z., et~al.}
+\newblock Mmlu-pro: A more robust and challenging multi-task language understanding benchmark.
 \newblock {\em arXiv preprint arXiv:2406.01574\/} (2024).
 
 \bibitem{wendler2024llamas}
-{\sc Wendler, C., Veith, V., Haim, N., Kapur, R., Hassid, M., Pietrek, M., and
-  Eichler, N.}
-\newblock Do llamas work in english? on the latent language of multilingual
-  transformers.
+{\sc Wendler, C., Veith, V., Haim, N., Kapur, R., Hassid, M., Pietrek, M., and Eichler, N.}
+\newblock Do llamas work in english? on the latent language of multilingual transformers.
 \newblock {\em arXiv preprint arXiv:2402.10588\/} (2024).
 
 \bibitem{winata2021language}
@@ -286,39 +241,32 @@
 \newblock {\em arXiv preprint arXiv:2109.07684\/} (2021).
 
 \bibitem{wolf2020transformers}
-{\sc Wolf, T., Debut, L., Sanh, V., Chaumond, J., Delangue, C., Moi, A.,
-  Cistac, P., Rault, T., Louf, R., Funtowicz, M., et~al.}
+{\sc Wolf, T., Debut, L., Sanh, V., Chaumond, J., Delangue, C., Moi, A., Cistac, P., Rault, T., Louf, R., Funtowicz, M., et~al.}
 \newblock Transformers: State-of-the-art natural language processing.
-\newblock In {\em Proceedings of the 2020 conference on empirical methods in
-  natural language processing: system demonstrations\/} (2020), pp.~38--45.
+\newblock In {\em Proceedings of the 2020 conference on empirical methods in natural language processing: system demonstrations\/} (2020), pp.~38--45.
 
 \bibitem{xie2020self}
 {\sc Xie, Q., Luong, M.-T., Hovy, E., and Le, Q.~V.}
 \newblock Self-training with noisy student improves imagenet classification.
-\newblock {\em Proceedings of the IEEE/CVF conference on computer vision and
-  pattern recognition\/} (2020), 10687--10698.
+\newblock {\em Proceedings of the IEEE/CVF conference on computer vision and pattern recognition\/} (2020), 10687--10698.
 
 \bibitem{qwen2024}
-{\sc Yang, A., Yang, B., Hui, B., Zheng, B., Yu, B., Zhou, C., Li, C., Li, C.,
-  Liu, D., Huang, F., et~al.}
+{\sc Yang, A., Yang, B., Hui, B., Zheng, B., Yu, B., Zhou, C., Li, C., Li, C., Liu, D., Huang, F., et~al.}
 \newblock Qwen2 technical report.
 \newblock {\em arXiv preprint arXiv:2407.10671\/} (2024).
 
 \bibitem{yang2021simple}
 {\sc Yang, Z., Yang, Y., Cer, D., and Darve, E.}
-\newblock A simple and effective method to eliminate the self language bias in
-  multilingual representations.
+\newblock A simple and effective method to eliminate the self language bias in multilingual representations.
 \newblock {\em Proceedings of EMNLP 2021\/} (2021), 5825--5832.
 
 \bibitem{zhou2023lima}
-{\sc Zhou, C., Liu, P., Xu, P., Iyer, S., Sun, J., Mao, Y., Ma, X., Efrat, A.,
-  Yu, P., Yu, L., et~al.}
+{\sc Zhou, C., Liu, P., Xu, P., Iyer, S., Sun, J., Mao, Y., Ma, X., Efrat, A., Yu, P., Yu, L., et~al.}
 \newblock Lima: Less is more for alignment.
 \newblock {\em arXiv preprint arXiv:2305.11206\/} (2023).
 
 \bibitem{zou2023representation}
-{\sc Zou, A., Phan, L., Chen, S., Campbell, J., Guo, P., Ren, R., Pan, A., Yin,
-  X., Mazeika, M., Dombrowski, A.-K., et~al.}
+{\sc Zou, A., Phan, L., Chen, S., Campbell, J., Guo, P., Ren, R., Pan, A., Yin, X., Mazeika, M., Dombrowski, A.-K., et~al.}
 \newblock Representation engineering: A top-down approach to ai transparency.
 \newblock {\em arXiv preprint arXiv:2310.01405\/} (2023).
 
