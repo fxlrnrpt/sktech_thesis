@@ -18,32 +18,32 @@ A level-1 auxiliary file: chapters/10_appendix.aux
 Database file #1: Bibliography.bib
 You've used 54 entries,
             2253 wiz_defined-function locations,
-            791 strings with 16086 characters,
-and the built_in function-call counts, 22838 in all, are:
-= -- 2023
-> -- 1743
+            791 strings with 16067 characters,
+and the built_in function-call counts, 22776 in all, are:
+= -- 2019
+> -- 1733
 < -- 0
-+ -- 711
-- -- 654
-* -- 1969
-:= -- 3891
++ -- 707
+- -- 650
+* -- 1961
+:= -- 3879
 add.period$ -- 162
 call.type$ -- 54
-change.case$ -- 474
+change.case$ -- 472
 chr.to.int$ -- 0
 cite$ -- 54
 duplicate$ -- 661
 empty$ -- 1369
-format.name$ -- 654
-if$ -- 4520
+format.name$ -- 650
+if$ -- 4510
 int.to.chr$ -- 0
 int.to.str$ -- 54
 missing$ -- 54
 newline$ -- 273
 num.names$ -- 108
-pop$ -- 461
+pop$ -- 459
 preamble$ -- 1
-purify$ -- 420
+purify$ -- 418
 quote$ -- 0
 skip$ -- 487
 stack$ -- 0
