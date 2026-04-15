@@ -2,7 +2,7 @@ PWD /Users/aigoncharov/dev/sktech/sktech_thesis
 INPUT /usr/local/texlive/2024/texmf.cnf
 INPUT /usr/local/texlive/2024/texmf-dist/web2c/texmf.cnf
 INPUT /usr/local/texlive/2024/texmf-var/web2c/xetex/xelatex.fmt
-INPUT main.tex
+INPUT /Users/aigoncharov/dev/sktech/sktech_thesis/main.tex
 OUTPUT main.log
 INPUT ./skthesis.cls
 INPUT skthesis.cls
